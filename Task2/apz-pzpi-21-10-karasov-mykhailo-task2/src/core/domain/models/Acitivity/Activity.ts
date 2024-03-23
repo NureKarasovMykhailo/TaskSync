@@ -1,8 +1,9 @@
 import Complexity from "../Complexity/Complexity";
 import Education from "../Education/Education";
 import User from "../User/User";
+import RoleDomainModel from "../Role/Role";
 
-export default class Activity {
+export default class ActivityDomainModel {
     constructor(
         public readonly id: number,
         public readonly activityTitle: string,

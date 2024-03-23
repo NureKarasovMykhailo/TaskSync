@@ -1,7 +1,8 @@
 import User from "../User/User";
 import Scanner from "../Scanner/Scanner";
+import RoleDomainModel from "../Role/Role";
 
-export default class ScannerHistory {
+export default class ScannerHistoryDomainModel {
     constructor(
         public readonly id: number,
         public readonly temperature: number,

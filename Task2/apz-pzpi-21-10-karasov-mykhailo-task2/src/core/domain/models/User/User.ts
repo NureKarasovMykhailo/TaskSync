@@ -1,7 +1,8 @@
 import Company from "../Company/Company";
+import RoleDomainModel from "../Role/Role";
 
 
-export default class User {
+export default class UserDomainModel {
     constructor(
         public readonly id: number,
         public readonly email: string,
