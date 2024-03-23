@@ -1,0 +1,16 @@
+import Company from "../Company/Company";
+
+
+export default class User {
+    constructor(
+        public readonly id: number,
+        public readonly email: string,
+        public readonly firstName: string,
+        public readonly secondName: string,
+        public readonly password: string,
+        public readonly phoneNumber: string | null,
+        public readonly birthday: Date,
+        public readonly userImage: string,
+        public readonly company: Company,
+    ) {}
+}
