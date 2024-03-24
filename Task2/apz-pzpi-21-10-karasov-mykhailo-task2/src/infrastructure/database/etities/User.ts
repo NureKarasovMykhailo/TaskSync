@@ -40,7 +40,7 @@ export default class User extends Model {
     password!: string;
 
     @Column({type: DataType.STRING, allowNull: true})
-    phoneNumber!: string;
+    phoneNumber!: string | null;
 
     @Column({type: DataType.DATEONLY, allowNull: false})
     birthday!: Date;

@@ -1,11 +1,12 @@
-import CreateRoleDto from "./dto/createRole.dto";
+import CreateRoleDto from "./dto/CreateRoleDto";
 import Role from "../../domain/models/Role/Role";
 import RoleDomainModel from "../../domain/models/Role/Role";
 
 export default interface IRoleRepository {
-    create(dto: CreateRoleDto): Promise<RoleDomainModel>;
-    update(dto: CreateRoleDto, id: number): Promise<RoleDomainModel>;
-    getAll(): Promise<RoleDomainModel[]>;
-    getById(id: number): Promise<RoleDomainModel | null>;
-    getByTitle(title: string): Promise<RoleDomainModel | null>;
+    createRole(dto: CreateRoleDto): Promise<RoleDomainModel>;
+    getRoleByTitle(roleTitle: string): Promise<RoleDomainModel | null>;
+    getAllRoles(): Promise<RoleDomainModel[]>;
+    getRoleById(id: number): Promise<RoleDomainModel | null>;
+    updateRole(dto: CreateRoleDto, id: number): Promise<RoleDomainModel | null>;
+    deleteRole(id: number): Promise<void>;
 }

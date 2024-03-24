@@ -4,7 +4,7 @@ import cors from 'cors';
 import { port } from './config';
 import sequelize from './infrastructure/database/database';
 import router from './infrastructure/routes/index';
-import errorHandler from "./core/common/middlewares/ErrorHandlingMidlleware";
+import errorHandler from "./core/common/middlewares/ErrorHandlingMiddleware";
 dotenv.config();
 
 const app = express();

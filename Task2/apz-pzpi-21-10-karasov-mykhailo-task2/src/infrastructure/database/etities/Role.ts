@@ -13,7 +13,7 @@ export default class Role extends Model {
     roleTitle!: string;
 
     @Column({type: DataType.STRING, allowNull: true})
-    description!: string;
+    description!: string | null;
 
     @BelongsToMany(() => User, () => UserRoles)
     users!: User[]
