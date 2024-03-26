@@ -19,6 +19,7 @@ import ScannerHistory from "./ScannerHistory";
 import Activity from "./Activity";
 import UserActivities from "./UserActivities";
 import Subscription from "./Subscription";
+import UserCompanies from "./UserCompanies";
 
 
 @Table({tableName: 'users'})
@@ -61,8 +62,8 @@ export default class User extends Model {
     @HasOne(() => Company)
     ownCompany!: Company;
 
-    @BelongsTo(() => Company)
-    company!: Company;
+    @BelongsToMany(() => Company, () => UserCompanies)
+    companies!: Company[];
 
     @HasMany(() => ScannerHistory)
     scannerHistory!: ScannerHistory[];

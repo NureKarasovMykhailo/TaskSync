@@ -1,8 +1,9 @@
-import {BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
+import {BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
 import User from "./User";
 import {DEFAULT_COMPANY_IMAGE_NAME} from "../../../config";
 import Scanner from "./Scanner";
 import Activity from "./Activity";
+import UserCompanies from "./UserCompanies";
 
 @Table({tableName: 'company'})
 export default class Company extends Model {
@@ -26,7 +27,7 @@ export default class Company extends Model {
     @BelongsTo(() => User)
     owner!: User;
 
-    @HasMany(() => User)
+    @BelongsToMany(() => User, () => UserCompanies)
     user!: User[];
 
     @HasMany(() => Scanner)

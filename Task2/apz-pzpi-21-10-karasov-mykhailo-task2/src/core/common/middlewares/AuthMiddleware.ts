@@ -8,7 +8,6 @@ function authMiddleware(req: Request, res: Response, next: NextFunction) {
         next();
     }
     try {
-        console.log('here')
         const token: string | undefined= req.headers.authorization?.split(' ')[1];
         if (!token) {
             return next(ApiError.unauthorized('Unauthorized user'));

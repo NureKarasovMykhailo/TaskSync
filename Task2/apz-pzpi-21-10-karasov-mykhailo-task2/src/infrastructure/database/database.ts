@@ -12,6 +12,7 @@ import ScannerHistory from "./etities/ScannerHistory";
 import Subscription from "./etities/Subscription";
 import UserActivities from "./etities/UserActivities";
 import UserEducations from "./etities/UserEducations";
+import UserCompanies from "./etities/UserCompanies";
 
 
 const sequelize = new Sequelize({
@@ -35,6 +36,7 @@ const sequelize = new Sequelize({
         Subscription,
         UserActivities,
         UserEducations,
+        UserCompanies
     ]
     
 });

@@ -5,6 +5,7 @@ import { port } from './config';
 import sequelize from './infrastructure/database/database';
 import router from './infrastructure/routes/index';
 import errorHandler from "./core/common/middlewares/ErrorHandlingMiddleware";
+
 dotenv.config();
 
 const app = express();
@@ -15,6 +16,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/api', router);
 
+
+// LAST MIDDLEWARE
 app.use(errorHandler);
 
 sequelize.sync().then(() => {
