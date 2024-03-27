@@ -4,15 +4,21 @@ import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepo
 import {NextFunction, Request, Response} from "express";
 import CreateUserDto from "../../core/repositories/UserRepository/dto/CreateUserDto";
 import {DEFAULT_USER_IMAGE_NAME} from "../../config";
-import formidable from "formidable";
+import UserMapper from "../mappers/UserMapper/UserMapper";
+import UserDomainModel from "../../core/domain/models/User/User";
+import FileManager from "../../core/common/uttils/FileManager";
 
 class UserController {
+    private readonly userMapper: UserMapper = new UserMapper();
+
     constructor(
         private readonly userService: UserService
     ) {}
 
+
     public async createUser(req: Request, res: Response, next: NextFunction) {
         try {
+
             const {
                 email,
                 firstName,
@@ -22,7 +28,11 @@ class UserController {
                 phoneNumber,
             } = req.body;
 
-            let userImage
+            let userImage;
+            // @ts-ignore
+            if (req.files) {
+                userImage = req.files.userImage;
+            }
 
             const dto: CreateUserDto = new CreateUserDto(
                 email,
@@ -34,9 +44,10 @@ class UserController {
                 userImage || DEFAULT_USER_IMAGE_NAME
             );
 
-            console.log(dto);
+            const userDomainModel: UserDomainModel = await this.userService.createUser(dto);
+            const user: User = this.userMapper.toPersistenceModel(userDomainModel);
 
-            return res.status(200)
+            return res.status(201).json({user: user});
         } catch (error) {
             console.log(error);
             next(error);
@@ -45,5 +56,6 @@ class UserController {
 
 }
 
-const userService: UserService = new UserService(new UserRepositoryImpl());
+const fileManager: FileManager = new FileManager();
+const userService: UserService = new UserService(new UserRepositoryImpl(), fileManager);
 export default new UserController(userService);
