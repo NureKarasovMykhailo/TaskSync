@@ -26,7 +26,7 @@ export default class UserMapper implements IMapper<User, UserDomainModel> {
 
     toPersistenceModel(data: UserDomainModel): User {
         const user = new User();
-        console.log(user)
+
         user.id = data.id;
         user.userImage = data.userImage;
         user.birthday = data.birthday;
@@ -38,6 +38,7 @@ export default class UserMapper implements IMapper<User, UserDomainModel> {
         user.roles = data.roles.map(role => {
             return new RoleMapper().toPersistenceModel(role);
         });
+
         return user;
     }
 

@@ -20,6 +20,21 @@ class FileManager {
             throw ApiError.internalServerError('Error while creating file');
         }
     }
+
+    async deleteFile(fileName: string) {
+        try {
+            const filePath = path.resolve(__dirname, '..', '..', '..', '..', '.dist', 'static');
+            if (fs.existsSync(filePath)) {
+                fs.unlink(path.join(filePath, fileName), () => {
+                    console.log(`${fileName} was deleted`);
+                });
+                return true;
+            }
+        } catch (error) {
+            console.log(error);
+            throw ApiError.internalServerError('Error while creating file');
+        }
+    }
 }
 
 export default FileManager;

@@ -3,7 +3,6 @@ import User from "./User";
 import {DEFAULT_COMPANY_IMAGE_NAME} from "../../../config";
 import Scanner from "./Scanner";
 import Activity from "./Activity";
-import UserCompanies from "./UserCompanies";
 
 @Table({tableName: 'company'})
 export default class Company extends Model {
@@ -27,7 +26,7 @@ export default class Company extends Model {
     @BelongsTo(() => User)
     owner!: User;
 
-    @BelongsToMany(() => User, () => UserCompanies)
+    @HasMany(() => User)
     user!: User[];
 
     @HasMany(() => Scanner)
