@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
     '/',
-    checkRoleMiddleware([RolesEnum.ADMIN]),
+    //checkRoleMiddleware([RolesEnum.ADMIN]),
     createEducationValidator(),
     educationController.createEducation.bind(educationController)
 );

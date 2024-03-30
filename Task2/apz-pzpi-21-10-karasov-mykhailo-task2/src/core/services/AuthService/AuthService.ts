@@ -28,6 +28,7 @@ export default class AuthService {
 
     public async login (dto: LoginDto) {
         const user = await this.authRepository.getUserByEmail(dto.email);
+
         if (!user) {
             throw ApiError.badRequest('Email чи пароль не вірний');
         }
@@ -57,9 +58,10 @@ export default class AuthService {
             firstName: user.firstName,
             secondName: user.secondName,
             birthday: user.birthday,
-            roles: user.roles,
             userImage: user.userImage,
-            phoneNumber: user.phoneNumber
+            phoneNumber: user.phoneNumber,
+            roles: user.roles,
+            educations: user.educations
         };
     }
 }

@@ -8,6 +8,12 @@ import Role from "../../database/etities/Role";
 import UserRoles from "../../database/etities/UserRoles";
 import UserRole from "../../../core/common/enums/RolesEnum";
 import UpdateUserAdminDto from "../../../core/repositories/UserRepository/dto/UpdateUserAdminDto";
+import AddOrDeleteRoleDto from "../../../core/repositories/UserRepository/dto/AddOrDeleteRoleDto";
+import ApiError from "../../../core/common/error/ApiError";
+import UpdateUserPublicDto from "../../../core/repositories/UserRepository/dto/UpdateUserPublicDto";
+import AddOrDeleteEducationDto from "../../../core/repositories/UserRepository/dto/AddOrDeleteEducationDto";
+import Education from "../../database/etities/Education";
+import UserEducations from "../../database/etities/UserEducations";
 
 export default class UserRepositoryImpl implements IUserRepository {
     private readonly userMapper: UserMapper = new UserMapper();
@@ -31,10 +37,14 @@ export default class UserRepositoryImpl implements IUserRepository {
     }
 
     async getUserByEmail(email: string): Promise<UserDomainModel | null> {
-        const user: User | null = await User.findOne({where: { email }});
+        const user: User | null = await User.findOne({
+            where: { email },
+            include: [{model: Education}]
+        });
         if (!user) {
             return null;
         }
+
         return this.userMapper.toDomainModel(user);
     }
 
@@ -73,9 +83,10 @@ export default class UserRepositoryImpl implements IUserRepository {
     async getUserById(id: number): Promise<UserDomainModel | null> {
         const user = await User.findOne({
             where: { id },
-            include: [{
-                model: Role,
-            }]
+            include: [
+                { model: Role },
+                { model: Education }
+            ]
         });
 
         if (!user) {
@@ -100,7 +111,135 @@ export default class UserRepositoryImpl implements IUserRepository {
         await updatedUser.save();
         return this.userMapper.toDomainModel(updatedUser);
     }
+    async updateUserPublic(id: number, dto: UpdateUserPublicDto, fileName: string): Promise<UserDomainModel | null> {
+        const updatingUser = await User.findOne(
+            { where: { id },
+                include: [{ model: Role}]
+            });
+        if (! updatingUser) {
+            return null;
+        }
 
+        updatingUser.firstName = dto.firstName;
+        updatingUser.secondName = dto.secondName;
+        updatingUser.birthday = dto.birthday;
+        updatingUser.phoneNumber = dto.phoneNumber;
+        updatingUser.userImage = fileName;
+
+        await updatingUser.save();
+        return this.userMapper.toDomainModel(updatingUser);
+    }
+
+    async deleteUserById(id: number): Promise<void> {
+        const user = await User.findOne({ where: { id }});
+        await user?.destroy();
+    }
+
+    async addUserRole(dto: AddOrDeleteRoleDto, userId: number): Promise<UserDomainModel | null> {
+        const user = await User.findOne({
+            where: {id: userId },
+            include: [{ model: Role }]
+        });
+        if (!user) {
+            throw ApiError.notFound(`There no user with ID: ${userId}`);
+        }
+
+        const addedRole = await Role.findOne({where: { roleTitle: dto.roleTitle}});
+        if (!addedRole) {
+            throw ApiError.notFound(`There no role with title: ${dto.roleTitle}`);
+        }
+
+        user.roles?.map(role => {
+            if (role.roleTitle === dto.roleTitle) {
+                throw ApiError.conflict(`User has already role: ${addedRole.roleTitle}`);
+            }
+        });
+
+        await UserRoles.create({
+            userId,
+            roleId: addedRole.id
+        });
+
+        return this.getUserById(userId);
+    }
+
+    public async deleteUserRole(dto: AddOrDeleteRoleDto, userId: number): Promise<UserDomainModel | null> {
+        const user = await User.findOne({where: { id: userId }});
+        if (!user) {
+            throw ApiError.notFound(`There no user with ID: ${userId}`);
+        }
+        const role = await Role.findOne({where: { roleTitle: dto.roleTitle}});
+        if (!role) {
+            throw ApiError.notFound(`There no role with title: ${dto.roleTitle}`);
+        }
+
+        const userRole = await UserRoles.findOne({
+            where: {
+                userId,
+                roleId: role.id
+            }
+        });
+        if (userRole) {
+            await userRole.destroy();
+        }
+
+        return this.getUserById(userId);
+    }
+
+    async addEducation(id: number, dto: AddOrDeleteEducationDto): Promise<UserDomainModel | null> {
+        const user = await User.findOne({
+            where: { id },
+            include: [{ model: Education }]
+        });
+        if (!user) {
+            return null;
+        }
+
+        const education = await Education.findOne({
+            where: { educationTitle: dto.educationTitle }
+        });
+        if (!education) {
+            throw ApiError.notFound(`There no education with title: ${dto.educationTitle}`);
+        }
+
+        user.educations?.map(education => {
+            if (education.educationTitle === dto.educationTitle) {
+                throw ApiError.conflict(`User has already education: ${education.educationTitle}`);
+            }
+        })
+
+        await UserEducations.create({
+            userId: user.id,
+            educationId: education.id
+        });
+
+
+        return await this.getUserById(id);
+    }
+
+    async deleteEducation(id: number, dto: AddOrDeleteEducationDto): Promise<UserDomainModel | null> {
+        const user = await User.findOne({ where: { id } });
+        if (!user) {
+            return null;
+        }
+
+        const education = await Education.findOne({
+            where: { educationTitle: dto.educationTitle }
+        });
+        if (!education) {
+            throw ApiError.notFound(`There no education with title: ${dto.educationTitle}`);
+        }
+
+        const userEducation = await UserEducations.findOne({
+            where: {
+                userId: user.id,
+                educationId: education.id
+            }
+        });
+        await userEducation?.destroy();
+
+        return await this.getUserById(id);
+    }
 
 
 }

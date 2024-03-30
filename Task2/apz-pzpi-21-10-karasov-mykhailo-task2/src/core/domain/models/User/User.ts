@@ -1,5 +1,6 @@
 import Company from "../Company/Company";
 import RoleDomainModel from "../Role/Role";
+import EducationDomainModel from "../Education/Education";
 
 
 export default class UserDomainModel {
@@ -14,5 +15,6 @@ export default class UserDomainModel {
         public readonly userImage: string,
         //public readonly company: Company
         public readonly roles: RoleDomainModel[],
+        public readonly educations: EducationDomainModel[],
     ) {}
 }

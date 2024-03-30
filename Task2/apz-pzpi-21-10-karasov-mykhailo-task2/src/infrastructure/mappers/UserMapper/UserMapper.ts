@@ -3,13 +3,23 @@ import UserDomainModel from "../../../core/domain/models/User/User";
 import User from "../../database/etities/User";
 import RoleMapper from "../RoleMapper/RoleMapper";
 import Role from "../../database/etities/Role";
+import EducationMapper from "../EducationMapper/EducationMapper";
+import EducationDomainModel from "../../../core/domain/models/Education/Education";
 
 export default class UserMapper implements IMapper<User, UserDomainModel> {
 
-    private readonly roleMapper = new RoleMapper();
+    private readonly roleMapper: RoleMapper = new RoleMapper();
+    private readonly educationMapper: EducationMapper = new EducationMapper();
 
     toDomainModel(data: User): UserDomainModel {
-        const roles = data.roles ? data.roles.map(role => this.roleMapper.toDomainModel(role)) : [];
+        const roles = data.roles
+            ? data.roles.map(role =>
+            this.roleMapper.toDomainModel(role)) : [];
+
+        const educations = data.educations
+            ? data.educations.map(education =>
+                this.educationMapper.toDomainModel(education)) : [];
+
         return new UserDomainModel(
             data.id,
             data.email,
@@ -21,6 +31,7 @@ export default class UserMapper implements IMapper<User, UserDomainModel> {
             data.userImage,
             //data.company,
             roles,
+            educations
         );
     }
 
@@ -38,6 +49,9 @@ export default class UserMapper implements IMapper<User, UserDomainModel> {
         user.roles = data.roles.map(role => {
             return new RoleMapper().toPersistenceModel(role);
         });
+        user.educations = data.educations.map(education => {
+            return new EducationMapper().toPersistenceModel(education);
+        })
 
         return user;
     }

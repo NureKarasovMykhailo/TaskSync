@@ -7,8 +7,10 @@ import FileManager from "../../common/uttils/FileManager";
 import bcrypt from "bcrypt";
 import PaginationClass from "../../common/uttils/PaginationClass";
 import UpdateUserAdminDto from "../../repositories/UserRepository/dto/UpdateUserAdminDto";
+import AddOrDeleteRoleDto from "../../repositories/UserRepository/dto/AddOrDeleteRoleDto";
+import UserRole from "../../common/enums/RolesEnum";
 
-export default class UserService {
+export default class AdminUserService {
     constructor(
         private readonly userRepository: IUserRepository,
         private readonly fileManager: FileManager
@@ -81,12 +83,14 @@ export default class UserService {
             throw ApiError.conflict(`User with this email has already existed`);
         }
 
-        let fileName = DEFAULT_USER_IMAGE_NAME;
+        let fileName: string;
         if (dto.userImage !== DEFAULT_USER_IMAGE_NAME) {
             if (user.userImage !== DEFAULT_USER_IMAGE_NAME) {
                 await this.fileManager.deleteFile(user.userImage);
             }
             fileName = await this.fileManager.createFile(dto.userImage);
+        } else {
+            fileName = user.userImage;
         }
 
         const updatedUser = await this.userRepository.updateUser(id, dto, fileName);
@@ -94,6 +98,37 @@ export default class UserService {
             throw ApiError.notFound(`There no user with ID: ${id}`);
         }
         return updatedUser;
+    }
+
+    async deleteUserById(id: number): Promise<void> {
+        const deletedUser = await this.userRepository.getUserById(id);
+        if (deletedUser) {
+            if (deletedUser.userImage !== DEFAULT_USER_IMAGE_NAME) {
+                await this.fileManager.deleteFile(deletedUser.userImage);
+            }
+            await this.userRepository.deleteUserById(id);
+        }
+
+        return;
+    }
+
+    async addUserRole(id: number, dto: AddOrDeleteRoleDto): Promise<UserDomainModel> {
+        const user =  await this.userRepository.addUserRole(dto, id);
+        if (!user) {
+            throw ApiError.notFound(`There no user with ID: ${id}`);
+        }
+        return user;
+    }
+
+    public async deleteUserRole(dto: AddOrDeleteRoleDto, userId: number): Promise<UserDomainModel> {
+        if (dto.roleTitle === UserRole.USER) {
+            throw ApiError.forbidden(`You cannot delete ${UserRole.USER} role`);
+        }
+        const user = await this.userRepository.deleteUserRole(dto, userId);
+        if (!user) {
+            throw ApiError.notFound(`There no user with id: ${userId}`);
+        }
+        return user;
     }
 
     private async isUserWithEmailExits(email: string): Promise<boolean> {
