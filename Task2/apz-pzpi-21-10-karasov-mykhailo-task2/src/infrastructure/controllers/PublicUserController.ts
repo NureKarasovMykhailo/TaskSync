@@ -4,6 +4,8 @@ import {NextFunction, Response, Request} from "express";
 import UpdateUserPublicDto from "../../core/repositories/UserRepository/dto/UpdateUserPublicDto";
 import PublicUserService from "../../core/services/PublicUserService/PublicUserService";
 import AddOrDeleteEducationDto from "../../core/repositories/UserRepository/dto/AddOrDeleteEducationDto";
+import SubscriptionClass from "../../core/common/uttils/SubscriptionClass";
+import SubscriptionRepositoryImpl from "../repositoriesImpl/sequelizeRepository/SubscriptionRepositoryImpl";
 
 class PublicUserController {
 
@@ -73,6 +75,18 @@ class PublicUserController {
         }
    }
 
+   public async subscribe(req: Request, res: Response, next: NextFunction) {
+        try {
+            // @ts-ignore
+            const subscriptionDetails = await this.userService.subscribe(req.user.id);
+
+            res.send(subscriptionDetails);
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+   }
+
 }
 
-export default new PublicUserController(new PublicUserService(new UserRepositoryImpl()), new UserMapper());
+export default new PublicUserController(new PublicUserService(new UserRepositoryImpl(), new SubscriptionRepositoryImpl()), new UserMapper());

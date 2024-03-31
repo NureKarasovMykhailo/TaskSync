@@ -24,4 +24,10 @@ router.put(
     publicUserController.deleteEducation.bind(publicUserController)
 );
 
+router.post(
+    '/subscribe',
+    authMiddleware,
+    publicUserController.subscribe.bind(publicUserController)
+);
+
 export default router;

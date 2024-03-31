@@ -6,6 +6,10 @@ import generateJwt from "../../common/uttils/JwtGenerate";
 import {DEFAULT_USER_IMAGE_NAME} from "../../../config";
 import UserDomainModel from "../../domain/models/User/User";
 import AddOrDeleteEducationDto from "../../repositories/UserRepository/dto/AddOrDeleteEducationDto";
+import SubscriptionClass from "../../common/uttils/SubscriptionClass";
+import ISubscribeRepository from "../../repositories/SubscribeRepository/ISubscribeRepository";
+import RolesEnum from "../../common/enums/RolesEnum";
+import AddOrDeleteRoleDto from "../../repositories/UserRepository/dto/AddOrDeleteRoleDto";
 
 export default class PublicUserService {
 
@@ -13,6 +17,7 @@ export default class PublicUserService {
 
     constructor(
        private readonly userRepository: IUserRepository,
+       private readonly subscriptionRepository: ISubscribeRepository,
     ) {}
 
     public async updateUser(userId: number, dto: UpdateUserPublicDto): Promise<string> {
@@ -52,6 +57,25 @@ export default class PublicUserService {
         }
         return generateJwt(this.getPayload(user));
     }
+
+    public async subscribe(userId: number) {
+        const subscriptionClass: SubscriptionClass = new SubscriptionClass();
+        const response = await subscriptionClass.subscribeRequest();
+        console.log(response)
+        if (response.ok) {
+            const currentDate = new Date();
+            const validUntilDate = new Date(currentDate.getTime() + 31 * 24 * 60 * 60 * 1000);
+            const subscriptionDetails = await response.json();
+            const subscriptionId = subscriptionDetails.id;
+            await this.subscriptionRepository.createUserSubscription(userId, subscriptionId, validUntilDate.toISOString());
+            const dto: AddOrDeleteRoleDto = new AddOrDeleteRoleDto(RolesEnum.SUBSCRIBER);
+            await this.userRepository.addUserRole(dto, userId);
+            return subscriptionDetails;
+        } else {
+            throw ApiError.internalServerError(`Error with PayPal API`);
+        }
+    }
+
 
     private getPayload(user: UserDomainModel) {
         return {
