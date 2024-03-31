@@ -34,4 +34,33 @@ export default class CompanyRepositoryImpl implements ICompanyRepository {
         return this.companyMapper.toDomainModel(company);
     }
 
+    async getCompanyById(companyId: number): Promise<CompanyDomainModel | null> {
+        const company = await Company.findOne({ where: { id: companyId } });
+        if (!company) {
+            return null;
+        }
+        return this.companyMapper.toDomainModel(company);
+    }
+
+    async updateCompany(companyId: number, dto: CreateOrUpdateCompanyDto, companyImage: any): Promise<CompanyDomainModel | null> {
+        const company = await Company.findOne({ where: { id: companyId } });
+        if (!company) {
+            return null;
+        }
+
+        company.companyName = dto.companyName;
+        company.description = dto.description;
+        if (companyImage) {
+            company.companyImage = companyImage;
+        }
+        return this.companyMapper.toDomainModel(company);
+    }
+
+    async deleteCompany(companyId: number): Promise<void> {
+        const company = await Company.findOne({ where: { id: companyId } });
+        await company?.destroy();
+        return;
+    }
+
+
 }

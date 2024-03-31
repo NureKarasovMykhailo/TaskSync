@@ -6,8 +6,6 @@ import IUserRepository from "../../repositories/UserRepository/IUserRepository";
 import JWT from "../../common/uttils/JWT";
 import FileManager from "../../common/uttils/FileManager";
 import {DEFAULT_COMPANY_IMAGE_NAME} from "../../../config";
-import fileManager from "../../common/uttils/FileManager";
-
 export default class CompanyService {
     private readonly fileManager: FileManager = new FileManager();
     constructor(
@@ -26,7 +24,7 @@ export default class CompanyService {
         if (dto.companyImage !== DEFAULT_COMPANY_IMAGE_NAME) {
             fileName = await this.fileManager.createFile(dto.companyImage);
         }
-        console.log(dto)
+
         const company = await this.companyRepository.createCompany(dto, creatingUserId, fileName);
         const creatingUser = await this.userRepository.getUserById(creatingUserId);
         if (creatingUser) {
@@ -34,11 +32,52 @@ export default class CompanyService {
             if (!user) {
                 throw ApiError.notFound(`There no user with ID: ${creatingUserId}`);
             }
-            console.log(user.companyId)
             const jwt = new JWT(user);
             return jwt.generateJwt();
         }
         return "";
+    }
+
+    async getCompanyById(companyId: number) {
+        const company = await this.companyRepository.getCompanyById(companyId);
+        if (!company) {
+            throw ApiError.notFound(`There no company with ID: ${companyId}`);
+        }
+        return company;
+    }
+
+    async updateCompany(companyId: number, dto: CreateOrUpdateCompanyDto) {
+        const company = await this.getCompanyById(companyId);
+        if (!await this.isCompanyNameUnique(dto.companyName) && dto.companyName === company.companyName) {
+            throw ApiError.conflict(`There are already exist company with name: ${dto.companyName}`);
+        }
+
+        let fileName = null;
+        if (dto.companyImage) {
+            if (company.companyImage !== DEFAULT_COMPANY_IMAGE_NAME) {
+                await this.fileManager.deleteFile(company.companyImage);
+            }
+            fileName = await this.fileManager.createFile(dto.companyImage);
+        }
+
+        const updatedCompany = await this.companyRepository.updateCompany(companyId, dto, fileName);
+        if (!updatedCompany) {
+            throw ApiError.notFound(`There no company with id: ${companyId}`);
+        }
+        return updatedCompany;
+    }
+
+    async deleteCompanyByToken(companyId: number, userId: number) {
+        const company = await this.getCompanyById(companyId);
+        if (company.companyImage !== DEFAULT_COMPANY_IMAGE_NAME) {
+            await this.fileManager.deleteFile(company.companyImage);
+        }
+        if (company.ownerId !== userId) {
+            throw ApiError.forbidden(`You cannot delete other user\'s company`);
+        }
+        await this.companyRepository.deleteCompany(companyId);
+        return;
+
     }
 
     private async isUserHasCompany(userId: number): Promise<boolean> {

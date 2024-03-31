@@ -9,6 +9,7 @@ import CompanyService from "../../core/services/CompanyService/CompanyService";
 import CompanyRepositoryImpl from "../repositoriesImpl/sequelizeRepository/CompanyRepositoryImpl";
 import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepositoryImpl";
 import CompanyMapper from "../mappers/CompanyMapper/CompanyMapper";
+import authMiddleware from "../../core/common/middlewares/AuthMiddleware";
 
 const router = express.Router();
 
@@ -27,16 +28,23 @@ router.post(
 );
 
 router.get(
-    '/'
+    '/',
+    authMiddleware,
+    publicCompanyController.getCompany.bind(publicCompanyController)
 );
 
 router.patch(
-    '/'
+    '/',
+    checkRoleMiddleware([RolesEnum.SUBSCRIBER]),
+    createOrUpdateCompanyValidator(),
+    publicCompanyController.updateCompany.bind(publicCompanyController)
 );
 
 router.delete(
-    '/'
-)
+    '/',
+    checkRoleMiddleware([RolesEnum.SUBSCRIBER]),
+    publicCompanyController.deleteCompany.bind(publicCompanyController)
+);
 
 
 export default router;
