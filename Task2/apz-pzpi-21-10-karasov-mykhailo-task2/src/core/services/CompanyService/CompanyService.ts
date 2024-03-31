@@ -1,6 +1,5 @@
 import ICompanyRepository from "../../repositories/CompanyRepository/ICompanyRepository";
 import CreateOrUpdateCompanyDto from "../../repositories/CompanyRepository/dto/CreateOrUpdateCompanyDto";
-import CompanyDomainModel from "../../domain/models/Company/Company";
 import ApiError from "../../common/error/ApiError";
 import IUserRepository from "../../repositories/UserRepository/IUserRepository";
 import JWT from "../../common/uttils/JWT";
