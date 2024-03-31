@@ -32,6 +32,8 @@ function checkRoleMiddleware(roles: string[]) {
                });
             });
             if (hasAccess) {
+                // @ts-ignore
+                req.user = jwt.verify(token, JWT_SECRET_KEY);
                 next();
             } else {
                 return next(ApiError.forbidden('You have not access to this function'))

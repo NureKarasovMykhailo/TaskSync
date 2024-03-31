@@ -5,10 +5,13 @@ import roleRouter from "./RoleRouter";
 import educationRouter from "./EducationRouter";
 import adminUserRouter from "./AdminUserRouter";
 import publicUserRouter from "./PublicUserRouter";
+import publicCompanyRouter from './CompanyPublicRouter';
 
 router.use('/education', educationRouter);
 router.use('/auth', authRouter);
 router.use('/role', roleRouter);
 router.use('/admin-user', adminUserRouter);
 router.use('/public-user', publicUserRouter)
+router.use('/public-company', publicCompanyRouter);
+
 export default router;

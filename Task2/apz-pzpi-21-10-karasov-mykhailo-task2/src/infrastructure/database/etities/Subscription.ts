@@ -20,7 +20,7 @@ export default class Subscription extends Model {
 
     @ForeignKey(() => User)
     @Column({type: DataType.INTEGER, allowNull: true})
-    userId!: number;
+    userId!: number | null;
 
     @BelongsTo(() => User)
     user!: User;

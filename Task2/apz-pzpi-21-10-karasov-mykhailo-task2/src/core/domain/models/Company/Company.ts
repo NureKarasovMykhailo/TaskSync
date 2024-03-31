@@ -7,6 +7,6 @@ export default class CompanyDomainModel {
         public readonly companyName: string,
         public readonly description: string | null,
         public readonly companyImage: string,
-        public readonly owner: User
+        public readonly ownerId: number
     ) {}
 }

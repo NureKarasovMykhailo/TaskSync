@@ -6,6 +6,6 @@ export default class SubscribeModel {
         public readonly code: string,
         public readonly validUntil: Date,
         public readonly isValid: boolean,
-        public readonly user: UserDomainModel
+        public readonly userId: number | null
     ) {}
 }

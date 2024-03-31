@@ -18,5 +18,5 @@ export default interface IUserRepository {
     updateUserPublic(id: number, dto: UpdateUserPublicDto, fileName: string): Promise<UserDomainModel | null>;
     addEducation(id: number, dto: AddOrDeleteEducationDto): Promise<UserDomainModel | null>;
     deleteEducation(id: number, dto: AddOrDeleteEducationDto): Promise<UserDomainModel | null>;
-
+    setCompanyId(userId: number, companyId: number): Promise<UserDomainModel | null>;
 }

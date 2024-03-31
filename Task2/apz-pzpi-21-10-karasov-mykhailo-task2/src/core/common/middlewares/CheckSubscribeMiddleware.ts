@@ -9,22 +9,30 @@ export default class CheckSubscribeMiddleware {
     ) {}
 
     async checkSubscribe(req: Request, res: Response, next: NextFunction) {
+
         // @ts-ignore
         const subscribe = await this.subscriptionRepository.getSubscriptionByUserId(req.user.id);
         if (!subscribe) {
             return next(ApiError.forbidden(`You have to subscribe for this function`));
         }
-        if (subscribe.validUntil.getDate() > new Date().getDate()) {
+
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        const validUntil = new Date(subscribe.validUntil);
+        validUntil.setHours(0, 0, 0, 0);
+
+        if (validUntil < currentDate) {
             return next(ApiError.forbidden(`You have to subscribe for this function`));
-        } else if (subscribe.validUntil.getDate() < new Date().getDate() && !subscribe.isValid) {
+        } else if (validUntil >= currentDate && !subscribe.isValid) {
             const subscriptionClass = new SubscriptionClass();
             if (await subscriptionClass.isSubscriptionValid(subscribe)) {
                 await this.subscriptionRepository.setSubscribeValidTrue(subscribe.id);
-                next();
+                return next();
             } else {
                 return next(ApiError.forbidden(`You have to subscribe for this function`));
             }
         }
-        next();
+
+        return next();
     }
 }

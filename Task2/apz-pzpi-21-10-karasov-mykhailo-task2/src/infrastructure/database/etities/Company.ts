@@ -14,7 +14,7 @@ export default class Company extends Model {
     companyName!: string;
 
     @Column({type: DataType.STRING, allowNull: true})
-    description!: string;
+    description!: string | null;
 
     @Column({type: DataType.STRING, allowNull: false, defaultValue: DEFAULT_COMPANY_IMAGE_NAME})
     companyImage!: string;

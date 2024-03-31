@@ -13,7 +13,7 @@ export default class UserDomainModel {
         public readonly phoneNumber: string | null,
         public readonly birthday: Date,
         public readonly userImage: string,
-        //public readonly company: Company
+        public readonly companyId: number | null,
         public readonly roles: RoleDomainModel[],
         public readonly educations: EducationDomainModel[],
     ) {}

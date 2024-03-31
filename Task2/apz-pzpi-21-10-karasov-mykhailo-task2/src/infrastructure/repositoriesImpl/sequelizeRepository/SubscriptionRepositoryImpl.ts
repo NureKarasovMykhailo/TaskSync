@@ -23,7 +23,10 @@ export default class SubscriptionRepositoryImpl implements  ISubscribeRepository
     }
 
     async getSubscriptionByUserId(userId: number): Promise<SubscribeModel | null> {
-        const subscription = await Subscription.findOne({ where: { userId } });
+        const subscription = await Subscription.findOne({
+            where: { userId },
+            include: [User]
+        });
         if (!subscription) {
             return null;
         }

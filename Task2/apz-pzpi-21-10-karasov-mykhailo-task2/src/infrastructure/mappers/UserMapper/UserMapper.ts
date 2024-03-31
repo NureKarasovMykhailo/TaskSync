@@ -12,9 +12,8 @@ export default class UserMapper implements IMapper<User, UserDomainModel> {
     private readonly educationMapper: EducationMapper = new EducationMapper();
 
     toDomainModel(data: User): UserDomainModel {
-        const roles = data.roles
-            ? data.roles.map(role =>
-            this.roleMapper.toDomainModel(role)) : [];
+        console.log(data)
+        const roles = data.roles !== null ? data.roles.map(role => this.roleMapper.toDomainModel(role)) : [];
 
         const educations = data.educations
             ? data.educations.map(education =>
@@ -29,7 +28,7 @@ export default class UserMapper implements IMapper<User, UserDomainModel> {
             data.phoneNumber,
             data.birthday,
             data.userImage,
-            //data.company,
+            data.companyId,
             roles,
             educations
         );

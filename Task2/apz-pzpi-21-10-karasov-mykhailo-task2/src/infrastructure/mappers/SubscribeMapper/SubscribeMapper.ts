@@ -7,13 +7,13 @@ export default class SubscribeMapper implements IMapper<Subscription, SubscribeM
     private readonly userMapper: UserMapper = new UserMapper();
 
     toDomainModel(data: Subscription): SubscribeModel {
-        const user = this.userMapper.toDomainModel(data.user);
+
         return new SubscribeModel(
             data.id,
             data.code,
             data.validUntil,
             data.isValid,
-            user
+            data.userId
         );
     }
 
@@ -23,7 +23,7 @@ export default class SubscribeMapper implements IMapper<Subscription, SubscribeM
         subscription.code = data.code;
         subscription.validUntil = data.validUntil;
         subscription.isValid = data.isValid;
-        subscription.user = this.userMapper.toPersistenceModel(data.user);
+        subscription.userId = data.userId
 
         return subscription;
     }

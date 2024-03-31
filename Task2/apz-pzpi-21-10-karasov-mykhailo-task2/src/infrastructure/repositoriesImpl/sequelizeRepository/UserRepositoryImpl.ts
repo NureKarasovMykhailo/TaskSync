@@ -14,6 +14,7 @@ import UpdateUserPublicDto from "../../../core/repositories/UserRepository/dto/U
 import AddOrDeleteEducationDto from "../../../core/repositories/UserRepository/dto/AddOrDeleteEducationDto";
 import Education from "../../database/etities/Education";
 import UserEducations from "../../database/etities/UserEducations";
+import Company from "../../database/etities/Company";
 
 export default class UserRepositoryImpl implements IUserRepository {
     private readonly userMapper: UserMapper = new UserMapper();
@@ -239,6 +240,20 @@ export default class UserRepositoryImpl implements IUserRepository {
         await userEducation?.destroy();
 
         return await this.getUserById(id);
+    }
+
+    async setCompanyId(userId: number, companyId: number): Promise<UserDomainModel | null> {
+        const user = await User.findOne({ where: { id: userId }, include: [Role] });
+        if (!user) {
+            return null;
+        }
+        const company = await Company.findOne({ where: { id: companyId }});
+        if (!company) {
+            return null;
+        }
+        user.companyId = company.id;
+        await user.save();
+        return this.userMapper.toDomainModel(user);
     }
 
 

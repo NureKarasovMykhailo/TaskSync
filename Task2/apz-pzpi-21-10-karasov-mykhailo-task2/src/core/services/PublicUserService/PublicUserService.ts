@@ -2,14 +2,13 @@ import FileManager from "../../common/uttils/FileManager";
 import IUserRepository from "../../repositories/UserRepository/IUserRepository";
 import UpdateUserPublicDto from "../../repositories/UserRepository/dto/UpdateUserPublicDto";
 import ApiError from "../../common/error/ApiError";
-import generateJwt from "../../common/uttils/JwtGenerate";
 import {DEFAULT_USER_IMAGE_NAME} from "../../../config";
-import UserDomainModel from "../../domain/models/User/User";
 import AddOrDeleteEducationDto from "../../repositories/UserRepository/dto/AddOrDeleteEducationDto";
 import SubscriptionClass from "../../common/uttils/SubscriptionClass";
 import ISubscribeRepository from "../../repositories/SubscribeRepository/ISubscribeRepository";
 import RolesEnum from "../../common/enums/RolesEnum";
 import AddOrDeleteRoleDto from "../../repositories/UserRepository/dto/AddOrDeleteRoleDto";
+import JWT from "../../common/uttils/JWT";
 
 export default class PublicUserService {
 
@@ -39,7 +38,8 @@ export default class PublicUserService {
             throw ApiError.notFound(`There no user with ID: ${userId}`);
         }
 
-        return generateJwt(this.getPayload(updatingUser));
+        const jwt = new JWT(user);
+        return jwt.generateJwt();
     }
 
     public async addEducation(userId: number, dto: AddOrDeleteEducationDto): Promise<string> {
@@ -47,7 +47,8 @@ export default class PublicUserService {
         if (!user) {
             throw ApiError.notFound(`There no user with ID: ${userId}`);
         }
-        return generateJwt(this.getPayload(user));
+        const jwt = new JWT(user);
+        return jwt.generateJwt();
     }
 
     public async deleteEducation(userId: number, dto: AddOrDeleteEducationDto): Promise<string> {
@@ -55,7 +56,8 @@ export default class PublicUserService {
         if (!user) {
             throw ApiError.notFound(`There no user with ID: ${userId}`);
         }
-        return generateJwt(this.getPayload(user));
+        const jwt = new JWT(user);
+        return jwt.generateJwt();
     }
 
     public async subscribe(userId: number) {
@@ -77,18 +79,6 @@ export default class PublicUserService {
     }
 
 
-    private getPayload(user: UserDomainModel) {
-        return {
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            secondName: user.secondName,
-            birthday: user.birthday,
-            userImage: user.userImage,
-            phoneNumber: user.phoneNumber,
-            roles: user.roles,
-            educations: user.educations
-        };
-    }
+
 
 }

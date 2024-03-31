@@ -3,9 +3,8 @@ import LoginDto from "../../repositories/AuthRepository/dto/LoginDto";
 import {RegistrationDto} from "../../repositories/AuthRepository/dto/RegistrationDto";
 import ApiError from "../../common/error/ApiError";
 import bcrypt from 'bcrypt';
-import generateJwt from "../../common/uttils/JwtGenerate";
 import UserDomainModel from "../../domain/models/User/User";
-import IRoleRepository from "../../repositories/RoleRepository/IRoleRepository";
+import JWT from "../../common/uttils/JWT";
 
 export default class AuthService {
     constructor(private readonly authRepository: IAuthRepository) {}
@@ -22,8 +21,8 @@ export default class AuthService {
 
         const hashPassword = await bcrypt.hash(dto.password, 5);
         const user: UserDomainModel = await this.authRepository.userRegistration({...dto, password: hashPassword});
-        const payload = this.getPayload(user);
-        return generateJwt(payload);
+        const jwt = new JWT(user);
+        return jwt.generateJwt();
     }
 
     public async login (dto: LoginDto) {
@@ -36,13 +35,13 @@ export default class AuthService {
             throw ApiError.badRequest('Email чи пароль не вірний');
         }
 
-        const payload = this.getPayload(user);
-        return generateJwt(payload);
+        const jwt = new JWT(user);
+        return jwt.generateJwt();
     }
 
     public checkAuth(user: any) {
-        const payload = this.getPayload(user);
-        return generateJwt(payload);
+        const jwt = new JWT(user);
+        return jwt.generateJwt();
 
     }
 
@@ -51,17 +50,5 @@ export default class AuthService {
         return candidate === null;
     }
 
-    private getPayload(user: UserDomainModel) {
-        return {
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            secondName: user.secondName,
-            birthday: user.birthday,
-            userImage: user.userImage,
-            phoneNumber: user.phoneNumber,
-            roles: user.roles,
-            educations: user.educations
-        };
-    }
+
 }
