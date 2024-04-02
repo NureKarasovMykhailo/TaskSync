@@ -4,6 +4,8 @@ import UpdateUserAdminDto from "./dto/UpdateUserAdminDto";
 import AddOrDeleteRoleDto from "./dto/AddOrDeleteRoleDto";
 import UpdateUserPublicDto from "./dto/UpdateUserPublicDto";
 import AddOrDeleteEducationDto from "./dto/AddOrDeleteEducationDto";
+import RoleDomainModel from "../../domain/models/Role/Role";
+import EducationDomainModel from "../../domain/models/Education/Education";
 
 export default interface IUserRepository {
     getUserByEmail(email: string): Promise<UserDomainModel | null>;
@@ -19,4 +21,7 @@ export default interface IUserRepository {
     addEducation(id: number, dto: AddOrDeleteEducationDto): Promise<UserDomainModel | null>;
     deleteEducation(id: number, dto: AddOrDeleteEducationDto): Promise<UserDomainModel | null>;
     setCompanyId(userId: number, companyId: number): Promise<UserDomainModel | null>;
+    getUserRoles(userId: number): Promise<RoleDomainModel[]>;
+    unpinUserFromCompany(userId: number): Promise<UserDomainModel | null>;
+    getUserEducations(userId: number): Promise<EducationDomainModel[]>;
 }

@@ -8,8 +8,6 @@ export default class RoleMapper implements IMapper<Role, RoleDomainModel> {
             data.id,
             data.roleTitle,
             data.description,
-            //TODO поменять на доменую модель
-            data.users
         );
     }
 

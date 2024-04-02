@@ -1,7 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import RoleService from "../../core/services/RoleService/RoleService";
 import CreateRoleDto from "../../core/repositories/RoleRepository/dto/CreateRoleDto";
-import RoleDomainModel from "../../core/domain/models/Role/Role";
 import RoleRepositoryImpl from "../repositoriesImpl/sequelizeRepository/RoleRepositoryImpl";
 import RoleMapper from "../mappers/RoleMapper/RoleMapper";
 import ApiError from "../../core/common/error/ApiError";

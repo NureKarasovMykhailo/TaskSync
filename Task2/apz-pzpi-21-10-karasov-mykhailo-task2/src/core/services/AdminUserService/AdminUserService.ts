@@ -9,6 +9,7 @@ import PaginationClass from "../../common/uttils/PaginationClass";
 import UpdateUserAdminDto from "../../repositories/UserRepository/dto/UpdateUserAdminDto";
 import AddOrDeleteRoleDto from "../../repositories/UserRepository/dto/AddOrDeleteRoleDto";
 import UserRole from "../../common/enums/RolesEnum";
+import RolesEnum from "../../common/enums/RolesEnum";
 
 export default class AdminUserService {
     constructor(
@@ -64,12 +65,14 @@ export default class AdminUserService {
         return pagination.paginateItems(users, offset, limit);
     }
 
-    public async getUserById(id: number): Promise<UserDomainModel> {
+    public async getUserById(id: number) {
         const user = await this.userRepository.getUserById(id);
         if (!user) {
             throw ApiError.notFound(`There no user with id: ${id}`);
         }
-        return user;
+        const roles = await this.userRepository.getUserRoles(id);
+        const educations = await this.userRepository.getUserEducations(id);
+        return { user, roles, educations};
     }
 
     public async updateUser(id: number, dto: UpdateUserAdminDto): Promise<UserDomainModel> {
@@ -112,15 +115,28 @@ export default class AdminUserService {
         return;
     }
 
-    async addUserRole(id: number, dto: AddOrDeleteRoleDto): Promise<UserDomainModel> {
+    async addUserRole(id: number, dto: AddOrDeleteRoleDto, addingUserRoles: string[]) {
+
+        if ((addingUserRoles.includes(RolesEnum.COMPANY_ADMIN) || addingUserRoles.includes(RolesEnum.SUBSCRIBER))
+            && (dto.roleTitle === RolesEnum.SUBSCRIBER || dto.roleTitle === RolesEnum.ADMIN)) {
+            throw ApiError.forbidden(`You cannot add role ${dto.roleTitle}`)
+        }
+
         const user =  await this.userRepository.addUserRole(dto, id);
         if (!user) {
             throw ApiError.notFound(`There no user with ID: ${id}`);
         }
-        return user;
+        const roles = await this.userRepository.getUserRoles(id);
+        return {user, roles};
     }
 
-    public async deleteUserRole(dto: AddOrDeleteRoleDto, userId: number): Promise<UserDomainModel> {
+    public async deleteUserRole(dto: AddOrDeleteRoleDto, userId: number, addingUserRoles: string[]) {
+        console.log(addingUserRoles)
+        if ((addingUserRoles.includes(RolesEnum.COMPANY_ADMIN) || addingUserRoles.includes(RolesEnum.SUBSCRIBER))
+            && (dto.roleTitle === RolesEnum.SUBSCRIBER || dto.roleTitle === RolesEnum.ADMIN)) {
+            throw ApiError.forbidden(`You cannot add role ${dto.roleTitle}`)
+        }
+
         if (dto.roleTitle === UserRole.USER) {
             throw ApiError.forbidden(`You cannot delete ${UserRole.USER} role`);
         }
@@ -128,7 +144,8 @@ export default class AdminUserService {
         if (!user) {
             throw ApiError.notFound(`There no user with id: ${userId}`);
         }
-        return user;
+        const roles = await this.userRepository.getUserRoles(userId);
+        return {user, roles};
     }
 
     private async isUserWithEmailExits(email: string): Promise<boolean> {

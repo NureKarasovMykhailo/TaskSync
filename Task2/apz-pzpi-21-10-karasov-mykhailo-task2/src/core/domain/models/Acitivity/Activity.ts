@@ -12,6 +12,5 @@ export default class ActivityDomainModel {
         public readonly timeShift: number,
         public readonly complexity: Complexity,
         public readonly requiredEducation: Education,
-        public readonly users: User[]
     ) {}
 }

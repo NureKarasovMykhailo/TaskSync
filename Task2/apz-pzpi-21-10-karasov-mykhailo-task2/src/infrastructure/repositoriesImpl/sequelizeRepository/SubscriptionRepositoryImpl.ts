@@ -2,7 +2,7 @@ import ISubscribeRepository from "../../../core/repositories/SubscribeRepository
 import Subscription from "../../database/etities/Subscription";
 import User from "../../database/etities/User";
 import SubscribeMapper from "../../mappers/SubscribeMapper/SubscribeMapper";
-import SubscribeModel from "../../../core/domain/models/Subscribe/SubscribeModel";
+import Subscribe from "../../../core/domain/models/Subscribe/Subscribe";
 
 export default class SubscriptionRepositoryImpl implements  ISubscribeRepository {
 
@@ -22,7 +22,7 @@ export default class SubscriptionRepositoryImpl implements  ISubscribeRepository
         return true;
     }
 
-    async getSubscriptionByUserId(userId: number): Promise<SubscribeModel | null> {
+    async getSubscriptionByUserId(userId: number): Promise<Subscribe | null> {
         const subscription = await Subscription.findOne({
             where: { userId },
             include: [User]
@@ -33,7 +33,7 @@ export default class SubscriptionRepositoryImpl implements  ISubscribeRepository
         return this.subscriptionMapper.toDomainModel(subscription);
     }
 
-    async setSubscribeValidTrue(subscribeId: number): Promise<SubscribeModel | null> {
+    async setSubscribeValidTrue(subscribeId: number): Promise<Subscribe | null> {
         const subscription = await Subscription.findOne( { where: { id: subscribeId } });
         if (!subscription) {
             return null;

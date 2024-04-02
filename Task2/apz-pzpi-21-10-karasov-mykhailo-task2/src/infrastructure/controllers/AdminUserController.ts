@@ -1,23 +1,27 @@
 import AdminUserService from "../../core/services/AdminUserService/AdminUserService";
 import User from "../database/etities/User";
-import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepositoryImpl";
 import {NextFunction, Request, Response} from "express";
 import CreateUserDto from "../../core/repositories/UserRepository/dto/CreateUserDto";
 import {DEFAULT_USER_IMAGE_NAME} from "../../config";
 import UserMapper from "../mappers/UserMapper/UserMapper";
 import UserDomainModel from "../../core/domain/models/User/User";
-import FileManager from "../../core/common/uttils/FileManager";
 import UpdateUserAdminDto from "../../core/repositories/UserRepository/dto/UpdateUserAdminDto";
 import AddOrDeleteRoleDto from "../../core/repositories/UserRepository/dto/AddOrDeleteRoleDto";
 import PublicUserService from "../../core/services/PublicUserService/PublicUserService";
 import AddOrDeleteEducationDto from "../../core/repositories/UserRepository/dto/AddOrDeleteEducationDto";
+import RoleDomainModel from "../../core/domain/models/Role/Role";
+import RoleMapper from "../mappers/RoleMapper/RoleMapper";
+import EducationMapper from "../mappers/EducationMapper/EducationMapper";
+import EducationDomainModel from "../../core/domain/models/Education/Education";
 
 class AdminUserController {
     private readonly userMapper: UserMapper = new UserMapper();
 
     constructor(
         private readonly userService: AdminUserService,
-        private readonly publicUserService: PublicUserService
+        private readonly publicUserService: PublicUserService,
+        private readonly roleMapper: RoleMapper,
+        private readonly educationMapper: EducationMapper
     ) {}
 
 
@@ -34,7 +38,7 @@ class AdminUserController {
             } = req.body;
 
             let userImage;
-            // @ts-ignore
+
             if (req.files) {
                 userImage = req.files.userImage;
             }
@@ -102,10 +106,11 @@ class AdminUserController {
     public async getUserById(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const userDomainModel = await this.userService.getUserById(Number(id));
-            const user = this.userMapper.toPersistenceModel(userDomainModel);
-            console.log(user.roles)
-            return res.status(200).json({ user: user, roles: user.roles });
+            const {user, roles, educations}  = await this.userService.getUserById(Number(id));
+            const { userPersistence, rolesPersistence, educationsPersistence}
+                = this.mapUserWithRolesAndEducation(user, roles, educations);
+
+            return res.status(200).json({ user: userPersistence, role: rolesPersistence, educations: educationsPersistence});
         } catch (error) {
             console.log(error);
             next(error);
@@ -119,13 +124,12 @@ class AdminUserController {
                 email,
                 firstName,
                 secondName,
-                password,
                 birthday,
                 phoneNumber,
             } = req.body;
 
             let userImage;
-            // @ts-ignore
+
             if (req.files) {
                 userImage = req.files.userImage;
             }
@@ -165,9 +169,14 @@ class AdminUserController {
             const { id } = req.params;
             const { roleTitle } = req.body;
             const dto: AddOrDeleteRoleDto = new AddOrDeleteRoleDto(roleTitle);
-            const userDomainModel = await this.userService.addUserRole(Number(id), dto);
-            const user = this.userMapper.toPersistenceModel(userDomainModel);
-            return res.status(200).json({ user: user, roles: user.roles});
+
+            const userRoles = this.getUserRoles(req.user.roles);
+            const {user, roles} = await this.userService.addUserRole(Number(id), dto, userRoles);
+            const userPersistence = this.userMapper.toPersistenceModel(user);
+            const rolesPersistence = roles.map(role => {
+                return this.roleMapper.toPersistenceModel(role);
+            })
+            return res.status(200).json({ user: userPersistence, roles: rolesPersistence});
         } catch (error) {
             console.log(error);
             next(error);
@@ -180,10 +189,15 @@ class AdminUserController {
             const { roleTitle } = req.body;
 
             const dto: AddOrDeleteRoleDto = new AddOrDeleteRoleDto(roleTitle);
+            // @ts-ignore
+            const userRoles = this.getUserRoles(req.user.roles);
 
-            const userDomainModel = await this.userService.deleteUserRole(dto, Number(id));
-            const user = this.userMapper.toPersistenceModel(userDomainModel);
-            return res.status(200).json({ user: user, roles: user.roles});
+            const {user, roles} = await this.userService.deleteUserRole(dto, Number(id), userRoles);
+            const userPersistence = this.userMapper.toPersistenceModel(user);
+            const rolesPersistence = roles.map(role => {
+                return this.roleMapper.toPersistenceModel(role);
+            });
+            return res.status(200).json({ user: userPersistence, roles: rolesPersistence});
         } catch (error) {
             console.log(error);
             next(error);
@@ -197,9 +211,11 @@ class AdminUserController {
             const dto: AddOrDeleteEducationDto = new AddOrDeleteEducationDto(educationTitle);
 
             await this.publicUserService.addEducation(Number(id), dto);
-            const userDomainModel = await this.userService.getUserById(Number(id));
-            const user = this.userMapper.toPersistenceModel(userDomainModel);
-            return res.status(200).json({ user: user, role: user.roles, educations: user.educations});
+            const {user, roles, educations}  = await this.userService.getUserById(Number(id));
+            const { userPersistence, rolesPersistence, educationsPersistence}
+                = this.mapUserWithRolesAndEducation(user, roles, educations);
+
+            return res.status(200).json({ user: userPersistence, role: rolesPersistence, educations: educationsPersistence});
         } catch (error) {
             console.log(error);
             next(error);
@@ -213,19 +229,40 @@ class AdminUserController {
             const dto: AddOrDeleteEducationDto = new AddOrDeleteEducationDto(educationTitle);
 
             await this.publicUserService.deleteEducation(Number(id), dto);
-            const userDomainModel = await this.userService.getUserById(Number(id));
-            const user = this.userMapper.toPersistenceModel(userDomainModel);
-            return res.status(200).json({ user: user, role: user.roles, educations: user.educations});
+            const {user, roles, educations}  = await this.userService.getUserById(Number(id));
+            const { userPersistence, rolesPersistence, educationsPersistence}
+                = this.mapUserWithRolesAndEducation(user, roles, educations);
+
+            return res.status(200).json({ user: userPersistence, role: rolesPersistence, educations: educationsPersistence});
         } catch (error) {
             console.log(error);
             next(error);
         }
     }
 
+    private getUserRoles(userRoles: RoleDomainModel[]): string[] {
+        let roles: string[] = [];
+        userRoles.map(role => {
+            roles.push(role.roleTitle);
+        });
+        return roles;
+    }
+
+    private mapUserWithRolesAndEducation(user: UserDomainModel, roles: RoleDomainModel[], educations: EducationDomainModel[]){
+        const userPersistenceModel = this.userMapper.toPersistenceModel(user);
+        const rolesPersistence = roles.map(role => {
+            return this.roleMapper.toPersistenceModel(role);
+        });
+        const educationsPersistenceModel = educations.map(education => {
+            return this.educationMapper.toPersistenceModel(education);
+        });
+
+        return {
+            userPersistence: userPersistenceModel,
+            rolesPersistence: rolesPersistence,
+            educationsPersistence: educationsPersistenceModel
+        }
+    }
 }
 
-const fileManager: FileManager = new FileManager();
-const publicUserService = new PublicUserService(new UserRepositoryImpl())
-const userService: AdminUserService = new AdminUserService(new UserRepositoryImpl(), fileManager);
-
-export default new AdminUserController(userService, publicUserService);
+export default AdminUserController;

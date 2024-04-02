@@ -1,5 +1,4 @@
 import {
-    BelongsTo,
     BelongsToMany,
     Column,
     DataType,
@@ -19,6 +18,7 @@ import ScannerHistory from "./ScannerHistory";
 import Activity from "./Activity";
 import UserActivities from "./UserActivities";
 import Subscription from "./Subscription";
+import Scanner from "./Scanner";
 
 
 @Table({tableName: 'users'})
@@ -50,7 +50,7 @@ export default class User extends Model {
 
     @ForeignKey(() => Company)
     @Column({type: DataType.INTEGER, allowNull: true})
-    companyId!: number;
+    companyId!: number | null;
 
     @BelongsToMany(() => Role, () => UserRoles)
     roles!: Role[]
@@ -63,6 +63,9 @@ export default class User extends Model {
 
     @HasMany(() => ScannerHistory)
     scannerHistory!: ScannerHistory[];
+
+    @HasOne(() => Scanner)
+    scanner!: Scanner;
 
     @BelongsToMany(() => Activity, () => UserActivities)
     activities!: Activity[];

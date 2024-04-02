@@ -6,7 +6,6 @@ import UserMapper from "../../mappers/UserMapper/UserMapper";
 import RolesEnum from "../../../core/common/enums/RolesEnum";
 import Role from "../../database/etities/Role";
 import UserRoles from "../../database/etities/UserRoles";
-import UserRole from "../../../core/common/enums/RolesEnum";
 import UpdateUserAdminDto from "../../../core/repositories/UserRepository/dto/UpdateUserAdminDto";
 import AddOrDeleteRoleDto from "../../../core/repositories/UserRepository/dto/AddOrDeleteRoleDto";
 import ApiError from "../../../core/common/error/ApiError";
@@ -15,9 +14,15 @@ import AddOrDeleteEducationDto from "../../../core/repositories/UserRepository/d
 import Education from "../../database/etities/Education";
 import UserEducations from "../../database/etities/UserEducations";
 import Company from "../../database/etities/Company";
+import RoleDomainModel from "../../../core/domain/models/Role/Role";
+import RoleMapper from "../../mappers/RoleMapper/RoleMapper";
+import EducationDomainModel from "../../../core/domain/models/Education/Education";
+import EducationMapper from "../../mappers/EducationMapper/EducationMapper";
 
 export default class UserRepositoryImpl implements IUserRepository {
     private readonly userMapper: UserMapper = new UserMapper();
+    private readonly roleMapper: RoleMapper = new RoleMapper();
+    private readonly educationMapper: EducationMapper = new EducationMapper();
 
     async createUser(dto: CreateUserDto, userImage: string, hashPassword: string): Promise<UserDomainModel> {
         const user: User = await User.create({
@@ -254,6 +259,38 @@ export default class UserRepositoryImpl implements IUserRepository {
         user.companyId = company.id;
         await user.save();
         return this.userMapper.toDomainModel(user);
+    }
+
+    async getUserRoles(userId: number): Promise<RoleDomainModel[]> {
+        let roles: RoleDomainModel[] = [];
+        const user = await User.findOne({ where: { id: userId}, include: [Role] });
+        if (user) {
+            roles = user.roles.map(role => {
+                return this.roleMapper.toDomainModel(role);
+            });
+        }
+        return roles;
+    }
+
+    async unpinUserFromCompany(userId: number): Promise<UserDomainModel | null> {
+        const user = await User.findOne({ where: { id: userId } });
+        if (!user) {
+            return null;
+        }
+        user.companyId = null;
+        await user.save();
+        return this.userMapper.toDomainModel(user);
+    }
+
+    async getUserEducations(userId: number): Promise<EducationDomainModel[]> {
+        let educations: EducationDomainModel[] = [];
+        const user = await User.findOne({ where: { id: userId}, include: [Education] });
+        if (user) {
+            educations = user.educations.map(education => {
+                return this.educationMapper.toDomainModel(education);
+            });
+        }
+        return educations;
     }
 
 

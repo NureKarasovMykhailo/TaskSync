@@ -1,10 +1,32 @@
 import express from "express";
-import adminUserController from "../controllers/AdminUserController";
 import createUserValidator from "../../core/common/validators/CreateUserValidator";
 import updateUserValidator from "../../core/common/validators/UpdateUserValidator";
 import publicUserController from "../controllers/PublicUserController";
+import checkRoleMiddleware from "../../core/common/middlewares/CheckRoleMiddleware";
+import RolesEnum from "../../core/common/enums/RolesEnum";
+import rolesEnum from "../../core/common/enums/RolesEnum";
+import FileManager from "../../core/common/uttils/FileManager";
+import PublicUserService from "../../core/services/PublicUserService/PublicUserService";
+import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepositoryImpl";
+import SubscriptionRepositoryImpl from "../repositoriesImpl/sequelizeRepository/SubscriptionRepositoryImpl";
+import AdminUserService from "../../core/services/AdminUserService/AdminUserService";
+import AdminUserController from "../controllers/AdminUserController";
+import RoleMapper from "../mappers/RoleMapper/RoleMapper";
+import EducationMapper from "../mappers/EducationMapper/EducationMapper";
 
 const router = express.Router();
+
+const fileManager: FileManager = new FileManager();
+const publicUserService = new PublicUserService(new UserRepositoryImpl(), new SubscriptionRepositoryImpl())
+const userService: AdminUserService = new AdminUserService(new UserRepositoryImpl(), fileManager);
+
+const adminUserController = new AdminUserController(
+    userService,
+    publicUserService,
+    new RoleMapper(),
+    new EducationMapper()
+);
+
 
 router.post(
     '/',
@@ -35,13 +57,17 @@ router.delete(
 
 router.patch(
     '/add-role/:id',
+    checkRoleMiddleware([RolesEnum.SUBSCRIBER, RolesEnum.ADMIN, rolesEnum.COMPANY_ADMIN]),
     adminUserController.addRole.bind(adminUserController)
 );
 
 router.patch(
     '/delete-role/:id',
+    checkRoleMiddleware([RolesEnum.SUBSCRIBER, RolesEnum.ADMIN, rolesEnum.COMPANY_ADMIN]),
     adminUserController.deleteRole.bind(adminUserController)
 );
+
+// TODO добавить возвращения оброзований
 
 router.put(
     '/add-education',

@@ -1,14 +1,12 @@
 import IMapper from "../IMapper";
-import SubscribeModel from "../../../core/domain/models/Subscribe/SubscribeModel";
+import Subscribe from "../../../core/domain/models/Subscribe/Subscribe";
 import Subscription from "../../database/etities/Subscription";
-import UserMapper from "../UserMapper/UserMapper";
 
-export default class SubscribeMapper implements IMapper<Subscription, SubscribeModel> {
-    private readonly userMapper: UserMapper = new UserMapper();
+export default class SubscribeMapper implements IMapper<Subscription, Subscribe> {
 
-    toDomainModel(data: Subscription): SubscribeModel {
+    toDomainModel(data: Subscription): Subscribe {
 
-        return new SubscribeModel(
+        return new Subscribe(
             data.id,
             data.code,
             data.validUntil,
@@ -17,7 +15,7 @@ export default class SubscribeMapper implements IMapper<Subscription, SubscribeM
         );
     }
 
-    toPersistenceModel(data: SubscribeModel): Subscription {
+    toPersistenceModel(data: Subscribe): Subscription {
         const subscription = new Subscription();
         subscription.id = data.id;
         subscription.code = data.code;

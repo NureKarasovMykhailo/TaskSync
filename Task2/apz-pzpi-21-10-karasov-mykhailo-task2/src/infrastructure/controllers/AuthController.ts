@@ -58,7 +58,7 @@ class AuthController {
 
     async checkAuth(req: Request, res: Response, next: NextFunction) {
         try {
-            // @ts-ignore
+
             const token = this.authService.checkAuth(req.user);
             return res.status(200).json({ token: token });
         } catch (error) {

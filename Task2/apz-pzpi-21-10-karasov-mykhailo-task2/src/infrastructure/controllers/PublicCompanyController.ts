@@ -6,11 +6,13 @@ import CompanyMapper from "../mappers/CompanyMapper/CompanyMapper";
 import ApiError from "../../core/common/error/ApiError";
 import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
+import UserMapper from "../mappers/UserMapper/UserMapper";
 
 export default class PublicCompanyController {
     constructor(
        private readonly companyService: CompanyService,
-       private readonly companyMapper: CompanyMapper
+       private readonly companyMapper: CompanyMapper,
+       private readonly userMapper: UserMapper
     ) {}
 
     public async createCompany(req: Request, res: Response, next: NextFunction) {
@@ -39,8 +41,8 @@ export default class PublicCompanyController {
             );
 
             // @ts-ignore
-            const token = await this.companyService.createCompany(dto, req.user.id);
-            return res.status(201).json({ token: token });
+            const {token, company} = await this.companyService.createCompany(dto, req.user.id);
+            return res.status(201).json({ token: token, company: this.companyMapper.toPersistenceModel(company) });
         } catch (error) {
             console.log(error);
             next(error);
@@ -104,12 +106,43 @@ export default class PublicCompanyController {
             // @ts-ignore
             if (req.user.companyId) {
                 // @ts-ignore
-                await this.companyService.deleteCompanyByToken(req.user.companyId, req.user.id);
-                return res.status(200).json({});
+                const token = await this.companyService.deleteCompanyByToken(req.user.companyId, req.user.id);
+                return res.status(200).json({token: token});
             } else {
                 return next(ApiError.notFound(`You have not any company`));
             }
 
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+
+    public async addEmployee(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            if (req.user.companyId) {
+                const addedEmployeeDomainModel = await this.companyService.addEmployee(Number(id), req.user.companyId);
+                const addedEmployee = this.userMapper.toPersistenceModel(addedEmployeeDomainModel);
+                return res.status(200).json({ addedUser: addedEmployee });
+            } else {
+                return next(ApiError.internalServerError(`Unexpected error`));
+            }
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+
+    public async deleteEmployee(req: Request, res: Response, next: NextFunction) {
+        try {
+            if (req.user.companyId) {
+                const { id } = req.params;
+                await this.companyService.deleteEmployee(Number(id), req.user.companyId);
+                return res.status(200).json({ });
+            } else {
+                return next(ApiError.internalServerError(`Unexpected error`));
+            }
         } catch (error) {
             console.log(error);
             next(error);

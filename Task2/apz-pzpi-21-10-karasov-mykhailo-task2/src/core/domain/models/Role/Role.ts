@@ -5,6 +5,5 @@ export default class RoleDomainModel {
         public readonly id: number,
         public readonly roleTitle: string,
         public readonly description: string | null,
-        public readonly users: User[]
     ) {}
 }

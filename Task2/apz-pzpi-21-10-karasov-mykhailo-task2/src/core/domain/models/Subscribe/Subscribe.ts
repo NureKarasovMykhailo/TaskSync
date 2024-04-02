@@ -1,6 +1,6 @@
 import UserDomainModel from "../User/User";
 
-export default class SubscribeModel {
+export default class Subscribe {
     constructor(
         public readonly id: number,
         public readonly code: string,

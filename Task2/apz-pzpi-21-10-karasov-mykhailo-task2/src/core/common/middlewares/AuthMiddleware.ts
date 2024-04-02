@@ -2,6 +2,8 @@ import {NextFunction, Request, Response} from "express";
 import ApiError from "../error/ApiError";
 import jwt from 'jsonwebtoken';
 import {JWT_SECRET_KEY} from "../../../config";
+import {User} from "../../../types/types";
+
 
 function authMiddleware(req: Request, res: Response, next: NextFunction) {
     if (req.method === 'OPTIONS') {
@@ -13,8 +15,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction) {
             return next(ApiError.unauthorized('Unauthorized user'));
         }
 
-        // @ts-ignore
-        req.user = jwt.verify(token, JWT_SECRET_KEY);
+        req.user = jwt.verify(token, JWT_SECRET_KEY) as User;
         next();
     } catch (error) {
         return next(ApiError.unauthorized('Unauthorized user'));

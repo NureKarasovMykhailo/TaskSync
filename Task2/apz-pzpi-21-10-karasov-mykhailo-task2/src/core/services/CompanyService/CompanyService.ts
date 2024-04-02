@@ -5,6 +5,7 @@ import IUserRepository from "../../repositories/UserRepository/IUserRepository";
 import JWT from "../../common/uttils/JWT";
 import FileManager from "../../common/uttils/FileManager";
 import {DEFAULT_COMPANY_IMAGE_NAME} from "../../../config";
+import RolesEnum from "../../common/enums/RolesEnum";
 export default class CompanyService {
     private readonly fileManager: FileManager = new FileManager();
     constructor(
@@ -12,7 +13,7 @@ export default class CompanyService {
         private readonly userRepository: IUserRepository,
     ) {}
 
-    async createCompany(dto: CreateOrUpdateCompanyDto, creatingUserId: number): Promise<string> {
+    async createCompany(dto: CreateOrUpdateCompanyDto, creatingUserId: number) {
         if (!await this.isCompanyNameUnique(dto.companyName)) {
             throw ApiError.conflict(`There already existed company with name: ${dto.companyName}`);
         }
@@ -32,7 +33,8 @@ export default class CompanyService {
                 throw ApiError.notFound(`There no user with ID: ${creatingUserId}`);
             }
             const jwt = new JWT(user);
-            return jwt.generateJwt();
+            const token = jwt.generateJwt();
+            return {token: token, company: company};
         }
         return "";
     }
@@ -75,8 +77,55 @@ export default class CompanyService {
             throw ApiError.forbidden(`You cannot delete other user\'s company`);
         }
         await this.companyRepository.deleteCompany(companyId);
-        return;
+        const user = await this.userRepository.getUserById(userId);
+        if (!user) {
+            throw ApiError.notFound(`There no user with ID: ${userId}`);
+        }
+        const jwt = new JWT(user);
+        return jwt.generateJwt();
 
+    }
+
+    public async addEmployee(addedEmployeeId: number, companyId: number) {
+        let addedEmployee = await this.userRepository.getUserById(addedEmployeeId);
+        if (!addedEmployee) {
+            throw ApiError.notFound(`There no user with ID: ${addedEmployeeId}`);
+        }
+        if (addedEmployee.companyId) {
+            throw ApiError.conflict(`User with id: ${addedEmployeeId} has already worked in company`);
+        }
+
+        addedEmployee = await this.userRepository.setCompanyId(addedEmployeeId, companyId);
+        if (!addedEmployee) {
+            throw ApiError.internalServerError(`Error with adding employee`);
+        }
+
+        return addedEmployee;
+    }
+
+    public async deleteEmployee(deletingUserId: number, companyId: number) {
+        const deletingUser = await this.userRepository.getUserById(deletingUserId);
+
+        if (!deletingUser) {
+            throw ApiError.notFound(`There no user with ID: ${deletingUserId}`);
+        }
+
+        if (deletingUser.companyId !== companyId) {
+            throw ApiError.forbidden(`You cannot delete user of other company`);
+        }
+
+        const deletingUserRoles = await this.userRepository.getUserRoles(deletingUserId);
+        deletingUserRoles.map(role => {
+            if (role.roleTitle === RolesEnum.SUBSCRIBER) {
+                throw ApiError.forbidden(`You cannot delete user with role: ${RolesEnum.SUBSCRIBER}`);
+            }
+        });
+        const unpinUser = await this.userRepository.unpinUserFromCompany(deletingUserId);
+        if (!unpinUser) {
+            throw ApiError.internalServerError(`Unexpected error`);
+        }
+        const jwt = new JWT(unpinUser);
+        return jwt.generateJwt();
     }
 
     private async isUserHasCompany(userId: number): Promise<boolean> {

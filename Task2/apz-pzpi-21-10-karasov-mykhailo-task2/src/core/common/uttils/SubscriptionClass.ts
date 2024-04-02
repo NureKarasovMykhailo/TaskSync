@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import * as process from "process";
-import SubscribeModel from "../../domain/models/Subscribe/SubscribeModel";
+import Subscribe from "../../domain/models/Subscribe/Subscribe";
 
 
 dotenv.config();
@@ -41,7 +41,7 @@ export default class SubscriptionClass {
         });
     }
 
-    async isSubscriptionValid(subscribe: SubscribeModel) {
+    async isSubscriptionValid(subscribe: Subscribe) {
         const response = await fetch(`https://api-m.sandbox.paypal.com/v1/billing/subscriptions/${subscribe.code}`, {
             method: 'get',
             headers: {

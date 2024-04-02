@@ -6,6 +6,7 @@ import educationRouter from "./EducationRouter";
 import adminUserRouter from "./AdminUserRouter";
 import publicUserRouter from "./PublicUserRouter";
 import publicCompanyRouter from './CompanyPublicRouter';
+import scannerRouter from "./ScannerRouter";
 
 router.use('/education', educationRouter);
 router.use('/auth', authRouter);
@@ -13,5 +14,6 @@ router.use('/role', roleRouter);
 router.use('/admin-user', adminUserRouter);
 router.use('/public-user', publicUserRouter)
 router.use('/public-company', publicCompanyRouter);
+router.use('/scanner', scannerRouter);
 
 export default router;

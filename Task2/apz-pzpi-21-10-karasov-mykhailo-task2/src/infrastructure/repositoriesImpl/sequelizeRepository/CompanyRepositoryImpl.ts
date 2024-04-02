@@ -3,6 +3,8 @@ import CreateOrUpdateCompanyDto from "../../../core/repositories/CompanyReposito
 import CompanyDomainModel from "../../../core/domain/models/Company/Company";
 import Company from "../../database/etities/Company";
 import CompanyMapper from "../../mappers/CompanyMapper/CompanyMapper";
+import User from "../../database/etities/User";
+import Role from "../../database/etities/Role";
 
 export default class CompanyRepositoryImpl implements ICompanyRepository {
     private readonly companyMapper: CompanyMapper = new CompanyMapper();
@@ -61,6 +63,9 @@ export default class CompanyRepositoryImpl implements ICompanyRepository {
         await company?.destroy();
         return;
     }
+
+
+
 
 
 }
