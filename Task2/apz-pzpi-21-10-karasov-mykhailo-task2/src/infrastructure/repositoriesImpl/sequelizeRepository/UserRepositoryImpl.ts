@@ -65,7 +65,7 @@ export default class UserRepositoryImpl implements IUserRepository {
             include: [{
                 model: Role,
                 where: [{ id: role.id }]
-            }]
+            }, Education]
         });
 
         usersPersistenceModel.map(userPersistenceModel => {
@@ -120,7 +120,7 @@ export default class UserRepositoryImpl implements IUserRepository {
     async updateUserPublic(id: number, dto: UpdateUserPublicDto, fileName: string): Promise<UserDomainModel | null> {
         const updatingUser = await User.findOne(
             { where: { id },
-                include: [{ model: Role}]
+                include: [Role, Education]
             });
         if (! updatingUser) {
             return null;
@@ -144,7 +144,7 @@ export default class UserRepositoryImpl implements IUserRepository {
     async addUserRole(dto: AddOrDeleteRoleDto, userId: number): Promise<UserDomainModel | null> {
         const user = await User.findOne({
             where: {id: userId },
-            include: [{ model: Role }]
+            include: [Role, Education]
         });
         if (!user) {
             throw ApiError.notFound(`There no user with ID: ${userId}`);
@@ -195,7 +195,7 @@ export default class UserRepositoryImpl implements IUserRepository {
     async addEducation(id: number, dto: AddOrDeleteEducationDto): Promise<UserDomainModel | null> {
         const user = await User.findOne({
             where: { id },
-            include: [{ model: Education }]
+            include: [Role, Education]
         });
         if (!user) {
             return null;

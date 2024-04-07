@@ -14,5 +14,7 @@ export default class UserDomainModel {
         public readonly birthday: Date,
         public readonly userImage: string,
         public readonly companyId: number | null,
+        public readonly roles: RoleDomainModel[] | null,
+        public readonly educations: EducationDomainModel[] | null
     ) {}
 }

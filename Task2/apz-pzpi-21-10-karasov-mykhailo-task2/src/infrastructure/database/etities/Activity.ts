@@ -37,12 +37,15 @@ export default class Activity extends Model {
     companyId!: number | null;
 
     @BelongsTo(() => Complexity)
-    complexity!: Complexity;
+    complexity!: Complexity | null;
 
     @BelongsTo(() => Education)
-    education!: Education;
+    education!: Education | null;
 
     @BelongsToMany(() => User, () => UserActivities)
-    users!: User[];
+    users!: User[] | null;
+
+    @BelongsTo(() => Company)
+    company!: Company | null;
 
 }

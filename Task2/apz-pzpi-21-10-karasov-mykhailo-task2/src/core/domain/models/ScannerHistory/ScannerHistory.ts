@@ -5,6 +5,7 @@ export default class ScannerHistoryDomainModel {
         public readonly pulse: number,
         public readonly activeWorkedTime: number,
         public readonly userId: number | null,
-        public readonly scannerId: number | null
+        public readonly scannerId: number | null,
+        public readonly createdAt: Date
 ) {}
 }

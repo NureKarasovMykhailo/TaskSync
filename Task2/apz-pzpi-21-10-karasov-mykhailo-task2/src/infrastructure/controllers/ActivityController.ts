@@ -1,10 +1,15 @@
 import ActivityService from "../../core/services/ActivityService/ActivityService";
 import {NextFunction, Response, Request} from "express";
 import CreateOrUpdateActivityDto from "../../core/repositories/ActivityRepository/dto/CreateOrUpdateActivityDto";
+import ActivityMapper from "../mappers/ActivityMapper/ActivityMapper";
+import {validationResult} from "express-validator";
+import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
+import ApiError from "../../core/common/error/ApiError";
 
 export default class ActivityController {
     constructor(
        private readonly activityService: ActivityService,
+       private readonly activityMapper: ActivityMapper
     ) {}
 
     public async createActivity(req: Request, res: Response, next: NextFunction) {
@@ -24,6 +29,13 @@ export default class ActivityController {
                 complexityId,
                 educationId,
             } = req.body;
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                const errorMessages = formatValidationErrors(errors.array());
+                return next(ApiError.badRequest(errorMessages.join(', ')));
+            }
+
             const dto: CreateOrUpdateActivityDto = new CreateOrUpdateActivityDto(
                 activityTitle,
                 description,
@@ -33,9 +45,12 @@ export default class ActivityController {
                 educationId,
                 companyId
             );
-
-            const {activity, education, complexity} = await this.activityService.createActivity(dto);
-            return res.status(201).json({ activity, education, complexity});
+            const activityDomain = await this.activityService.createActivity(dto);
+            const activityPersistence = this.activityMapper.toPersistenceModel(activityDomain);
+            console.log(activityPersistence)
+            return res.status(201).json({
+                activity: activityDomain
+            });
         } catch (error) {
             console.log(error);
             next(error);
@@ -64,7 +79,7 @@ export default class ActivityController {
                 );
 
                 return res.status(200).json({
-                    activities: activities.items,
+                    activities: activities.paginatedItems,
                     pagination: {
                         totalItems: activities.itemsCount,
                         totalPages: activities.totalPages,
@@ -80,5 +95,106 @@ export default class ActivityController {
         }
     }
 
+    public async getActivityById(req: Request, res: Response, next: NextFunction) {
+        try {
+            if (req.user.companyId) {
+                const { id } = req.params;
+                const activity = await this.activityService.getActivityById(Number(id), req.user.companyId);
+                return res.status(200).json({ activity: activity});
+            }
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+
+    public async updateActivity(req: Request, res: Response, next: NextFunction) {
+        try {
+            let companyId;
+            if (req.user.companyId) {
+                companyId = req.user.companyId;
+            } else {
+                companyId = req.body.companyId;
+            }
+
+            const { id } = req.params;
+            const {
+                activityTitle,
+                description,
+                requiredWorkerCount,
+                timeShift,
+                complexityId,
+                educationId
+            } = req.body;
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                const errorMessages = formatValidationErrors(errors.array());
+                return next(ApiError.badRequest(errorMessages.join(', ')));
+            }
+
+            const dto: CreateOrUpdateActivityDto = new CreateOrUpdateActivityDto(
+                activityTitle as string,
+                description as string,
+                Number(requiredWorkerCount),
+                Number(timeShift),
+                Number(complexityId),
+                Number(educationId),
+                companyId
+            );
+            console.log(dto)
+            const updatedActivity = await this.activityService.updateActivity(Number(id), companyId, dto);
+
+            return res.status(200).json({ activity: updatedActivity });
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+
+    public async deleteActivity(req: Request, res: Response, next: NextFunction) {
+        try {
+            if (req.user.companyId) {
+                const { id } = req.params;
+                await this.activityService.deleteActivity(Number(id), req.user.companyId);
+                return res.status(200).json({});
+            }
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+
+    public async addEmployee(req: Request, res: Response, next: NextFunction) {
+        try {
+            if (req.user.companyId) {
+                const { id } = req.params;
+                const { userId } = req.body;
+
+                const activity = await this.activityService.addEmployee(Number(id), Number(userId));
+
+                return res.status(200).json({ activity: activity });
+            }
+
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
+
+    public async deleteEmployee(req: Request, res: Response, next: NextFunction) {
+        try {
+            if (req.user.companyId) {
+                const { id } = req.params;
+                const { userId} = req.body;
+
+                const activity = await this.activityService.deleteEmployee(Number(id), Number(userId));
+                return res.status(200).json({ activity: activity});
+            }
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
 
 }

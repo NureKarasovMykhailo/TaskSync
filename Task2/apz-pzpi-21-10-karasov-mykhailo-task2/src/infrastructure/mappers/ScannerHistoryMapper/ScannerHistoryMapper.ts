@@ -10,7 +10,8 @@ export default class ScannerHistoryMapper implements IMapper<ScannerHistory, Sca
             data.pulse,
             data.activeWorkedTime,
             data.userId,
-            data.scannerId
+            data.scannerId,
+            data.createdAt
         );
     }
 
@@ -23,6 +24,7 @@ export default class ScannerHistoryMapper implements IMapper<ScannerHistory, Sca
         scannerHistory.activeWorkedTime = data.activeWorkedTime;
         scannerHistory.userId = data.userId;
         scannerHistory.scannerId = data.scannerId;
+        scannerHistory.createdAt = data.createdAt;
 
         return scannerHistory;
     }

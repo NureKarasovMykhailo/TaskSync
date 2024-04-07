@@ -8,17 +8,13 @@ export default class UserActivities extends Model {
     @Column({type: DataType.INTEGER, primaryKey: true, autoIncrement: true})
     id!: number;
 
-    @Column({type: DataType.DATE, allowNull: false})
-    timeStart!: Date;
-
-    @Column({type: DataType.DATE, allowNull: false})
-    timeEnd!: Date;
-
     @ForeignKey(() => User)
-    @Column({type: DataType.INTEGER, allowNull: false})
-    userId!: number;
+    @Column({type: DataType.INTEGER, allowNull: true})
+    userId!: number | null;
 
     @ForeignKey(() => Activity)
-    @Column({type: DataType.INTEGER, allowNull: false})
-    activityId!: number;
+    @Column({type: DataType.INTEGER, allowNull: true})
+    activityId!: number | null;
+
+
 }

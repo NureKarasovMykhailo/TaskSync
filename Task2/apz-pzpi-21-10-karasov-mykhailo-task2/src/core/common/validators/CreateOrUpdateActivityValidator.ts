@@ -6,7 +6,7 @@ export default function createOrUpdateActivityValidator(): ValidationChain[] {
             .trim()
             .notEmpty()
             .withMessage('Будь-ласка, введіть назву діяльності'),
-        body('requireWorkerCount')
+        body('requiredWorkerCount')
             .isNumeric()
             .withMessage('Будь-ласка, введіть необхідну кількість робітників'),
         body('timeShift')
