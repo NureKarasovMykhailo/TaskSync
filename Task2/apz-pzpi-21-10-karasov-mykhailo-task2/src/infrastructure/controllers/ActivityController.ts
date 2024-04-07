@@ -1,5 +1,4 @@
 import ActivityService from "../../core/services/ActivityService/ActivityService";
-import ActivityMapper from "../mappers/ActivityMapper/ActivityMapper";
 import {NextFunction, Response, Request} from "express";
 import CreateOrUpdateActivityDto from "../../core/repositories/ActivityRepository/dto/CreateOrUpdateActivityDto";
 
