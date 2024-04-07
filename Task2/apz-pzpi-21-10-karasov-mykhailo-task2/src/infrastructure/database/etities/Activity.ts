@@ -16,7 +16,7 @@ export default class Activity extends Model {
     activityTitle!: string;
 
     @Column({type: DataType.STRING, allowNull: true})
-    description!: string;
+    description!: string | null;
 
     @Column({type: DataType.INTEGER, allowNull: false})
     requiredWorkersCount!: number
@@ -26,15 +26,15 @@ export default class Activity extends Model {
 
     @ForeignKey(() => Complexity)
     @Column({type: DataType.INTEGER, allowNull: true})
-    complexityId!: number;
+    complexityId!: number | null;
 
     @ForeignKey(() => Education)
     @Column({type: DataType.INTEGER, allowNull: true})
-    educationId!: number;
+    educationId!: number | null;
 
     @ForeignKey(() => Company)
     @Column({type: DataType.INTEGER, allowNull: true})
-    companyId!: number;
+    companyId!: number | null;
 
     @BelongsTo(() => Complexity)
     complexity!: Complexity;

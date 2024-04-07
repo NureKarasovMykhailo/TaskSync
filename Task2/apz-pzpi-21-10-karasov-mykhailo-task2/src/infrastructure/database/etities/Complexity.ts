@@ -11,6 +11,9 @@ export default class Complexity extends Model {
     @Column({type: DataType.STRING, unique: true, allowNull: false})
     complexityTitle!: string;
 
+    @Column({ type: DataType.INTEGER, unique: true, allowNull: false})
+    evaluation!: number;
+
     @HasMany(() => Activity)
     activities!: Activity[];
 }

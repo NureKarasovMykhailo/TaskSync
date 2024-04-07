@@ -1,7 +1,3 @@
-import Complexity from "../Complexity/Complexity";
-import Education from "../Education/Education";
-import User from "../User/User";
-import RoleDomainModel from "../Role/Role";
 
 export default class ActivityDomainModel {
     constructor(
@@ -10,7 +6,8 @@ export default class ActivityDomainModel {
         public readonly description: string | null,
         public readonly requiredWorkerCount: number,
         public readonly timeShift: number,
-        public readonly complexity: Complexity,
-        public readonly requiredEducation: Education,
+        public readonly complexityId: number | null,
+        public readonly educationId: number | null,
+        public readonly companyId: number | null
     ) {}
 }

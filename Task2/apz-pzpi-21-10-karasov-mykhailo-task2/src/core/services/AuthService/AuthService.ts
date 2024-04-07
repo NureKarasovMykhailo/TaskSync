@@ -5,9 +5,13 @@ import ApiError from "../../common/error/ApiError";
 import bcrypt from 'bcrypt';
 import UserDomainModel from "../../domain/models/User/User";
 import JWT from "../../common/uttils/JWT";
+import IUserRepository from "../../repositories/UserRepository/IUserRepository";
 
 export default class AuthService {
-    constructor(private readonly authRepository: IAuthRepository) {}
+    constructor(
+        private readonly authRepository: IAuthRepository,
+        private readonly userRepository: IUserRepository
+    ) {}
 
     public async registration(dto: RegistrationDto) {
 
@@ -21,7 +25,8 @@ export default class AuthService {
 
         const hashPassword = await bcrypt.hash(dto.password, 5);
         const user: UserDomainModel = await this.authRepository.userRegistration({...dto, password: hashPassword});
-        const jwt = new JWT(user);
+        const roles = await this.userRepository.getUserRoles(user.id);
+        const jwt = new JWT(user, roles);
         return jwt.generateJwt();
     }
 
@@ -35,12 +40,14 @@ export default class AuthService {
             throw ApiError.badRequest('Email чи пароль не вірний');
         }
 
-        const jwt = new JWT(user);
+        const roles = await this.userRepository.getUserRoles(user.id);
+        const jwt = new JWT(user, roles);
         return jwt.generateJwt();
     }
 
-    public checkAuth(user: any) {
-        const jwt = new JWT(user);
+    public async checkAuth(user: any) {
+        const roles = await this.userRepository.getUserRoles(user.id);
+        const jwt = new JWT(user, roles);
         return jwt.generateJwt();
 
     }

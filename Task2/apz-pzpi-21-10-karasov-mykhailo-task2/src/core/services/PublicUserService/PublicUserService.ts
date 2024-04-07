@@ -37,8 +37,9 @@ export default class PublicUserService {
         if (!updatingUser) {
             throw ApiError.notFound(`There no user with ID: ${userId}`);
         }
+        const roles = await this.userRepository.getUserRoles(updatingUser.id);
 
-        const jwt = new JWT(user);
+        const jwt = new JWT(updatingUser, roles);
         return jwt.generateJwt();
     }
 
@@ -47,7 +48,8 @@ export default class PublicUserService {
         if (!user) {
             throw ApiError.notFound(`There no user with ID: ${userId}`);
         }
-        const jwt = new JWT(user);
+        const roles = await this.userRepository.getUserRoles(user.id);
+        const jwt = new JWT(user, roles);
         return jwt.generateJwt();
     }
 
@@ -56,7 +58,8 @@ export default class PublicUserService {
         if (!user) {
             throw ApiError.notFound(`There no user with ID: ${userId}`);
         }
-        const jwt = new JWT(user);
+        const roles = await this.userRepository.getUserRoles(user.id);
+        const jwt = new JWT(user, roles);
         return jwt.generateJwt();
     }
 

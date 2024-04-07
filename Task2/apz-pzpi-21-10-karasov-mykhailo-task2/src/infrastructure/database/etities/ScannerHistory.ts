@@ -19,11 +19,11 @@ export default class ScannerHistory extends Model {
 
     @ForeignKey(() => User)
     @Column({type: DataType.INTEGER, allowNull: true})
-    userId!: number;
+    userId!: number | null;
 
     @ForeignKey(() => Scanner)
     @Column({type: DataType.INTEGER, allowNull: true})
-    scannerId!: number;
+    scannerId!: number | null;
 
     @BelongsTo(() => User)
     user!: User;

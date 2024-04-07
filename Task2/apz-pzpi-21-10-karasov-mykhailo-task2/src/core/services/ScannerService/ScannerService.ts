@@ -60,4 +60,14 @@ export default class ScannerService {
             throw ApiError.notFound(`There no user with ID: ${userId}`);
         }
     }
+
+    public async getScannerById(scannerId: number) {
+        const scanner = await this.scannerRepository.getScannerById(scannerId);
+        if (!scanner) {
+            throw ApiError.notFound(`There no scanner with ID: ${scannerId}`);
+        }
+        return scanner;
+    }
+
+
 }

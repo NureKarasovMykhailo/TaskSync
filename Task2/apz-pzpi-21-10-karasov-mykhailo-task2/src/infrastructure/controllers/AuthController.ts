@@ -70,4 +70,5 @@ class AuthController {
 
 }
 
-export default new AuthController(new AuthService(new AuthRepositoryImpl(new UserMapper())));
+export default AuthController;
+
