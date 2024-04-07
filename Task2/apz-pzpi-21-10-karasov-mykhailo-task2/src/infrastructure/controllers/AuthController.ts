@@ -4,8 +4,6 @@ import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
 import {RegistrationDto} from "../../core/repositories/AuthRepository/dto/RegistrationDto";
 import AuthService from "../../core/services/AuthService/AuthService";
-import AuthRepositoryImpl from "../repositoriesImpl/sequelizeRepository/AuthRepositoryImpl";
-import UserMapper from "../mappers/UserMapper/UserMapper";
 import LoginDto from "../../core/repositories/AuthRepository/dto/LoginDto";
 
 class AuthController {

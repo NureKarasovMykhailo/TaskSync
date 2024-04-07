@@ -1,4 +1,3 @@
-import RoleDomainModel from "../Role/Role";
 
 export default class ComplexityDomainModel {
     constructor(

@@ -4,7 +4,6 @@ import IEducationRepository from "../../repositories/EducationRepository/IEducat
 import IComplexityRepository from "../../repositories/ComplexityRepository/IComplexityRepository";
 import ActivityDomainModel from "../../domain/models/Acitivity/Activity";
 import PaginationClass from "../../common/uttils/PaginationClass";
-import UserDomainModel from "../../domain/models/User/User";
 
 export default class ActivityService {
     constructor(

@@ -6,7 +6,6 @@ import CreateOrUpdateActivityDto from "../../core/repositories/ActivityRepositor
 export default class ActivityController {
     constructor(
        private readonly activityService: ActivityService,
-       private readonly activityMapper: ActivityMapper
     ) {}
 
     public async createActivity(req: Request, res: Response, next: NextFunction) {

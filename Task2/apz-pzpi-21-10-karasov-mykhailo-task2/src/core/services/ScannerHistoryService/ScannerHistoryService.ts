@@ -3,7 +3,6 @@ import CreateOrUpdateScannerHistoryDto
     from "../../repositories/ScannerHistoryRepository/dto/CreateOrUpdateScannerHistoryDto";
 import IScannerRepository from "../../repositories/ScannerRepository/IScannerRepository";
 import ApiError from "../../common/error/ApiError";
-import ScannerDomainModel from "../../domain/models/Scanner/Scanner";
 
 export default class ScannerHistoryService {
     constructor(
