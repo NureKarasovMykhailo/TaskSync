@@ -78,7 +78,7 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
     }
 
     async getScanners(): Promise<ScannerDomainModel[]> {
-        let scannersDomainModel: ScannerDomainModel[] = [];
+        let scannersDomainModel: ScannerDomainModel[];
         const scanners = await Scanner.findAll({include: [User, Company]});
         scannersDomainModel = scanners.map(scanner => {
             return this.scannerMapper.toDomainModel(scanner)
@@ -87,7 +87,7 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
     }
 
     async getScannersByCompany(companyId: number): Promise<ScannerDomainModel[]> {
-        let scannersDomainModel: ScannerDomainModel[] = [];
+        let scannersDomainModel: ScannerDomainModel[];
         const scanners = await Scanner.findAll({where: { companyId }, include: [User, Company]});
         scannersDomainModel = scanners.map(scanner => {
             return this.scannerMapper.toDomainModel(scanner)

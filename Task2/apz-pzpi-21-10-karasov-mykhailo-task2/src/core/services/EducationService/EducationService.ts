@@ -17,7 +17,7 @@ export default class EducationService {
     }
 
     public async getAll(offset: number, limit: number, educationTitle?: string) {
-        let educations: EducationDomainModel[] = [];
+        let educations: EducationDomainModel[];
         if (educationTitle !== undefined && educationTitle !== 'undefined') {
             educations = await this.getEducationByTitle(educationTitle);
         } else {
