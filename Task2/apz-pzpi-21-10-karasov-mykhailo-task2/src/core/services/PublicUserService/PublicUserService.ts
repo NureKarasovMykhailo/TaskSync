@@ -9,6 +9,7 @@ import ISubscribeRepository from "../../repositories/SubscribeRepository/ISubscr
 import RolesEnum from "../../common/enums/RolesEnum";
 import AddOrDeleteRoleDto from "../../repositories/UserRepository/dto/AddOrDeleteRoleDto";
 import JWT from "../../common/uttils/JWT";
+import RoleDomainModel from "../../domain/models/Role/Role";
 
 export default class PublicUserService {
 
@@ -66,15 +67,20 @@ export default class PublicUserService {
     public async subscribe(userId: number) {
         const subscriptionClass: SubscriptionClass = new SubscriptionClass();
         const response = await subscriptionClass.subscribeRequest();
-        console.log(response)
+
         if (response.ok) {
             const currentDate = new Date();
             const validUntilDate = new Date(currentDate.getTime() + 31 * 24 * 60 * 60 * 1000);
             const subscriptionDetails = await response.json();
             const subscriptionId = subscriptionDetails.id;
-            await this.subscriptionRepository.createUserSubscription(userId, subscriptionId, validUntilDate.toISOString());
+            if (await this.subscriptionRepository.getSubscriptionByUserId(userId) === null) {
+                await this.subscriptionRepository.createUserSubscription(userId, subscriptionId, validUntilDate.toISOString());
+            }
             const dto: AddOrDeleteRoleDto = new AddOrDeleteRoleDto(RolesEnum.SUBSCRIBER);
-            await this.userRepository.addUserRole(dto, userId);
+            const user = await this.userRepository.getUserById(userId);
+            if (user && !this.isUserHasRoleSubscriber(user.roles)) {
+                await this.userRepository.addUserRole(dto, userId);
+            }
             return subscriptionDetails;
         } else {
             throw ApiError.internalServerError(`Error with PayPal API`);
@@ -82,6 +88,17 @@ export default class PublicUserService {
     }
 
 
-
+    private isUserHasRoleSubscriber(roles: RoleDomainModel[] | null) {
+        if (!roles) {
+            throw ApiError.internalServerError(`Unknown error`);
+        }
+        let isSubscriber = false;
+        roles.map(role => {
+            if (role.roleTitle === RolesEnum.SUBSCRIBER) {
+                isSubscriber = true;
+            }
+        });
+        return isSubscriber;
+    }
 
 }

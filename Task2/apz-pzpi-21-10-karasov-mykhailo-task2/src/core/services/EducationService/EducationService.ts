@@ -2,6 +2,7 @@ import IEducationRepository from "../../repositories/EducationRepository/IEducat
 import CreateEducationDto from "../../repositories/EducationRepository/dto/CreateEducation";
 import ApiError from "../../common/error/ApiError";
 import EducationDomainModel from "../../domain/models/Education/Education";
+import PaginationClass from "../../common/uttils/PaginationClass";
 
 export default class EducationService {
     constructor(
@@ -15,12 +16,16 @@ export default class EducationService {
         return await this.educationRepository.createEducation(dto);
     }
 
-    public async getAll(educationTitle?: string): Promise<EducationDomainModel[]> {
+    public async getAll(offset: number, limit: number, educationTitle?: string) {
+        let educations: EducationDomainModel[] = [];
         if (educationTitle !== undefined && educationTitle !== 'undefined') {
-            return this.getEducationByTitle(educationTitle);
+            educations = await this.getEducationByTitle(educationTitle);
         } else {
-            return await this.educationRepository.getAllEducations();
+            educations = await this.educationRepository.getAllEducations();
         }
+
+        const pagination: PaginationClass<EducationDomainModel> = new PaginationClass<EducationDomainModel>();
+        return pagination.paginateItems(educations, offset, limit);
     }
 
     public async getEducationById(id: number): Promise<EducationDomainModel> {

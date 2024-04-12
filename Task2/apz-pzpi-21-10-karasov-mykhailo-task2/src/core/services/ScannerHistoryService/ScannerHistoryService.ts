@@ -3,6 +3,8 @@ import CreateOrUpdateScannerHistoryDto
     from "../../repositories/ScannerHistoryRepository/dto/CreateOrUpdateScannerHistoryDto";
 import IScannerRepository from "../../repositories/ScannerRepository/IScannerRepository";
 import ApiError from "../../common/error/ApiError";
+import ScannerHistoryDomainModel from "../../domain/models/ScannerHistory/ScannerHistory";
+import PaginationClass from "../../common/uttils/PaginationClass";
 
 export default class ScannerHistoryService {
     constructor(
@@ -14,10 +16,12 @@ export default class ScannerHistoryService {
         return await this.scannerHistoryRepository.createScannerHistory(dto);
     }
 
-    public async getHistoryOfScanner(scannerId: number, companyId: number) {
+    public async getHistoryOfScanner(scannerId: number, companyId: number, limit: number, offset: number) {
         await this.checkScanner(scannerId, companyId);
 
-        return await this.scannerHistoryRepository.getScannerHistoryByScannerId(scannerId);
+        const scannerHistories = await this.scannerHistoryRepository.getScannerHistoryByScannerId(scannerId);
+        const pagination: PaginationClass<ScannerHistoryDomainModel> = new PaginationClass();
+        return pagination.paginateItems(scannerHistories, limit, offset);
     }
 
     public async deleteScannerHistory(scannerHistoryId: number) {
@@ -38,6 +42,27 @@ export default class ScannerHistoryService {
         return;
     }
 
+    public async getAllScannerHistory(scannerId: number, userId: number, limit: number, offset: number) {
+        let scannerHistories = await this.scannerHistoryRepository.getAllScannerHistory();
+
+        if (scannerId) {
+            scannerHistories = this.filterHistoryByScannerId(scannerId, scannerHistories);
+        }
+
+        if (userId) {
+            scannerHistories = this.filterHistoryByUserId(userId, scannerHistories);
+        }
+
+        const pagination: PaginationClass<ScannerHistoryDomainModel> = new PaginationClass();
+
+        return pagination.paginateItems(scannerHistories, offset, limit);
+
+    }
+
+    public async updateScannerHistory(id: number, dto: CreateOrUpdateScannerHistoryDto) {
+        return await this.scannerHistoryRepository.updateScannerHistory(id, dto);
+    }
+
     private async checkScanner(scannerId: number, companyId: number): Promise<void> {
         const scanner = await this.scannerRepository.getScannerById(scannerId);
         if (!scanner) {
@@ -47,5 +72,13 @@ export default class ScannerHistoryService {
             throw ApiError.forbidden(`You have not access to this information`);
         }
         return;
+    }
+
+    private filterHistoryByScannerId(scannerId: number, scannerHistories: ScannerHistoryDomainModel[]) {
+        return scannerHistories.filter(scannerHistory => scannerHistory.scannerId === scannerId);
+    }
+
+    private filterHistoryByUserId(userId: number, scannerHistories: ScannerHistoryDomainModel[]) {
+        return scannerHistories.filter(scannerHistory => scannerHistory.userId === userId);
     }
 }

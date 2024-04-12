@@ -7,4 +7,6 @@ export default interface IScannerHistoryRepository {
     deleteScannerHistoryById(id: number): Promise<void>;
     getScannerHistoryById(id: number): Promise<ScannerHistoryDomainModel | null>;
     deleteScannerHistoryByScannerId(scannerId: number): Promise<void>;
+    getAllScannerHistory(): Promise<ScannerHistoryDomainModel[]>;
+    updateScannerHistory(id: number, dto: CreateOrUpdateScannerHistoryDto): Promise<ScannerHistoryDomainModel>;
 }

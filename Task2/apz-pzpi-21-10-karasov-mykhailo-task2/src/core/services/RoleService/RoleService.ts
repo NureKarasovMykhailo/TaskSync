@@ -3,6 +3,7 @@ import IRoleRepository from "../../repositories/RoleRepository/IRoleRepository";
 import RoleDomainModel from "../../domain/models/Role/Role";
 import ApiError from "../../common/error/ApiError";
 import {validationResult} from "express-validator";
+import PaginationClass from "../../common/uttils/PaginationClass";
 
 export default class RoleService {
 
@@ -16,8 +17,10 @@ export default class RoleService {
         return await this.roleRepository.createRole(dto);
     }
 
-    public async getAll() {
-        return await this.roleRepository.getAllRoles();
+    public async getAll(offset: number, limit: number) {
+        const roles = await this.roleRepository.getAllRoles();
+        const pagination: PaginationClass<RoleDomainModel> = new PaginationClass();
+        return pagination.paginateItems(roles, offset, limit);
     }
 
     public async getOne(id: number) {

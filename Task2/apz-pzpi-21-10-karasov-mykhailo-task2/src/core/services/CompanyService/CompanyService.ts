@@ -6,6 +6,10 @@ import JWT from "../../common/uttils/JWT";
 import FileManager from "../../common/uttils/FileManager";
 import {DEFAULT_COMPANY_IMAGE_NAME} from "../../../config";
 import RolesEnum from "../../common/enums/RolesEnum";
+import CompanyDomainModel from "../../domain/models/Company/Company";
+import PaginationClass from "../../common/uttils/PaginationClass";
+import Company from "../../../infrastructure/database/etities/Company";
+
 export default class CompanyService {
     private readonly fileManager: FileManager = new FileManager();
     constructor(
@@ -13,26 +17,32 @@ export default class CompanyService {
         private readonly userRepository: IUserRepository,
     ) {}
 
-    async createCompany(dto: CreateOrUpdateCompanyDto, creatingUserId: number) {
+    async createCompany(dto: CreateOrUpdateCompanyDto) {
+        if (await this.userRepository.getUserById(dto.creatingUserId) === null) {
+            throw ApiError.badRequest(`There no user with ID: ${dto.creatingUserId}`)
+        }
+
         if (!await this.isCompanyNameUnique(dto.companyName)) {
             throw ApiError.conflict(`There already existed company with name: ${dto.companyName}`);
         }
-        if (await this.isUserHasCompany(creatingUserId)) {
+        if (await this.isUserHasCompany(dto.creatingUserId)) {
             throw ApiError.forbidden(`This user has already created company`);
         }
+
         let fileName = DEFAULT_COMPANY_IMAGE_NAME;
         if (dto.companyImage !== DEFAULT_COMPANY_IMAGE_NAME) {
             fileName = await this.fileManager.createFile(dto.companyImage);
         }
 
-        const company = await this.companyRepository.createCompany(dto, creatingUserId, fileName);
-        const creatingUser = await this.userRepository.getUserById(creatingUserId);
+        const company = await this.companyRepository.createCompany(dto, fileName);
+        const creatingUser = await this.userRepository.getUserById(dto.creatingUserId);
         if (creatingUser) {
-            const user = await this.userRepository.setCompanyId(creatingUserId, company.id);
+            const user = await this.userRepository.setCompanyId(dto.creatingUserId, company.id);
             if (!user) {
-                throw ApiError.notFound(`There no user with ID: ${creatingUserId}`);
+                throw ApiError.notFound(`There no user with ID: ${dto.creatingUserId}`);
             }
-            const jwt = new JWT(user);
+            const roles = await this.userRepository.getUserRoles(user.id);
+            const jwt = new JWT(user, roles);
             const token = jwt.generateJwt();
             return {token: token, company: company};
         }
@@ -48,8 +58,12 @@ export default class CompanyService {
     }
 
     async updateCompany(companyId: number, dto: CreateOrUpdateCompanyDto) {
+        if (await this.userRepository.getUserById(dto.creatingUserId) === null) {
+            throw ApiError.badRequest(`There no user with ID: ${dto.creatingUserId}`)
+        }
+
         const company = await this.getCompanyById(companyId);
-        if (!await this.isCompanyNameUnique(dto.companyName) && dto.companyName === company.companyName) {
+        if (!await this.isCompanyNameUnique(dto.companyName) && dto.companyName !== company.companyName) {
             throw ApiError.conflict(`There are already exist company with name: ${dto.companyName}`);
         }
 
@@ -81,7 +95,8 @@ export default class CompanyService {
         if (!user) {
             throw ApiError.notFound(`There no user with ID: ${userId}`);
         }
-        const jwt = new JWT(user);
+        const roles = await this.userRepository.getUserRoles(user.id);
+        const jwt = new JWT(user, roles);
         return jwt.generateJwt();
 
     }
@@ -124,8 +139,42 @@ export default class CompanyService {
         if (!unpinUser) {
             throw ApiError.internalServerError(`Unexpected error`);
         }
-        const jwt = new JWT(unpinUser);
+        const roles = await this.userRepository.getUserRoles(unpinUser.id);
+        const jwt = new JWT(unpinUser, roles);
         return jwt.generateJwt();
+    }
+
+    public async getCompanies(companyName: string, sortBy: string, offset: number, limit: number) {
+        let companies: CompanyDomainModel[] = [];
+
+        if (companyName) {
+            const company = await this.companyRepository.getCompanyByTitle(companyName);
+            if (company) {
+                companies.push(company);
+            }
+        } else {
+            companies = await this.companyRepository.getAllCompanies();
+
+            if (sortBy) {
+                companies = this.sortCompany(sortBy, companies);
+            }
+        }
+        console.log(companies)
+
+        const pagination: PaginationClass<CompanyDomainModel> = new PaginationClass();
+
+        return pagination.paginateItems(companies, offset, limit);
+
+    }
+
+    public async deleteCompany(companyId: number) {
+        const company = await this.getCompanyById(companyId);
+        if (company.companyImage !== DEFAULT_COMPANY_IMAGE_NAME) {
+            await this.fileManager.deleteFile(company.companyImage);
+        }
+
+        await this.companyRepository.deleteCompany(companyId);
+        return;
     }
 
     private async isUserHasCompany(userId: number): Promise<boolean> {
@@ -136,5 +185,14 @@ export default class CompanyService {
     private async isCompanyNameUnique(companyName: string): Promise<boolean> {
         const candidateCompany = await this.companyRepository.getCompanyByName(companyName);
         return candidateCompany === null;
+    }
+
+    private sortCompany(sortBy: string, companies: CompanyDomainModel[]) {
+        if (sortBy ===  'asc') {
+            companies.sort((a, b) => a.companyName.localeCompare(b.companyName));
+        } else if (sortBy === 'desc') {
+            companies.sort((a, b) => b.companyName.localeCompare(a.companyName));
+        }
+        return companies;
     }
 }

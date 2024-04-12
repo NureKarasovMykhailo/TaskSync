@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
     '/',
-    //checkRoleMiddleware([RolesEnum.ADMIN]),
+    checkRoleMiddleware([RolesEnum.ADMIN]),
     createEducationValidator(),
     educationController.createEducation.bind(educationController)
 );
@@ -23,9 +23,10 @@ router.get(
     authMiddleware,
     educationController.getById.bind(educationController)
 );
-router.patch(
+router.put(
     '/:id',
     checkRoleMiddleware([RolesEnum.ADMIN]),
+    createEducationValidator(),
     educationController.updateEducation.bind(educationController)
 );
 router.delete(

@@ -67,16 +67,14 @@ router.patch(
     adminUserController.deleteRole.bind(adminUserController)
 );
 
-// TODO добавить возвращения оброзований
-
-router.put(
-    '/add-education',
-    adminUserController.addEducation.bind(publicUserController)
+router.patch(
+    '/add-education/:id',
+    adminUserController.addEducation.bind(adminUserController)
 );
 
-router.put(
-    '/delete-education',
-    adminUserController.deleteEducation.bind(publicUserController)
+router.patch(
+    '/delete-education/:id',
+    adminUserController.deleteEducation.bind(adminUserController)
 );
 
 export default router;

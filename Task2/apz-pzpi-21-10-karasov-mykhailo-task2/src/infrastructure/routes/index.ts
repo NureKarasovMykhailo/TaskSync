@@ -10,6 +10,10 @@ import scannerRouter from "./ScannerRouter";
 import scannerHistoryRouter from "./ScannerHistoryRouter";
 import complexityRouter from "./ComplexityRouter";
 import activityRouter from "./ActivityRouter";
+import companyAdminRouter from "./CompanyAdminRouter";
+import adminActivityRouter from "./AdminActivityRouter";
+import adminScannerRouter from "./AdminScannerRouter";
+import adminScannerHistoryRouter from "./AdminScannerHistoryRouter";
 
 router.use('/education', educationRouter);
 router.use('/auth', authRouter);
@@ -21,5 +25,9 @@ router.use('/scanner', scannerRouter);
 router.use('/scanner-history', scannerHistoryRouter);
 router.use('/complexity', complexityRouter);
 router.use('/activity', activityRouter);
+router.use('/company-admin', companyAdminRouter);
+router.use('/activity-admin', adminActivityRouter);
+router.use('/scanner-admin', adminScannerRouter);
+router.use('/admin-scanner-history', adminScannerHistoryRouter);
 
 export default router;

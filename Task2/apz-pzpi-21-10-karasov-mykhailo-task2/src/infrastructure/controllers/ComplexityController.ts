@@ -35,11 +35,21 @@ export default class ComplexityController {
 
     public async getComplexities(req: Request, res: Response, next: NextFunction) {
         try {
-            const complexitiesDomainModel = await this.complexityService.getAllComplexity();
-            const complexities = complexitiesDomainModel.map(complexityDomainModel => {
+            const { limit = '10', page = '1'} = req.query;
+            const offset = Number(limit) * Number(page) - Number(limit);
+            const paginatedComplexitiesDomainModel = await this.complexityService.getAllComplexity(offset, Number(limit));
+            const complexities = paginatedComplexitiesDomainModel.paginatedItems.map(complexityDomainModel => {
                 return this.complexityMapper.toPersistenceModel(complexityDomainModel);
             });
-            return res.status(200).json({ complexities: complexities});
+            return res.status(200).json({
+                complexities: complexities,
+                pagination: {
+                    totalItems: paginatedComplexitiesDomainModel.itemsCount,
+                    totalPages: paginatedComplexitiesDomainModel.totalPages,
+                    currentPage: page,
+                    itemsPerPage: limit
+                }
+            });
 
         } catch (error) {
             console.log(error);

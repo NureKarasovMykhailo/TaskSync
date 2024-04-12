@@ -142,7 +142,7 @@ export default class ActivityController {
                 Number(educationId),
                 companyId
             );
-            console.log(dto)
+            
             const updatedActivity = await this.activityService.updateActivity(Number(id), companyId, dto);
 
             return res.status(200).json({ activity: updatedActivity });
@@ -196,5 +196,4 @@ export default class ActivityController {
             next(error);
         }
     }
-
 }

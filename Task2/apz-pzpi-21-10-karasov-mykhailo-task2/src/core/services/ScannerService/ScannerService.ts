@@ -2,6 +2,8 @@ import IScannerRepository from "../../repositories/ScannerRepository/IScannerRep
 import CreateOrUpdateScannerDto from "../../repositories/ScannerRepository/dto/CreateOrUpdateScannerDto";
 import ApiError from "../../common/error/ApiError";
 import IUserRepository from "../../repositories/UserRepository/IUserRepository";
+import PaginationClass from "../../common/uttils/PaginationClass";
+import ScannerDomainModel from "../../domain/models/Scanner/Scanner";
 
 export default class ScannerService {
     constructor(
@@ -23,6 +25,8 @@ export default class ScannerService {
         return await this.scannerRepository.updateScanner(dto, scannerId);
     }
 
+
+
     public async getScanner(id: number, companyId: number) {
         const scanner = await this.scannerRepository.getScannerById(id);
         if (!scanner) {
@@ -35,8 +39,10 @@ export default class ScannerService {
     }
 
 
-    public async getCompanyScanners(companyId: number) {
-        return this.scannerRepository.getScannersByCompany(companyId);
+    public async getCompanyScanners(companyId: number, limit: number, offset: number) {
+        const scanners = await this.scannerRepository.getScannersByCompany(companyId);
+        const paginationClass: PaginationClass<ScannerDomainModel> = new PaginationClass();
+        return paginationClass.paginateItems(scanners, offset, limit);
     }
 
     public async deleteScanner(id: number, companyId: number) {
@@ -47,6 +53,11 @@ export default class ScannerService {
             }
             await this.scannerRepository.deleteScanner(id);
         }
+        return;
+    }
+
+    public async deleteScannerAdmin(id: number) {
+        await this.scannerRepository.deleteScanner(id);
         return;
     }
 
@@ -69,5 +80,10 @@ export default class ScannerService {
         return scanner;
     }
 
+    public async getScanners(offset: number, limit: number) {
+        const scanners =  await this.scannerRepository.getScanners();
+        const paginationClass: PaginationClass<ScannerDomainModel> = new PaginationClass();
+        return paginationClass.paginateItems(scanners, offset, limit);
+    }
 
 }

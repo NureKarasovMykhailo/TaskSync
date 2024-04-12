@@ -29,7 +29,7 @@ class EducationController {
             }
 
             const education = await this.educationService.createEducation(dto);
-            return res.status(201).json({ message: education });
+            return res.status(201).json({ education: education });
         } catch (error) {
             console.log(error);
             next(error);
@@ -38,12 +38,31 @@ class EducationController {
 
     async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            const { educationTitle } = req.query;
-            const educationDomainModels = await this.educationService.getAll(String(educationTitle));
-            const educations = educationDomainModels.map(education => {
+            const {
+                educationTitle,
+                limit = '10',
+                page = '1'
+            } = req.query;
+
+            const offset = Number(limit) * Number(page) - Number(limit);
+
+            const paginatedEducationDomain = await this.educationService.getAll(
+                offset,
+                Number(limit),
+                educationTitle as string
+            );
+            const educations = paginatedEducationDomain.paginatedItems.map(education => {
                return this.educationMapper.toPersistenceModel(education);
             });
-            return res.status(200).json({ educations: educations });
+            return res.status(200).json({
+                educations: educations,
+                pagination: {
+                    totalItems: paginatedEducationDomain.itemsCount,
+                    totalPages: paginatedEducationDomain.totalPages,
+                    currentPage: page,
+                    itemsPerPage: limit
+                }
+            });
         } catch (error) {
             console.log(error);
             next(error);
@@ -65,6 +84,13 @@ class EducationController {
         try {
             const { id } = req.params;
             const { educationTitle, description } = req.body;
+
+            const errors = validationResult(req.body);
+            if (!errors.isEmpty()) {
+                const errorMessages = formatValidationErrors(errors.array());
+                return next(ApiError.badRequest(errorMessages.join(', ')));
+            }
+
             const dto: CreateEducationDto = new CreateEducationDto(educationTitle, description);
             const educationDomain: EducationDomainModel
                 = await this.educationService.updateEducation(Number(id), dto);

@@ -4,6 +4,9 @@ import CreateOrUpdateScannerHistoryDto
 import ScannerHistoryDomainModel from "../../../core/domain/models/ScannerHistory/ScannerHistory";
 import ScannerHistory from "../../database/etities/ScannerHistory";
 import ScannerHistoryMapper from "../../mappers/ScannerHistoryMapper/ScannerHistoryMapper";
+import Scanner from "../../database/etities/Scanner";
+import ApiError from "../../../core/common/error/ApiError";
+import User from "../../database/etities/User";
 
 export default class ScannerHistoryRepositoryImpl implements IScannerHistoryRepository {
 
@@ -46,4 +49,45 @@ export default class ScannerHistoryRepositoryImpl implements IScannerHistoryRepo
         await ScannerHistory.destroy({ where: { scannerId }});
         return;
     }
+
+    async getAllScannerHistory(): Promise<ScannerHistoryDomainModel[]> {
+        const scannerHistories = await ScannerHistory.findAll();
+
+        return scannerHistories.map(scannerHistory => {
+            return this.scannerHistoryMapper.toDomainModel(scannerHistory)
+        });
+    }
+
+    async updateScannerHistory(id: number, dto: CreateOrUpdateScannerHistoryDto): Promise<ScannerHistoryDomainModel> {
+        const scanner = await Scanner.findOne({ where: { id :dto.scannerId }} );
+        if (!scanner) {
+            throw ApiError.notFound(`There no scanner with ID: ${dto.scannerId}`);
+        }
+
+        const user = await User.findOne({where: { id: dto.userId }});
+        if (!user) {
+            throw ApiError.notFound(`There no user with ID: ${dto.userId}`);
+        }
+
+        if (user.companyId !== scanner.companyId) {
+            throw ApiError.forbidden(`You have not access to this information`);
+        }
+
+        const scannerHistory = await ScannerHistory.findOne({ where: { id }});
+        if (!scannerHistory) {
+            throw ApiError.notFound(`There no scanner history with ID: ${id}`);
+        }
+
+        scannerHistory.temperature = dto.temperature;
+        scannerHistory.pulse = dto.pulse;
+        scannerHistory.activeWorkedTime = dto.activeWorkedTime;
+        scannerHistory.userId = dto.userId;
+        scannerHistory.scannerId = dto.scannerId;
+
+        await scannerHistory.save();
+
+        return this.scannerHistoryMapper.toDomainModel(scannerHistory);
+    }
+
+
 }

@@ -11,24 +11,34 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
     private readonly scannerMapper: ScannerMapper = new ScannerMapper();
 
     async createScanner(dto: CreateOrUpdateScannerDto): Promise<ScannerDomainModel> {
-        const user = await User.findOne({ where: {id: dto.userId}});
+        const user = await User.findOne({
+            where: {id: dto.userId},
+        });
 
         const company = await Company.findOne({ where: { id: dto.companyId }});
         if (!company) {
             throw ApiError.notFound(`There no company with ID: ${dto.companyId}`);
         }
 
-        const scanner = await Scanner.create({
+        let scanner: Scanner | null = await Scanner.create({
             description:  dto.description,
             userId: user?.id,
             companyId: dto.companyId
         });
 
+        scanner = await Scanner.findOne({where: {id: scanner.id}, include: [User, Company]});
+        if (!scanner ) {
+            throw ApiError.notFound(`There no scanner with`)
+        }
+
         return this.scannerMapper.toDomainModel(scanner);
     }
 
     async getScannerById(id: number): Promise<ScannerDomainModel | null> {
-        const scanner = await Scanner.findOne({ where: { id } });
+        const scanner = await Scanner.findOne({
+            where: { id },
+            include: [User, Company]
+        });
         if (!scanner) {
             return null;
         }
@@ -36,14 +46,18 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
     }
 
     async updateScanner(dto: CreateOrUpdateScannerDto, id: number): Promise<ScannerDomainModel> {
-        const user = await User.findOne({ where: {id: dto.userId}});
+        const user = await User.findOne({ where: {
+            id: dto.userId}});
 
         const company = await Company.findOne({ where: { id: dto.companyId }});
         if (!company) {
             throw ApiError.notFound(`There no company with ID: ${dto.companyId}`);
         }
 
-        const scanner = await Scanner.findOne({where: { id }});
+        const scanner = await Scanner.findOne({
+            where: { id },
+            include: [User, Company]
+        });
         if (!scanner) {
             throw ApiError.notFound(`There no scanner with ID: ${id}`);
         }
@@ -65,7 +79,7 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
 
     async getScanners(): Promise<ScannerDomainModel[]> {
         let scannersDomainModel: ScannerDomainModel[] = [];
-        const scanners = await Scanner.findAll();
+        const scanners = await Scanner.findAll({include: [User, Company]});
         scannersDomainModel = scanners.map(scanner => {
             return this.scannerMapper.toDomainModel(scanner)
         });
@@ -74,7 +88,7 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
 
     async getScannersByCompany(companyId: number): Promise<ScannerDomainModel[]> {
         let scannersDomainModel: ScannerDomainModel[] = [];
-        const scanners = await Scanner.findAll({where: { companyId }});
+        const scanners = await Scanner.findAll({where: { companyId }, include: [User, Company]});
         scannersDomainModel = scanners.map(scanner => {
             return this.scannerMapper.toDomainModel(scanner)
         });

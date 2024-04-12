@@ -13,6 +13,9 @@ import RoleDomainModel from "../../core/domain/models/Role/Role";
 import RoleMapper from "../mappers/RoleMapper/RoleMapper";
 import EducationMapper from "../mappers/EducationMapper/EducationMapper";
 import EducationDomainModel from "../../core/domain/models/Education/Education";
+import {validationResult} from "express-validator";
+import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
+import ApiError from "../../core/common/error/ApiError";
 
 class AdminUserController {
     private readonly userMapper: UserMapper = new UserMapper();
@@ -41,6 +44,12 @@ class AdminUserController {
 
             if (req.files) {
                 userImage = req.files.userImage;
+            }
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                const errorMessages = formatValidationErrors(errors.array());
+                return next(ApiError.badRequest(errorMessages.join(', ')));
             }
 
             const dto: CreateUserDto = new CreateUserDto(
@@ -132,6 +141,12 @@ class AdminUserController {
 
             if (req.files) {
                 userImage = req.files.userImage;
+            }
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                const errorMessages = formatValidationErrors(errors.array());
+                return next(ApiError.badRequest(errorMessages.join(', ')));
             }
 
             const dto: UpdateUserAdminDto = new UpdateUserAdminDto(

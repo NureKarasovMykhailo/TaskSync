@@ -9,4 +9,5 @@ export default interface IActivityRepository {
     deleteActivityById(id: number): Promise<void>;
     addEmployee(id: number, userId: number): Promise<ActivityDomainModel>;
     deleteEmployee(id: number, userId: number): Promise<ActivityDomainModel>;
+    getAllActivities(): Promise<ActivityDomainModel[]>;
 }

@@ -45,11 +45,21 @@ export default class ScannerHistoryController {
         try {
             if (req.user.companyId) {
                 const { id } = req.params;
-                const scannerHistoriesDomainModel = await this.scannerHistoryService.getHistoryOfScanner(Number(id), req.user.companyId);
-                const scannerHistories = scannerHistoriesDomainModel.map(scannerHistory => {
+                const { limit = '10', page = '1'} = req.query;
+                const offset = Number(limit) * Number(page) - Number(limit);
+                const scannerHistoriesDomainModel = await this.scannerHistoryService.getHistoryOfScanner(Number(id), req.user.companyId, Number(limit), offset);
+                const scannerHistories = scannerHistoriesDomainModel.paginatedItems.map(scannerHistory => {
                     return this.scannerHistoryMapper.toPersistenceModel(scannerHistory);
                 });
-                return res.status(200).json({ scannerHistories: scannerHistories });
+                return res.status(200).json({
+                    scannerHistories: scannerHistories,
+                    pagination: {
+                        totalItems: scannerHistoriesDomainModel.itemsCount,
+                        totalPages: scannerHistoriesDomainModel.totalPages,
+                        currentPage: page,
+                        itemsPerPage: limit
+                    }
+                });
             } else {
                 return next(ApiError.forbidden(`You have not access to this information`));
             }

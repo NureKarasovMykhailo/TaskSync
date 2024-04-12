@@ -37,11 +37,12 @@ export default class PublicCompanyController {
             const dto: CreateOrUpdateCompanyDto = new CreateOrUpdateCompanyDto(
                 companyName,
                 description,
-                companyImage
+                companyImage,
+                req.user.id
             );
 
             // @ts-ignore
-            const {token, company} = await this.companyService.createCompany(dto, req.user.id);
+            const {token, company} = await this.companyService.createCompany(dto);
             return res.status(201).json({ token: token, company: this.companyMapper.toPersistenceModel(company) });
         } catch (error) {
             console.log(error);
@@ -84,7 +85,12 @@ export default class PublicCompanyController {
                 return next(ApiError.badRequest(errorMessages.join(', ')));
             }
 
-            const dto: CreateOrUpdateCompanyDto = new CreateOrUpdateCompanyDto(companyName, description, companyImage);
+            const dto: CreateOrUpdateCompanyDto = new CreateOrUpdateCompanyDto(
+                companyName,
+                description,
+                companyImage,
+                req.user.id
+            );
             // @ts-ignore
             if (req.user.companyId) {
                 // @ts-ignore

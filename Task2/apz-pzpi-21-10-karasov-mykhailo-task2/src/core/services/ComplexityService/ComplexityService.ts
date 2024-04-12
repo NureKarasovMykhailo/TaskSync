@@ -1,6 +1,8 @@
 import IComplexityRepository from "../../repositories/ComplexityRepository/IComplexityRepository";
 import CreateOrUpdateComplexityDto from "../../repositories/ComplexityRepository/dto/CreateOrUpdateComplexityDto";
 import ApiError from "../../common/error/ApiError";
+import PaginationClass from "../../common/uttils/PaginationClass";
+import ComplexityDomainModel from "../../domain/models/Complexity/Complexity";
 
 export default class ComplexityService {
     constructor(
@@ -11,8 +13,10 @@ export default class ComplexityService {
         return await this.complexityRepository.createComplexity(dto);
     }
 
-    public async getAllComplexity() {
-        return await this.complexityRepository.getAllComplexities();
+    public async getAllComplexity(offset: number, limit: number) {
+        const complexities = await this.complexityRepository.getAllComplexities();
+        const pagination: PaginationClass<ComplexityDomainModel> = new PaginationClass();
+        return pagination.paginateItems(complexities, offset, limit);
     }
 
     public async getComplexityById(id: number) {

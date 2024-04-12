@@ -32,11 +32,23 @@ class RoleController {
 
     async getAll (req: Request, res: Response, next: NextFunction) {
         try {
-            const rolesDomain = await this.roleService.getAll();
-            const roles = rolesDomain.map(roleDomain => {
+            const { limit = '10', page = '1'} = req.query;
+
+            const offset = Number(page) * Number(limit) - Number(limit);
+
+            const paginatedRolesDomain = await this.roleService.getAll(offset, Number(limit));
+            const roles = paginatedRolesDomain.paginatedItems.map(roleDomain => {
                 return this.roleMapper.toPersistenceModel(roleDomain);
             });
-            return res.status(200).json({roles: roles})
+            return res.status(200).json({
+                roles: roles,
+                pagination: {
+                    totalItems: paginatedRolesDomain.itemsCount,
+                    totalPages: paginatedRolesDomain.totalPages,
+                    currentPage: page,
+                    itemsPerPage: limit
+                }
+            });
         } catch (error) {
             console.log(error);
             next(error);

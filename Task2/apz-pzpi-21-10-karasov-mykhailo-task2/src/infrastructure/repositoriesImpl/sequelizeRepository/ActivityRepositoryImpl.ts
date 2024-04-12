@@ -128,6 +128,14 @@ export default class ActivityRepositoryImpl implements IActivityRepository{
         return activity;
     }
 
+    async getAllActivities(): Promise<ActivityDomainModel[]> {
+        const activities = await Activity.findAll({
+            include: [Education, Company, Complexity]
+        });
+        return activities.map(activity => {
+            return this.activityMapper.toDomainModel(activity);
+        });
+    }
 
 
     private async checkDto(dto: CreateOrUpdateActivityDto) {

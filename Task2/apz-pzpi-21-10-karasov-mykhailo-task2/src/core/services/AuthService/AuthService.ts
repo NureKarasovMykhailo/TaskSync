@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import UserDomainModel from "../../domain/models/User/User";
 import JWT from "../../common/uttils/JWT";
 import IUserRepository from "../../repositories/UserRepository/IUserRepository";
+import {User} from "../../../types/types";
 
 export default class AuthService {
     constructor(
@@ -45,9 +46,13 @@ export default class AuthService {
         return jwt.generateJwt();
     }
 
-    public async checkAuth(user: any) {
+    public async checkAuth(user: User) {
+        const userModel = await this.userRepository.getUserById(user.id);
+        if (!userModel) {
+            throw ApiError.badRequest(`There no user with id: ${user.id}`);
+        }
         const roles = await this.userRepository.getUserRoles(user.id);
-        const jwt = new JWT(user, roles);
+        const jwt = new JWT(userModel, roles);
         return jwt.generateJwt();
 
     }

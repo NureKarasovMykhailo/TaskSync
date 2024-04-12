@@ -28,11 +28,22 @@ export default class ScannerController {
     public async getCompanyScanners(req: Request, res: Response, next: NextFunction) {
         try {
            if (req.user.companyId) {
-               const scannersDomain = await this.scannerService.getCompanyScanners(req.user.companyId);
-               const scanners = scannersDomain.map(scanner => {
+               const { limit = '10', page = '1'} = req.query;
+               const offset = Number(page) * Number(limit) - Number(limit);
+
+               const paginatedScanner = await this.scannerService.getCompanyScanners(req.user.companyId, Number(limit), offset);
+               const scanners = paginatedScanner.paginatedItems.map(scanner => {
                    return this.scannerMapper.toPersistenceModel(scanner);
                })
-               return res.status(200).json({ scanners: scanners });
+               return res.status(200).json({
+                   scanners: scanners,
+                   pagination: {
+                       totalItems: paginatedScanner.itemsCount,
+                       totalPages: paginatedScanner.totalPages,
+                       currentPage: page,
+                       itemsPerPage: limit
+                   }
+               });
            } else {
                return next(ApiError.badRequest(`There no company id`));
            }

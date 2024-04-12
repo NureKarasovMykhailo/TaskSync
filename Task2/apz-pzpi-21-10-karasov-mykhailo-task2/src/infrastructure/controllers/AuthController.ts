@@ -57,7 +57,7 @@ class AuthController {
     async checkAuth(req: Request, res: Response, next: NextFunction) {
         try {
 
-            const token = this.authService.checkAuth(req.user);
+            const token = await this.authService.checkAuth(req.user);
             return res.status(200).json({ token: token });
         } catch (error) {
             console.log(error);

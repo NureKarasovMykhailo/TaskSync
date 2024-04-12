@@ -3,17 +3,30 @@ import CreateOrUpdateCompanyDto from "../../../core/repositories/CompanyReposito
 import CompanyDomainModel from "../../../core/domain/models/Company/Company";
 import Company from "../../database/etities/Company";
 import CompanyMapper from "../../mappers/CompanyMapper/CompanyMapper";
-import User from "../../database/etities/User";
-import Role from "../../database/etities/Role";
+
 
 export default class CompanyRepositoryImpl implements ICompanyRepository {
     private readonly companyMapper: CompanyMapper = new CompanyMapper();
-    async createCompany(dto: CreateOrUpdateCompanyDto, creatingUserId: number, companyImage: string): Promise<CompanyDomainModel> {
+
+    async getCompanyByTitle(companyTitle: string): Promise<CompanyDomainModel | null> {
+        const company = await Company.findOne({where: { companyName: companyTitle}});
+        if (!company) {
+            return null;
+        }
+        return this.companyMapper.toDomainModel(company);
+    }
+    async getAllCompanies(): Promise<CompanyDomainModel[]> {
+        const companies = await Company.findAll();
+        return companies.map(company => {
+            return this.companyMapper.toDomainModel(company);
+        });
+    }
+    async createCompany(dto: CreateOrUpdateCompanyDto, companyImage: string): Promise<CompanyDomainModel> {
         const company = await Company.create({
             companyName: dto.companyName,
             description: dto.description,
             companyImage: companyImage,
-            userId: creatingUserId
+            userId: dto.creatingUserId
         });
         return this.companyMapper.toDomainModel(company);
     }
@@ -55,6 +68,8 @@ export default class CompanyRepositoryImpl implements ICompanyRepository {
         if (companyImage) {
             company.companyImage = companyImage;
         }
+        company.userId = dto.creatingUserId;
+        await company.save();
         return this.companyMapper.toDomainModel(company);
     }
 
@@ -63,9 +78,4 @@ export default class CompanyRepositoryImpl implements ICompanyRepository {
         await company?.destroy();
         return;
     }
-
-
-
-
-
 }

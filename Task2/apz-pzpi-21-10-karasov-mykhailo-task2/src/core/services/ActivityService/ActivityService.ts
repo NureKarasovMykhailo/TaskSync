@@ -28,13 +28,27 @@ export default class ActivityService {
     ) {
         let activities = await this.activityRepository.getActivityByCompanyId(companyId);
 
-        if (activityTitle) {
-            activities = this.filterActivityByTitle(activityTitle, activities);
+        activities = this.filterActivity(activityTitle, requiredEducation, activities);
+
+        if (sortBy) {
+            activities = this.sortActivity(sortBy, activities);
         }
 
-        if (requiredEducation) {
-            activities = this.filterActivityByEducation(requiredEducation, activities);
-        }
+        const pagination: PaginationClass<ActivityDomainModel> = new PaginationClass();
+
+        return pagination.paginateItems(activities, offset, limit);
+    }
+
+    public async getActivities(
+        activityTitle: string,
+        requiredEducation: string,
+        sortBy: string,
+        offset: number,
+        limit: number
+    ) {
+        let activities = await this.activityRepository.getAllActivities();
+
+        activities = this.filterActivity(activityTitle, requiredEducation, activities);
 
         if (sortBy) {
             activities = this.sortActivity(sortBy, activities);
@@ -55,13 +69,31 @@ export default class ActivityService {
         return activity;
     }
 
+    public async getActivity(id: number) {
+        const activity = await this.activityRepository.getActivityById(id);
+        if (!activity) {
+            throw ApiError.notFound(`There no activity with ID: ${id}`);
+        }
+
+        return activity;
+    }
+
     public async updateActivity(activityId: number, companyId: number, dto: CreateOrUpdateActivityDto) {
         await this.getActivityById(activityId, companyId);
         return await this.activityRepository.updateActivity(activityId, dto);
     }
 
+    public async updateActivityAdmin(activityId: number, dto: CreateOrUpdateActivityDto) {
+        return await this.activityRepository.updateActivity(activityId, dto);
+    }
+
     public async deleteActivity(activityId: number, companyId: number) {
         await this.getActivityById(activityId, companyId);
+        await this.activityRepository.deleteActivityById(activityId);
+        return;
+    }
+
+    public async deleteActivityAdmin(activityId: number) {
         await this.activityRepository.deleteActivityById(activityId);
         return;
     }
@@ -75,6 +107,10 @@ export default class ActivityService {
         const user = await this.userRepository.getUserById(userId);
         if (!user) {
             throw ApiError.notFound(`There no user with ID: ${userId}`);
+        }
+
+        if (user.companyId !== activity.companyId) {
+            throw ApiError.forbidden(`User with ID: ${userId} is not in company with ID: ${activity.companyId}`);
         }
 
         if (!this.isUserHasEducation(activity.education?.educationTitle, user)) {
@@ -95,9 +131,24 @@ export default class ActivityService {
             throw ApiError.notFound(`There no user with ID: ${userId}`);
         }
 
+        if (user.companyId !== activity.companyId) {
+            throw ApiError.forbidden(`User with ID: ${userId} is not in company with ID: ${activity.companyId}`);
+        }
+
         return await this.activityRepository.deleteEmployee(activityId, userId);
     }
 
+    private filterActivity(activityTitle: string, requiredEducation: string, activities: ActivityDomainModel[]) {
+        if (activityTitle) {
+            activities = this.filterActivityByTitle(activityTitle, activities);
+        }
+
+        if (requiredEducation) {
+            activities = this.filterActivityByEducation(requiredEducation, activities);
+        }
+
+        return activities;
+    }
 
     private isUserHasEducation(educationTitle: string | undefined, user: UserDomainModel) {
         let hasEducation = false;

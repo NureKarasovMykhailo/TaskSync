@@ -22,10 +22,10 @@ export default class Scanner extends Model {
     userId!: number | null;
 
     @BelongsTo(() => Company)
-    company!: Company;
+    company!: Company | null;
 
     @BelongsTo(() => User)
-    user!: User;
+    user!: User | null;
 
     @HasMany(() => ScannerHistory)
     scannerHistories!: ScannerHistory[]
