@@ -2,7 +2,6 @@ import CreateRoleDto from "../../repositories/RoleRepository/dto/CreateRoleDto";
 import IRoleRepository from "../../repositories/RoleRepository/IRoleRepository";
 import RoleDomainModel from "../../domain/models/Role/Role";
 import ApiError from "../../common/error/ApiError";
-import {validationResult} from "express-validator";
 import PaginationClass from "../../common/uttils/PaginationClass";
 
 export default class RoleService {

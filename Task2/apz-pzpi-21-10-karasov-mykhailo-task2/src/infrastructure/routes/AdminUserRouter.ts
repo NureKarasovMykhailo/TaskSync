@@ -1,7 +1,6 @@
 import express from "express";
 import createUserValidator from "../../core/common/validators/CreateUserValidator";
 import updateUserValidator from "../../core/common/validators/UpdateUserValidator";
-import publicUserController from "../controllers/PublicUserController";
 import checkRoleMiddleware from "../../core/common/middlewares/CheckRoleMiddleware";
 import RolesEnum from "../../core/common/enums/RolesEnum";
 import rolesEnum from "../../core/common/enums/RolesEnum";

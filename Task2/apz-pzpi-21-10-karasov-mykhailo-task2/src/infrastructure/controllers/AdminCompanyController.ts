@@ -38,7 +38,7 @@ export default class AdminCompanyController {
                 userId
             );
             // @ts-ignore
-            const {token, company } = await this.companyService.createCompany(dto);
+            const { company } = await this.companyService.createCompany(dto);
             return res.status(201).json({company: company});
 
         } catch (error) {

@@ -1,7 +1,6 @@
 import ScannerService from "../../core/services/ScannerService/ScannerService";
 import {NextFunction, Response, Request} from "express";
 import CreateOrUpdateScannerDto from "../../core/repositories/ScannerRepository/dto/CreateOrUpdateScannerDto";
-import ScannerDomainModel from "../../core/domain/models/Scanner/Scanner";
 
 export default class AdminScannerController {
     constructor(

@@ -4,7 +4,6 @@ import ActivityRepositoryImpl from "../repositoriesImpl/sequelizeRepository/Acti
 import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepositoryImpl";
 import checkRoleMiddleware from "../../core/common/middlewares/CheckRoleMiddleware";
 import RolesEnum from "../../core/common/enums/RolesEnum";
-import createOrUpdateComplexityValidator from "../../core/common/validators/CreateOrUpdateComplexityValidator";
 import AdminActivityController from "../controllers/AdminActivityController";
 import createOrUpdateActivityValidator from "../../core/common/validators/CreateOrUpdateActivityValidator";
 

@@ -8,7 +8,6 @@ import {DEFAULT_COMPANY_IMAGE_NAME} from "../../../config";
 import RolesEnum from "../../common/enums/RolesEnum";
 import CompanyDomainModel from "../../domain/models/Company/Company";
 import PaginationClass from "../../common/uttils/PaginationClass";
-import Company from "../../../infrastructure/database/etities/Company";
 
 export default class CompanyService {
     private readonly fileManager: FileManager = new FileManager();
