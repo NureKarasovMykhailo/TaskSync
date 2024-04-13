@@ -6,6 +6,7 @@ export default class CreateUserDto {
        public readonly password: string,
        public readonly birthday: Date,
        public readonly phoneNumber: string,
-       public readonly userImage: any
+       public readonly userImage: any,
+       public readonly companyId: number | null
     ) {}
 }

@@ -24,4 +24,5 @@ export default interface IUserRepository {
     getUserRoles(userId: number): Promise<RoleDomainModel[]>;
     unpinUserFromCompany(userId: number): Promise<UserDomainModel | null>;
     getUserEducations(userId: number): Promise<EducationDomainModel[]>;
+    getUserByCompanyId(companyId: number): Promise<UserDomainModel[]>
 }

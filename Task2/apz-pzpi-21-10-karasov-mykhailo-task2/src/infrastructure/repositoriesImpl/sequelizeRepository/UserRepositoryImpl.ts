@@ -107,12 +107,18 @@ export default class UserRepositoryImpl implements IUserRepository {
             return null;
         }
 
+        const company = await Company.findOne({where: {id: dto.companyId}});
+        if (company) {
+            updatedUser.companyId = company.id;
+        }
+
         updatedUser.email = dto.email;
         updatedUser.firstName = dto.firstName;
         updatedUser.secondName = dto.secondName;
         updatedUser.phoneNumber = dto.phoneNumber;
         updatedUser.birthday = dto.birthday;
         updatedUser.userImage = userImage;
+
 
         await updatedUser.save();
         return this.userMapper.toDomainModel(updatedUser);
@@ -292,6 +298,18 @@ export default class UserRepositoryImpl implements IUserRepository {
         }
         return educations;
     }
+
+    async getUserByCompanyId(companyId: number): Promise<UserDomainModel[]> {
+        const users = await User.findAll({
+            where: { companyId },
+            include: [Education, Role]
+        })
+
+        return users.map(user => {
+           return this.userMapper.toDomainModel(user);
+        });
+    }
+
 
 
 }

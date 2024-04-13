@@ -11,7 +11,7 @@ const roleController  = new RoleController();
 
 router.post(
     '/',
-    //checkRoleMiddleware([rolesEnum.ADMIN]),
+    checkRoleMiddleware([rolesEnum.ADMIN]),
     createRoleValidator(),
     roleController.create.bind(roleController)
 );

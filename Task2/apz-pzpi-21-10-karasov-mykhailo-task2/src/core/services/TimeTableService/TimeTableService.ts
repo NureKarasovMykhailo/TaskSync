@@ -1,18 +1,16 @@
 import IUserRepository from "../../repositories/UserRepository/IUserRepository";
 import IActivityRepository from "../../repositories/ActivityRepository/IActivityRepository";
-import IScannerRepository from "../../repositories/ScannerRepository/IScannerRepository";
 import IScannerHistoryRepository from "../../repositories/ScannerHistoryRepository/IScannerHistoryRepository";
 import ApiError from "../../common/error/ApiError";
 import ScannerHistoryDomainModel from "../../domain/models/ScannerHistory/ScannerHistory";
 import ActivityDomainModel from "../../domain/models/Acitivity/Activity";
-import Education from "../../../infrastructure/database/etities/Education";
 import EducationDomainModel from "../../domain/models/Education/Education";
+import TimeTableManager from "../../common/classes/TimeTableManager";
 
 export default class TimeTableService {
     constructor(
         private readonly userRepository: IUserRepository,
         private readonly activityRepository: IActivityRepository,
-        private readonly scannerRepository: IScannerRepository,
         private readonly scannerHistoryRepository: IScannerHistoryRepository
     ) {}
 
@@ -40,7 +38,30 @@ export default class TimeTableService {
         activities = this.getActivityWithRelevantEducation(activities, user.educations);
         activities = this.getActivityWithNotFullWorker(activities);
 
-        return activities;
+        const timeTableManager = new TimeTableManager(activities, lastScannerHistory);
+        console.log(activities);
+        const optimalActivityId = timeTableManager.getOptimalActivity();
+        const optimalActivity = await this.activityRepository.getActivityById(optimalActivityId);
+        if (!optimalActivity) {
+            throw ApiError.internalServerError(`There no activity with ID: ${optimalActivityId}`);
+        }
+
+        await this.activityRepository.addEmployee(optimalActivity.id, userId);
+
+        return optimalActivity;
+    }
+
+    public async createTimeTable(companyId: number) {
+        const users = await this.userRepository.getUserByCompanyId(companyId);
+        for (let i = 0; i < users.length; i++) {
+            try {
+                await this.getWorkForEmployee(users[i].id, companyId);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        return this.activityRepository.getActivityByCompanyId(companyId);
     }
 
 

@@ -6,22 +6,52 @@ import CoefficientsData from "./CoefficientsData";
 export default class TimeTableManager {
 
     private _activities: ActivityDomainModel[];
-    private _user: UserDomainModel;
     private _scannerHistory: ScannerHistoryDomainModel;
     private _coefficientsArray!: CoefficientsData[];
 
     constructor(
        activities: ActivityDomainModel[],
-       user: UserDomainModel,
        scannerHistory: ScannerHistoryDomainModel
     ) {
         this._activities = activities;
-        this._user = user;
         this._scannerHistory = scannerHistory;
+        this._coefficientsArray = this.getCoefficientsArray();
+    }
+
+    public getOptimalActivity(): number {
+        const maxCoefficientData = this.getCoefficientsWithMaxData(this._coefficientsArray);
+
+
+        for (let i = 0; i < this._coefficientsArray.length; i++) {
+            this._coefficientsArray[i].totalCoefficient =
+                this._coefficientsArray[i].complexityCoefficient / maxCoefficientData.complexityCoefficient +
+                this._coefficientsArray[i].pulseCoefficient / maxCoefficientData.pulseCoefficient +
+                this._coefficientsArray[i].temperatureCoefficient / maxCoefficientData.temperatureCoefficient +
+                this._coefficientsArray[i].complexityCoefficient / maxCoefficientData.complexityCoefficient;
+        }
+
+        this._coefficientsArray = this._coefficientsArray.sort((a, b) => b.totalCoefficient - a.totalCoefficient);
+
+        return this._coefficientsArray[0].activityId;
+
     }
 
     private getCoefficientsArray() {
+        let coefficientsArray: CoefficientsData[] = [];
 
+        for (let i = 0; i < this._activities.length; i++) {
+
+            let coefficientsData = new CoefficientsData(
+                this._activities[i].id,
+                this.getTemperatureCoefficient(this._scannerHistory.temperature),
+                this.getPulseCoefficients(this._scannerHistory.pulse),
+                this.getActiveWorkCoefficients(this._scannerHistory.activeWorkedTime),
+                this._activities[i].complexity?.evaluation || 6
+            );
+            coefficientsArray.push(coefficientsData);
+        }
+
+        return coefficientsArray;
     }
 
     private getTemperatureCoefficient(temperature: number): number {
@@ -77,6 +107,40 @@ export default class TimeTableManager {
         } else {
             return 5;
         }
+    }
+
+    private getCoefficientsWithMaxData(coefficientsArray: CoefficientsData[]) {
+        let maxPulseCoefficient = Number.MIN_SAFE_INTEGER;
+        let maxTemperatureCoefficient = Number.MIN_SAFE_INTEGER;
+        let maxActiveWorkTimeCoefficient = Number.MIN_SAFE_INTEGER;
+        let maxComplexityCoefficient = Number.MIN_SAFE_INTEGER;
+
+        for (let i = 0; i < coefficientsArray.length; i++) {
+            if (maxPulseCoefficient < coefficientsArray[i].pulseCoefficient) {
+                maxPulseCoefficient = coefficientsArray[i].pulseCoefficient;
+            }
+
+            if (maxTemperatureCoefficient < coefficientsArray[i].temperatureCoefficient) {
+                maxTemperatureCoefficient = coefficientsArray[i].temperatureCoefficient;
+            }
+
+            if (maxActiveWorkTimeCoefficient < coefficientsArray[i].workTimeCoefficient) {
+                maxActiveWorkTimeCoefficient = coefficientsArray[i].workTimeCoefficient;
+            }
+
+            if (maxComplexityCoefficient < coefficientsArray[i].complexityCoefficient) {
+                maxComplexityCoefficient = coefficientsArray[i].complexityCoefficient;
+            }
+        }
+
+        return new CoefficientsData(
+            0,
+            maxTemperatureCoefficient,
+            maxPulseCoefficient,
+            maxActiveWorkTimeCoefficient,
+            maxComplexityCoefficient
+        );
+
     }
 
 }

@@ -38,6 +38,7 @@ class AdminUserController {
                 password,
                 birthday,
                 phoneNumber,
+                companyId
             } = req.body;
 
             let userImage;
@@ -59,7 +60,8 @@ class AdminUserController {
                 password,
                 birthday,
                 phoneNumber,
-                userImage || DEFAULT_USER_IMAGE_NAME
+                userImage || DEFAULT_USER_IMAGE_NAME,
+                companyId as number
             );
 
             const userDomainModel: UserDomainModel = await this.userService.createUser(dto);
@@ -135,6 +137,7 @@ class AdminUserController {
                 secondName,
                 birthday,
                 phoneNumber,
+                companyId
             } = req.body;
 
             let userImage;
@@ -155,7 +158,8 @@ class AdminUserController {
                 secondName,
                 birthday,
                 phoneNumber,
-                userImage || DEFAULT_USER_IMAGE_NAME
+                userImage || DEFAULT_USER_IMAGE_NAME,
+                companyId as number
             );
 
             const updatedUserDomain = await this.userService.updateUser(Number(id), dto);

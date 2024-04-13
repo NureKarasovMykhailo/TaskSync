@@ -12,6 +12,7 @@ import AdminUserService from "../../core/services/AdminUserService/AdminUserServ
 import AdminUserController from "../controllers/AdminUserController";
 import RoleMapper from "../mappers/RoleMapper/RoleMapper";
 import EducationMapper from "../mappers/EducationMapper/EducationMapper";
+import authMiddleware from "../../core/common/middlewares/AuthMiddleware";
 
 const router = express.Router();
 
@@ -56,6 +57,7 @@ router.delete(
 
 router.patch(
     '/add-role/:id',
+    authMiddleware,
     checkRoleMiddleware([RolesEnum.SUBSCRIBER, RolesEnum.ADMIN, rolesEnum.COMPANY_ADMIN]),
     adminUserController.addRole.bind(adminUserController)
 );

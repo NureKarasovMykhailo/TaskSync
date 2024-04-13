@@ -1,9 +1,12 @@
 export default class CoefficientsData {
+
+    public totalCoefficient: number = -1;
+
     constructor (
-        activityId: number,
-        temperatureCoefficient: number,
-        pulseCoefficient: number,
-        workTimeCoefficient: number,
-        complexityCoefficient: number,
+        public activityId: number,
+        public temperatureCoefficient: number,
+        public pulseCoefficient: number,
+        public workTimeCoefficient: number,
+        public complexityCoefficient: number,
     ) {}
 }
