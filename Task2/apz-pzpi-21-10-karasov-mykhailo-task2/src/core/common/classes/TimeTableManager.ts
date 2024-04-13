@@ -1,41 +1,27 @@
 import ActivityDomainModel from "../../domain/models/Acitivity/Activity";
-import ScannerHistoryDomainModel from "../../domain/models/ScannerHistory/ScannerHistory";
 import UserDomainModel from "../../domain/models/User/User";
+import ScannerHistoryDomainModel from "../../domain/models/ScannerHistory/ScannerHistory";
 import CoefficientsData from "./CoefficientsData";
 
-export default class CoefficientsManager {
+export default class TimeTableManager {
 
-    private readonly _activity: ActivityDomainModel;
-    private  _scannerHistory: ScannerHistoryDomainModel;
-    private readonly _user: UserDomainModel;
+    private _activities: ActivityDomainModel[];
+    private _user: UserDomainModel;
+    private _scannerHistory: ScannerHistoryDomainModel;
+    private _coefficientsArray!: CoefficientsData[];
 
-    private _temperatureCoefficient!: number;
-    private _pulseCoefficient!: number;
-    private _activeWorkTimeCoefficient!: number;
-    private _complexityCoefficient!: number;
-
-    constructor(activity: ActivityDomainModel, scannerHistory: ScannerHistoryDomainModel, user: UserDomainModel) {
-        this._activity = activity;
-        this._scannerHistory = scannerHistory;
+    constructor(
+       activities: ActivityDomainModel[],
+       user: UserDomainModel,
+       scannerHistory: ScannerHistoryDomainModel
+    ) {
+        this._activities = activities;
         this._user = user;
+        this._scannerHistory = scannerHistory;
     }
 
-    public setCoefficients() {
-        this._complexityCoefficient = this._activity.complexity?.evaluation || 5;
-        this._pulseCoefficient = this.getPulseCoefficients(this._scannerHistory.pulse);
-        this._temperatureCoefficient = this.getTemperatureCoefficient(this._scannerHistory.temperature);
-        this._activeWorkTimeCoefficient = this.getActiveWorkCoefficients(this._scannerHistory.activeWorkedTime);
-    }
+    private getCoefficientsArray() {
 
-    public getCoefficientsData() {
-        return new CoefficientsData(
-            this._user,
-            this._activity,
-            this._temperatureCoefficient,
-            this._pulseCoefficient,
-            this._activeWorkTimeCoefficient,
-            this._complexityCoefficient
-        );
     }
 
     private getTemperatureCoefficient(temperature: number): number {
@@ -92,6 +78,5 @@ export default class CoefficientsManager {
             return 5;
         }
     }
-
 
 }
