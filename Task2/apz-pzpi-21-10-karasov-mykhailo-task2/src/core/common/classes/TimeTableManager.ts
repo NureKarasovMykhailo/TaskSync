@@ -1,5 +1,4 @@
 import ActivityDomainModel from "../../domain/models/Acitivity/Activity";
-import UserDomainModel from "../../domain/models/User/User";
 import ScannerHistoryDomainModel from "../../domain/models/ScannerHistory/ScannerHistory";
 import CoefficientsData from "./CoefficientsData";
 
