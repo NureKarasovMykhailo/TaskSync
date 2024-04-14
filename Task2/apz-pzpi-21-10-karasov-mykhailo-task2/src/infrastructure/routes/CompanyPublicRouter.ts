@@ -63,5 +63,17 @@ router.delete(
     publicCompanyController.deleteEmployee.bind(publicCompanyController)
 );
 
+router.get(
+    '/employees',
+    hasUserCompanyMiddleware,
+    publicCompanyController.getAllCompanyEmployees.bind(publicCompanyController)
+);
+
+router.get(
+    '/employees/:id',
+    hasUserCompanyMiddleware,
+    publicCompanyController.getCompanyEmployee.bind(publicCompanyController)
+);
+
 
 export default router;

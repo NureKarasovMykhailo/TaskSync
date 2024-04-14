@@ -155,4 +155,41 @@ export default class PublicCompanyController {
             next(error);
         }
     }
+
+    public async getAllCompanyEmployees(req: Request, res: Response, next: NextFunction) {
+        try {
+            if (req.user.companyId) {
+                const {email,  limit = '10', page = '1' } = req.query;
+                const offset = Number(page) * Number(limit) - Number(limit);
+                const paginatedUsers = await this.companyService.getCompanyEmployees(req.user.companyId, offset, Number(limit), email as string);
+
+                return res.status(200).json({
+                    users: paginatedUsers.paginatedItems,
+                    pagination: {
+                        totalItems: paginatedUsers.itemsCount,
+                        totalPages: paginatedUsers.totalPages,
+                        currentPage: page,
+                        itemsPerPage: limit
+                    }
+                })
+            }
+        } catch (error){
+            console.log(error);
+            next(error);
+        }
+    }
+
+    public async getCompanyEmployee(req: Request, res: Response, next: NextFunction) {
+        try {
+            if (req.user.companyId) {
+                const { id } = req.params;
+                const user = await this.companyService.getCompanyEmployee(req.user.companyId, Number(id));
+
+                return res.status(200).json(user);
+            }
+        } catch (error){
+            console.log(error);
+            next(error);
+        }
+    }
 }

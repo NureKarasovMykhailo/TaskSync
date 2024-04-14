@@ -30,6 +30,7 @@ app.use(i18n.init);
 app.use(localizationMiddleware);
 app.use(fileUpload());
 app.use(express.json());
+app.use(express.static(path.resolve(__dirname, '..', '.dist', 'static')));
 app.use('/api', router);
 
 

@@ -9,6 +9,7 @@ import RolesEnum from "../../common/enums/RolesEnum";
 import CompanyDomainModel from "../../domain/models/Company/Company";
 import PaginationClass from "../../common/uttils/PaginationClass";
 import i18n from "i18n";
+import UserDomainModel from "../../domain/models/User/User";
 
 export default class CompanyService {
     private readonly fileManager: FileManager = new FileManager();
@@ -175,6 +176,27 @@ export default class CompanyService {
 
         await this.companyRepository.deleteCompany(companyId);
         return;
+    }
+
+    public async getCompanyEmployees(companyId: number, offset: number, limit: number, email?: string) {
+        let employees = await this.userRepository.getUserByCompanyId(companyId);
+        if (email) {
+            employees = employees.filter(user => user.email === email);
+        }
+        const pagination: PaginationClass<UserDomainModel> = new PaginationClass();
+        return pagination.paginateItems(employees, offset, limit);
+    }
+
+    public async getCompanyEmployee(companyId: number, userId: number) {
+        const user = await this.userRepository.getUserById(userId);
+        if (!user) {
+            throw ApiError.notFound(i18n.__('userNotFound'));
+        }
+        if (user.companyId !== companyId) {
+            throw ApiError.notFound(i18n.__('youHaveNotAccessToThisInformation'));
+        }
+
+        return user;
     }
 
     private async isUserHasCompany(userId: number): Promise<boolean> {
