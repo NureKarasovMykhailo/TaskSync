@@ -5,6 +5,7 @@ import IScannerRepository from "../../repositories/ScannerRepository/IScannerRep
 import ApiError from "../../common/error/ApiError";
 import ScannerHistoryDomainModel from "../../domain/models/ScannerHistory/ScannerHistory";
 import PaginationClass from "../../common/uttils/PaginationClass";
+import i18n from "i18n";
 
 export default class ScannerHistoryService {
     constructor(
@@ -31,7 +32,7 @@ export default class ScannerHistoryService {
     public async getOneScannerHistory(scannerHistoryId: number) {
         const scannerHistory = await this.scannerHistoryRepository.getScannerHistoryById(scannerHistoryId);
         if (!scannerHistory) {
-            throw ApiError.notFound(`There no scanner history with ID: ${scannerHistoryId}`);
+            throw ApiError.notFound(i18n.__('scannerHistoryNotFound'));
         }
         return scannerHistory;
     }
@@ -66,10 +67,10 @@ export default class ScannerHistoryService {
     private async checkScanner(scannerId: number, companyId: number): Promise<void> {
         const scanner = await this.scannerRepository.getScannerById(scannerId);
         if (!scanner) {
-            throw ApiError.notFound(`There no scanner with id: ${scannerId}`);
+            throw ApiError.notFound(i18n.__('scannerNotFound'));
         }
         if (scanner.companyId !== companyId) {
-            throw ApiError.forbidden(`You have not access to this information`);
+            throw ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation'));
         }
         return;
     }

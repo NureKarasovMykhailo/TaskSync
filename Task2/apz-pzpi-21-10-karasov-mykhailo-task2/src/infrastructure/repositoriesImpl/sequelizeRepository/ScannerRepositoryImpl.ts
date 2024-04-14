@@ -6,6 +6,7 @@ import ScannerMapper from "../../mappers/ScannerMapper/ScannerMapper";
 import User from "../../database/etities/User";
 import ApiError from "../../../core/common/error/ApiError";
 import Company from "../../database/etities/Company";
+import i18n from "i18n";
 
 export default class ScannerRepositoryImpl implements IScannerRepository {
     private readonly scannerMapper: ScannerMapper = new ScannerMapper();
@@ -17,7 +18,7 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
 
         const company = await Company.findOne({ where: { id: dto.companyId }});
         if (!company) {
-            throw ApiError.notFound(`There no company with ID: ${dto.companyId}`);
+            throw ApiError.notFound(i18n.__('companyNotFound'));
         }
 
         let scanner: Scanner | null = await Scanner.create({
@@ -28,7 +29,7 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
 
         scanner = await Scanner.findOne({where: {id: scanner.id}, include: [User, Company]});
         if (!scanner ) {
-            throw ApiError.notFound(`There no scanner with`)
+            throw ApiError.notFound(i18n.__('scannerNotFound'))
         }
 
         return this.scannerMapper.toDomainModel(scanner);
@@ -51,7 +52,7 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
 
         const company = await Company.findOne({ where: { id: dto.companyId }});
         if (!company) {
-            throw ApiError.notFound(`There no company with ID: ${dto.companyId}`);
+            throw ApiError.notFound(i18n.__('companyNotFound'));
         }
 
         const scanner = await Scanner.findOne({
@@ -59,7 +60,7 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
             include: [User, Company]
         });
         if (!scanner) {
-            throw ApiError.notFound(`There no scanner with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('scannerNotFound'));
         }
         scanner.userId = user?.id || null;
         scanner.companyId = company.id;
@@ -71,7 +72,7 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
     async deleteScanner(id: number): Promise<void> {
         const scanner = await Scanner.findOne({where: { id }});
         if (!scanner) {
-            throw ApiError.notFound(`There no scanner with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('scannerNotFound'));
         }
         await scanner.destroy();
         return;

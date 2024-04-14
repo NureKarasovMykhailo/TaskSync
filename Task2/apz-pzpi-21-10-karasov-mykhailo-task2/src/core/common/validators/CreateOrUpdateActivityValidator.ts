@@ -5,19 +5,19 @@ export default function createOrUpdateActivityValidator(): ValidationChain[] {
         body('activityTitle')
             .trim()
             .notEmpty()
-            .withMessage('Будь-ласка, введіть назву діяльності'),
+            .withMessage('enterActivityTitle'),
         body('requiredWorkerCount')
             .isNumeric()
-            .withMessage('Будь-ласка, введіть необхідну кількість робітників'),
+            .withMessage('enterRequiredWorkerCount'),
         body('timeShift')
             .isNumeric()
-            .withMessage('Будь-ласка, введіть кількість часу, необхідну для виконання роботи'),
+            .withMessage('enterTimeShift'),
         body('complexityId')
             .isNumeric()
-            .withMessage('Будь-ласка оберіть складність діяльності'),
+            .withMessage('enterComplexityId'),
         body('educationId')
             .isNumeric()
-            .withMessage('Будь-ласка оберіть складність діяльності'),
+            .withMessage('enterEducationId'),
 
     ]
 }

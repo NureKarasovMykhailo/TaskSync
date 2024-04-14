@@ -5,12 +5,12 @@ export default function createOrUpdateComplexityValidator(): ValidationChain[] {
         body('complexityTitle')
             .trim()
             .notEmpty()
-            .withMessage('Будь-ласка, введіть назву складності'),
+            .withMessage('enterComplexityTitle'),
         body('evaluation')
             .trim()
             .notEmpty()
-            .withMessage('Будь-ласка, введіть числову оцінку складності')
+            .withMessage('enterEvaluation')
             .isNumeric()
-            .withMessage('Невірний формат числової оцінки')
+            .withMessage('incorrectEvaluationFormat')
     ];
 }

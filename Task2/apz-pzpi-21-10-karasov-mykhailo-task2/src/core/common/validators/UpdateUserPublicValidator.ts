@@ -5,14 +5,14 @@ export default function updateUserPublicValidator() {
         body('firstName')
             .trim()
             .notEmpty()
-            .withMessage('Required field firstName'),
+            .withMessage('enterFirstName'),
         body('secondName')
             .trim()
             .notEmpty()
-            .withMessage('Required field secondName'),
+            .withMessage('enterSecondName'),
         body('birthday')
             .isDate()
-            .withMessage('Неправильний формат дати народження'),
+            .withMessage('birthday'),
 
     ];
 }

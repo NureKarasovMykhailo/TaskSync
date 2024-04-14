@@ -6,6 +6,9 @@ import sequelize from './infrastructure/database/database';
 import router from './infrastructure/routes/index';
 import errorHandler from "./core/common/middlewares/ErrorHandlingMiddleware";
 import fileUpload from 'express-fileupload'
+import i18n from "i18n";
+import path from "path";
+import localizationMiddleware from "./core/common/middlewares/LocalizationMiddleware";
 
 dotenv.config();
 
@@ -13,7 +16,18 @@ const app = express();
 
 const PORT = port;
 
+i18n.configure({
+    locales: ['en', 'uk'],
+    directory: path.join(__dirname, 'locales'),
+    defaultLocale: 'uk',
+    objectNotation: true,
+    register: global
+});
+
+
 app.use(cors());
+app.use(i18n.init);
+app.use(localizationMiddleware);
 app.use(fileUpload());
 app.use(express.json());
 app.use('/api', router);
@@ -22,8 +36,12 @@ app.use('/api', router);
 // LAST MIDDLEWARE
 app.use(errorHandler);
 
-sequelize.sync().then(() => {
-    app.listen(PORT, () => {
-        console.log(`[server]: Server started work on http://localhost:${PORT}`);
-    });
-})
+try {
+    sequelize.sync().then(() => {
+        app.listen(PORT, () => {
+            console.log(`[server]: Server started work on http://localhost:${PORT}`);
+        });
+    })
+} catch (error) {
+    console.log(error);
+}

@@ -4,6 +4,7 @@ import ApiError from "../../common/error/ApiError";
 import IUserRepository from "../../repositories/UserRepository/IUserRepository";
 import PaginationClass from "../../common/uttils/PaginationClass";
 import ScannerDomainModel from "../../domain/models/Scanner/Scanner";
+import i18n from "i18n";
 
 export default class ScannerService {
     constructor(
@@ -30,10 +31,10 @@ export default class ScannerService {
     public async getScanner(id: number, companyId: number) {
         const scanner = await this.scannerRepository.getScannerById(id);
         if (!scanner) {
-            throw ApiError.notFound(`There no scanner with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('scannerNotFound'));
         }
         if (scanner.companyId !== companyId) {
-            throw ApiError.forbidden(`You have not access to this information`);
+            throw ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation'));
         }
         return scanner;
     }
@@ -49,7 +50,7 @@ export default class ScannerService {
         const scanner = await this.scannerRepository.getScannerById(id);
         if (scanner) {
             if (scanner.companyId !== companyId) {
-                throw ApiError.forbidden(`You have not access to this information`);
+                throw ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation'));
             }
             await this.scannerRepository.deleteScanner(id);
         }
@@ -65,17 +66,17 @@ export default class ScannerService {
         const user = await this.userRepository.getUserById(userId);
         if (user) {
             if (user.companyId !== companyId) {
-                throw ApiError.forbidden(`You have not access to this information`);
+                throw ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation'));
             }
         } else {
-            throw ApiError.notFound(`There no user with ID: ${userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
     }
 
     public async getScannerById(scannerId: number) {
         const scanner = await this.scannerRepository.getScannerById(scannerId);
         if (!scanner) {
-            throw ApiError.notFound(`There no scanner with ID: ${scannerId}`);
+            throw ApiError.notFound(i18n.__('scannerNotFound'));
         }
         return scanner;
     }

@@ -9,6 +9,7 @@ import ActivityMapper from "../../mappers/ActivityMapper/ActivityMapper";
 import ApiError from "../../../core/common/error/ApiError";
 import User from "../../database/etities/User";
 import UserActivities from "../../database/etities/UserActivities";
+import i18n from "i18n";
 
 export default class ActivityRepositoryImpl implements IActivityRepository{
     private activityMapper: ActivityMapper = new ActivityMapper();
@@ -33,7 +34,7 @@ export default class ActivityRepositoryImpl implements IActivityRepository{
 
 
         if (!activity) {
-            throw ApiError.notFound(`There no activity with ID: ${createdActivity.id}`);
+            throw ApiError.notFound(i18n.__('activityNotFound'));
         }
 
         return this.activityMapper.toDomainModel(activity);
@@ -68,7 +69,7 @@ export default class ActivityRepositoryImpl implements IActivityRepository{
             include: [Education, Company, Complexity, User]
         });
         if (!activity) {
-            throw ApiError.notFound(`There no activity with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('activityNotFound'));
         }
 
         activity.activityTitle = dto.activityTitle;
@@ -86,7 +87,7 @@ export default class ActivityRepositoryImpl implements IActivityRepository{
 
         const updatedActivity = await this.getActivityById(id);
         if (!updatedActivity) {
-            throw ApiError.notFound(`There no activity with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('activityNotFound'));
         }
         return updatedActivity;
 
@@ -100,7 +101,7 @@ export default class ActivityRepositoryImpl implements IActivityRepository{
 
     async addEmployee(id: number, userId: number): Promise<ActivityDomainModel> {
         if (await this.isUserInActivity(id, userId)) {
-            throw ApiError.badRequest(`User is already in activity with ID: ${id}`);
+            throw ApiError.badRequest(i18n.__('userIsAlreadyInActivity'));
         }
 
         await UserActivities.create({
@@ -110,7 +111,7 @@ export default class ActivityRepositoryImpl implements IActivityRepository{
 
         const activity = await this.getActivityById(id);
         if (!activity) {
-            throw ApiError.notFound(`There no activity with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('activityNotFound'));
         }
         return activity;
     }
@@ -123,7 +124,7 @@ export default class ActivityRepositoryImpl implements IActivityRepository{
         await userActivity?.destroy();
         const activity = await this.getActivityById(id);
         if (!activity) {
-            throw ApiError.notFound(`There no activity with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('activityNotFound'));
         }
         return activity;
     }
@@ -144,7 +145,7 @@ export default class ActivityRepositoryImpl implements IActivityRepository{
         const company = await Company.findOne({ where: { id: dto.companyId }});
 
         if (!complexity || !education || !company) {
-            throw ApiError.badRequest(`Error while creating activity`);
+            throw ApiError.badRequest(i18n.__('errorWhileCreatingActivity'));
         }
 
         return { complexity, education, company }

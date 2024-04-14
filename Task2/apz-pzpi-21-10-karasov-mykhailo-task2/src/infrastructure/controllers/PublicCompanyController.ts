@@ -7,6 +7,7 @@ import ApiError from "../../core/common/error/ApiError";
 import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
 import UserMapper from "../mappers/UserMapper/UserMapper";
+import i18n from "i18n";
 
 export default class PublicCompanyController {
     constructor(
@@ -59,7 +60,7 @@ export default class PublicCompanyController {
                 const company = this.companyMapper.toPersistenceModel(companyDomainModel);
                 return res.status(200).json({ company: company });
             } else {
-                return next(ApiError.notFound(`You have not any company`));
+                return next(ApiError.notFound(i18n.__('youHaveNotAnyCompany')));
             }
         } catch (error) {
             console.log(error);
@@ -98,7 +99,7 @@ export default class PublicCompanyController {
                 const updatedCompany = this.companyMapper.toPersistenceModel(updatedCompanyDomain);
                 return res.status(200).json({ company: updatedCompany } );
             } else {
-                return next(ApiError.notFound(`You have not any company`));
+                return next(ApiError.notFound(i18n.__('youHaveNotAnyCompany')));
             }
 
         } catch (error) {
@@ -115,7 +116,7 @@ export default class PublicCompanyController {
                 const token = await this.companyService.deleteCompanyByToken(req.user.companyId, req.user.id);
                 return res.status(200).json({token: token});
             } else {
-                return next(ApiError.notFound(`You have not any company`));
+                return next(ApiError.notFound(i18n.__('youHaveNotAnyCompany')));
             }
 
         } catch (error) {
@@ -132,7 +133,7 @@ export default class PublicCompanyController {
                 const addedEmployee = this.userMapper.toPersistenceModel(addedEmployeeDomainModel);
                 return res.status(200).json({ addedUser: addedEmployee });
             } else {
-                return next(ApiError.internalServerError(`Unexpected error`));
+                return next(ApiError.internalServerError(i18n.__('unknownError')));
             }
         } catch (error) {
             console.log(error);

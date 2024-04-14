@@ -7,6 +7,7 @@ import ScannerHistoryMapper from "../../mappers/ScannerHistoryMapper/ScannerHist
 import Scanner from "../../database/etities/Scanner";
 import ApiError from "../../../core/common/error/ApiError";
 import User from "../../database/etities/User";
+import i18n from "i18n";
 
 export default class ScannerHistoryRepositoryImpl implements IScannerHistoryRepository {
 
@@ -61,21 +62,21 @@ export default class ScannerHistoryRepositoryImpl implements IScannerHistoryRepo
     async updateScannerHistory(id: number, dto: CreateOrUpdateScannerHistoryDto): Promise<ScannerHistoryDomainModel> {
         const scanner = await Scanner.findOne({ where: { id :dto.scannerId }} );
         if (!scanner) {
-            throw ApiError.notFound(`There no scanner with ID: ${dto.scannerId}`);
+            throw ApiError.notFound(i18n.__('scannerNotFound'));
         }
 
         const user = await User.findOne({where: { id: dto.userId }});
         if (!user) {
-            throw ApiError.notFound(`There no user with ID: ${dto.userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
 
         if (user.companyId !== scanner.companyId) {
-            throw ApiError.forbidden(`You have not access to this information`);
+            throw ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation'));
         }
 
         const scannerHistory = await ScannerHistory.findOne({ where: { id }});
         if (!scannerHistory) {
-            throw ApiError.notFound(`There no scanner history with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('scannerNotFound'));
         }
 
         scannerHistory.temperature = dto.temperature;

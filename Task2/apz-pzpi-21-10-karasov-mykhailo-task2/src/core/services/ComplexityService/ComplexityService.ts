@@ -3,6 +3,7 @@ import CreateOrUpdateComplexityDto from "../../repositories/ComplexityRepository
 import ApiError from "../../common/error/ApiError";
 import PaginationClass from "../../common/uttils/PaginationClass";
 import ComplexityDomainModel from "../../domain/models/Complexity/Complexity";
+import i18n from "i18n";
 
 export default class ComplexityService {
     constructor(
@@ -22,7 +23,7 @@ export default class ComplexityService {
     public async getComplexityById(id: number) {
         const complexity = await this.complexityRepository.getComplexityById(id);
         if (!complexity) {
-            throw ApiError.notFound(`There no complexity with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('complexityNotFound'));
         }
         return complexity;
     }
@@ -30,7 +31,7 @@ export default class ComplexityService {
     public async updateComplexity(id: number, dto: CreateOrUpdateComplexityDto) {
         const complexity = await this.complexityRepository.getComplexityById(id);
         if (!complexity) {
-            throw ApiError.notFound(`There no complexity with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('complexityNotFound'));
         }
         return await this.complexityRepository.updateComplexity(id, dto);
 

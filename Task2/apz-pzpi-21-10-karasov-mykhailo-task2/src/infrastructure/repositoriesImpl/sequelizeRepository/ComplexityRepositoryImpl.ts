@@ -5,6 +5,7 @@ import ComplexityDomainModel from "../../../core/domain/models/Complexity/Comple
 import Complexity from "../../database/etities/Complexity";
 import ComplexityMapper from "../../mappers/ComplexityMapper/ComplexityMapper";
 import ApiError from "../../../core/common/error/ApiError";
+import i18n from "i18n";
 
 export default class ComplexityRepositoryImpl implements IComplexityRepository {
     private readonly complexityMapper: ComplexityMapper = new ComplexityMapper();
@@ -36,7 +37,7 @@ export default class ComplexityRepositoryImpl implements IComplexityRepository {
     async updateComplexity(id: number, dto: CreateOrUpdateComplexityDto): Promise<ComplexityDomainModel> {
         const complexity = await Complexity.findOne({ where: { id }});
         if (!complexity) {
-            throw ApiError.notFound(`There no complexity with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('complexityNotFound'));
         }
 
         complexity.complexityTitle = dto.complexityTitle;

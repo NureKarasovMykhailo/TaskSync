@@ -3,6 +3,7 @@ import {NextFunction, Request, Response} from "express";
 import CreateOrUpdateScannerDto from "../../core/repositories/ScannerRepository/dto/CreateOrUpdateScannerDto";
 import ScannerMapper from "../mappers/ScannerMapper/ScannerMapper";
 import ApiError from "../../core/common/error/ApiError";
+import i18n from "i18n";
 
 export default class ScannerController {
     constructor(
@@ -45,7 +46,7 @@ export default class ScannerController {
                    }
                });
            } else {
-               return next(ApiError.badRequest(`There no company id`));
+               return next(ApiError.badRequest(i18n.__('youHaveNotAnyCompany')));
            }
         } catch (error) {
             console.log(error);

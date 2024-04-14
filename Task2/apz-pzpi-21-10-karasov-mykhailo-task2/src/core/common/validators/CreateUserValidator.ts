@@ -5,22 +5,22 @@ function createUserValidator() {
     return [
         body('email')
           .isEmail()
-          .withMessage('Невірний формат електроної пошти'),
+          .withMessage('incorrectEmailFormat'),
         body('firstName')
             .trim()
             .notEmpty()
-            .withMessage('Required field firstName'),
+            .withMessage('enterFirstName'),
         body('secondName')
             .trim()
             .notEmpty()
-            .withMessage('Required field secondName'),
+            .withMessage('enterSecondName'),
         body('password')
             .trim()
             .isLength({min: 8, max: 20})
-            .withMessage('Пароль має бути від 8 до 20 символів'),
+            .withMessage('passwordMustBe'),
         body('birthday')
             .isDate()
-            .withMessage('Неправильний формат дати народження'),
+            .withMessage('birthday'),
 
     ];
 }

@@ -16,6 +16,7 @@ import EducationDomainModel from "../../core/domain/models/Education/Education";
 import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
 import ApiError from "../../core/common/error/ApiError";
+import i18n from 'i18n';
 
 class AdminUserController {
     private readonly userMapper: UserMapper = new UserMapper();
@@ -46,6 +47,7 @@ class AdminUserController {
             if (req.files) {
                 userImage = req.files.userImage;
             }
+
 
             const errors = validationResult(req);
             if (!errors.isEmpty()) {

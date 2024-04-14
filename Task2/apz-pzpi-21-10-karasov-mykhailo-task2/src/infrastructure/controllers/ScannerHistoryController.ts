@@ -5,6 +5,7 @@ import ScannerService from "../../core/services/ScannerService/ScannerService";
 import CreateOrUpdateScannerHistoryDto
     from "../../core/repositories/ScannerHistoryRepository/dto/CreateOrUpdateScannerHistoryDto";
 import ApiError from "../../core/common/error/ApiError";
+import i18n from "i18n";
 
 export default class ScannerHistoryController {
     constructor(
@@ -61,7 +62,7 @@ export default class ScannerHistoryController {
                     }
                 });
             } else {
-                return next(ApiError.forbidden(`You have not access to this information`));
+                return next(ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation')));
             }
         } catch (error) {
             console.log(error);
@@ -76,7 +77,7 @@ export default class ScannerHistoryController {
                 await this.scannerHistoryService.deleteScannerHistory(Number(id));
                 return res.status(200).json({});
             } else {
-                return next(ApiError.forbidden(`You have not access to this information`));
+                return next(ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation')));
             }
         } catch (error) {
             console.log(error);
@@ -92,7 +93,7 @@ export default class ScannerHistoryController {
                 return res.status(200).json({ scannerHistory: this.scannerHistoryMapper.toPersistenceModel(scannerHistoryDomainModel)});
 
             } else {
-                return next(ApiError.forbidden(`You have not access to this information`));
+                return next(ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation')));
             }
         } catch (error) {
             console.log(error);
@@ -107,7 +108,7 @@ export default class ScannerHistoryController {
                 await this.scannerHistoryService.clearScannerHistory(Number(id), req.user.companyId);
                 return res.status(200).json({ });
             } else {
-                return next(ApiError.forbidden(`You have not access to this information`));
+                return next(ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation')));
             }
         } catch (error) {
             console.log(error);

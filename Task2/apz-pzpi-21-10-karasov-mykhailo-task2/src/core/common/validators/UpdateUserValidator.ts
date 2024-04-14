@@ -4,18 +4,18 @@ export default function updateUserValidator() {
     return [
         body('email')
             .isEmail()
-            .withMessage('Невірний формат електроної пошти'),
+            .withMessage('incorrectEmailFormat'),
         body('firstName')
             .trim()
             .notEmpty()
-            .withMessage('Required field firstName'),
+            .withMessage('enterFirstName'),
         body('secondName')
             .trim()
             .notEmpty()
-            .withMessage('Required field secondName'),
+            .withMessage('enterSecondName'),
         body('birthday')
             .isDate()
-            .withMessage('Неправильний формат дати народження'),
+            .withMessage('birthday'),
 
     ];
 }

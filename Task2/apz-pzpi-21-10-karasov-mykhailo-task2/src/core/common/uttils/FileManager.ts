@@ -2,7 +2,7 @@ import * as uuid from 'uuid';
 import * as path from 'path';
 import * as fs from 'fs';
 import ApiError from "../error/ApiError";
-import * as buffer from "buffer";
+import i18n from "i18n";
 
 class FileManager {
     async createFile(file: any): Promise<string> {
@@ -17,7 +17,7 @@ class FileManager {
             return fileName;
         } catch (error) {
             console.log(error);
-            throw ApiError.internalServerError('Error while creating file');
+            throw ApiError.internalServerError(i18n.__('creatingFileError'));
         }
     }
 
@@ -32,7 +32,7 @@ class FileManager {
             }
         } catch (error) {
             console.log(error);
-            throw ApiError.internalServerError('Error while creating file');
+            throw ApiError.internalServerError(i18n.__('creatingFileError'));
         }
     }
 }

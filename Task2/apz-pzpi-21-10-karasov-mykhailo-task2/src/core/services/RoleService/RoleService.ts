@@ -3,6 +3,7 @@ import IRoleRepository from "../../repositories/RoleRepository/IRoleRepository";
 import RoleDomainModel from "../../domain/models/Role/Role";
 import ApiError from "../../common/error/ApiError";
 import PaginationClass from "../../common/uttils/PaginationClass";
+import i18n from "i18n";
 
 export default class RoleService {
 
@@ -10,7 +11,7 @@ export default class RoleService {
 
     public async createRole(dto: CreateRoleDto) {
         if (await this.isRoleExist(dto.roleTitle)) {
-            throw ApiError.conflict('Роль з такою назвою вже існує.');
+            throw ApiError.conflict(i18n.__('roleWithThisTitleAlreadyExist'));
         }
 
         return await this.roleRepository.createRole(dto);
@@ -25,7 +26,7 @@ export default class RoleService {
     public async getOne(id: number) {
         const role = await this.roleRepository.getRoleById(id);
         if (!role) {
-            throw ApiError.notFound(`Роль з ID: ${id} не була знайдена`);
+            throw ApiError.notFound(i18n.__('roleNotFound'));
         }
         return role;
     }
@@ -33,14 +34,14 @@ export default class RoleService {
     public async updateRole(dto: CreateRoleDto, id: number) {
         const role: RoleDomainModel | null = await this.roleRepository.getRoleById(id);
         if (!role) {
-            throw ApiError.notFound(`Роль з ID: ${id} не була знайдена`);
+            throw ApiError.notFound(i18n.__('roleNotFound'));
         }
         if (await this.isRoleExist(dto.roleTitle) && dto.roleTitle !== role.roleTitle) {
-            throw ApiError.conflict(`Роль з назвою ${dto.roleTitle} вже існує`)
+            throw ApiError.conflict(i18n.__('roleWithThisTitleAlreadyExist'))
         }
         const updatedRole =  await this.roleRepository.updateRole(dto, id);
         if (!updatedRole) {
-            throw ApiError.notFound(`Роль з ID: ${id} не була знайдена`);
+            throw ApiError.notFound(i18n.__('roleNotFound'));
         }
         return updatedRole;
     }

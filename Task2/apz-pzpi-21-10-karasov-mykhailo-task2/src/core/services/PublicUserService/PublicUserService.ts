@@ -10,6 +10,7 @@ import RolesEnum from "../../common/enums/RolesEnum";
 import AddOrDeleteRoleDto from "../../repositories/UserRepository/dto/AddOrDeleteRoleDto";
 import JWT from "../../common/uttils/JWT";
 import RoleDomainModel from "../../domain/models/Role/Role";
+import i18n from "i18n"
 
 export default class PublicUserService {
 
@@ -23,7 +24,7 @@ export default class PublicUserService {
     public async updateUser(userId: number, dto: UpdateUserPublicDto): Promise<string> {
         const user = await this.userRepository.getUserById(userId);
         if (!user ) {
-            throw ApiError.notFound(`There no user with ID: ${userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
         let fileName =  user.userImage
         if (dto.userImage) {
@@ -36,7 +37,7 @@ export default class PublicUserService {
         const updatingUser = await this.userRepository.updateUserPublic(userId, dto, fileName);
 
         if (!updatingUser) {
-            throw ApiError.notFound(`There no user with ID: ${userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
         const roles = await this.userRepository.getUserRoles(updatingUser.id);
 
@@ -47,7 +48,7 @@ export default class PublicUserService {
     public async addEducation(userId: number, dto: AddOrDeleteEducationDto): Promise<string> {
         const user = await this.userRepository.addEducation(userId, dto);
         if (!user) {
-            throw ApiError.notFound(`There no user with ID: ${userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
         const roles = await this.userRepository.getUserRoles(user.id);
         const jwt = new JWT(user, roles);
@@ -57,7 +58,7 @@ export default class PublicUserService {
     public async deleteEducation(userId: number, dto: AddOrDeleteEducationDto): Promise<string> {
         const user = await this.userRepository.deleteEducation(userId, dto);
         if (!user) {
-            throw ApiError.notFound(`There no user with ID: ${userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
         const roles = await this.userRepository.getUserRoles(user.id);
         const jwt = new JWT(user, roles);
@@ -83,14 +84,14 @@ export default class PublicUserService {
             }
             return subscriptionDetails;
         } else {
-            throw ApiError.internalServerError(`Error with PayPal API`);
+            throw ApiError.internalServerError(i18n.__('errorWithPayPalAPI'));
         }
     }
 
 
     private isUserHasRoleSubscriber(roles: RoleDomainModel[] | null) {
         if (!roles) {
-            throw ApiError.internalServerError(`Unknown error`);
+            throw ApiError.internalServerError(i18n.__('unknownError'));
         }
         let isSubscriber = false;
         roles.map(role => {

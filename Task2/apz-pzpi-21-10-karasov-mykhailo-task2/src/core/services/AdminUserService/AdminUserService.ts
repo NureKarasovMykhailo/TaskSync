@@ -10,6 +10,7 @@ import UpdateUserAdminDto from "../../repositories/UserRepository/dto/UpdateUser
 import AddOrDeleteRoleDto from "../../repositories/UserRepository/dto/AddOrDeleteRoleDto";
 import UserRole from "../../common/enums/RolesEnum";
 import RolesEnum from "../../common/enums/RolesEnum";
+import i18n from "i18n";
 
 export default class AdminUserService {
     constructor(
@@ -19,7 +20,7 @@ export default class AdminUserService {
 
     public async createUser(dto: CreateUserDto): Promise<UserDomainModel> {
         if (await this.isUserWithEmailExits(dto.email)) {
-            throw ApiError.conflict('User with this email already exist');
+            throw ApiError.conflict(i18n.__('userWithThisEmailExisted'));
         }
         let fileName: string = DEFAULT_USER_IMAGE_NAME;
         if (dto.userImage !== DEFAULT_USER_IMAGE_NAME) {
@@ -68,7 +69,7 @@ export default class AdminUserService {
     public async getUserById(id: number) {
         const user = await this.userRepository.getUserById(id);
         if (!user) {
-            throw ApiError.notFound(`There no user with id: ${id}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
         const roles = await this.userRepository.getUserRoles(id);
         const educations = await this.userRepository.getUserEducations(id);
@@ -79,11 +80,11 @@ export default class AdminUserService {
         const user = await this.userRepository.getUserById(id);
 
         if (!user) {
-            throw ApiError.notFound(`There no user with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
 
         if (await this.isUserWithEmailExits(dto.email) && dto.email !== user.email) {
-            throw ApiError.conflict(`User with this email has already existed`);
+            throw ApiError.conflict(i18n.__('userWithThisEmailExisted'));
         }
 
         let fileName: string;
@@ -98,7 +99,7 @@ export default class AdminUserService {
 
         const updatedUser = await this.userRepository.updateUser(id, dto, fileName);
         if (!updatedUser) {
-            throw ApiError.notFound(`There no user with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
         return updatedUser;
     }
@@ -119,12 +120,12 @@ export default class AdminUserService {
 
         if ((addingUserRoles.includes(RolesEnum.COMPANY_ADMIN) || addingUserRoles.includes(RolesEnum.SUBSCRIBER))
             && (dto.roleTitle === RolesEnum.SUBSCRIBER || dto.roleTitle === RolesEnum.ADMIN)) {
-            throw ApiError.forbidden(`You cannot add role ${dto.roleTitle}`)
+            throw ApiError.forbidden(i18n.__('youCannotAddThisRole'))
         }
 
         const user =  await this.userRepository.addUserRole(dto, id);
         if (!user) {
-            throw ApiError.notFound(`There no user with ID: ${id}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
         const roles = await this.userRepository.getUserRoles(id);
         return {user, roles};
@@ -134,15 +135,15 @@ export default class AdminUserService {
         console.log(addingUserRoles)
         if ((addingUserRoles.includes(RolesEnum.COMPANY_ADMIN) || addingUserRoles.includes(RolesEnum.SUBSCRIBER))
             && (dto.roleTitle === RolesEnum.SUBSCRIBER || dto.roleTitle === RolesEnum.ADMIN)) {
-            throw ApiError.forbidden(`You cannot add role ${dto.roleTitle}`)
+            throw ApiError.forbidden(i18n.__('youCannotDeleteThisRole'))
         }
 
         if (dto.roleTitle === UserRole.USER) {
-            throw ApiError.forbidden(`You cannot delete ${UserRole.USER} role`);
+            throw ApiError.forbidden(i18n.__('youCannotDeleteThisRole'));
         }
         const user = await this.userRepository.deleteUserRole(dto, userId);
         if (!user) {
-            throw ApiError.notFound(`There no user with id: ${userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
         const roles = await this.userRepository.getUserRoles(userId);
         return {user, roles};

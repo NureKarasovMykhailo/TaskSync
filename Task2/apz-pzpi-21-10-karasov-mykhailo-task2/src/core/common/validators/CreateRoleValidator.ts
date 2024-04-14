@@ -1,16 +1,16 @@
 import {body, ValidationChain} from 'express-validator';
-import {NextFunction, Request} from "express";
+import i18n from "i18n";
 
 export default function createRoleValidator(): ValidationChain[] {
     return [
         body('roleTitle')
             .trim()
             .notEmpty()
-            .withMessage('Введіть назву ролі')
+            .withMessage('enterRoleTitle')
             .isString()
-            .withMessage('Невірний формат назви ролі'),
+            .withMessage('incorrectRoleTitleFormat'),
         body('description')
             .isString()
-            .withMessage('Невірний формат опису ролі')
+            .withMessage('incorrectRoleDescriptionFormat')
     ]
 }

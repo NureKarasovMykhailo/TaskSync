@@ -3,6 +3,7 @@ import CreateEducationDto from "../../repositories/EducationRepository/dto/Creat
 import ApiError from "../../common/error/ApiError";
 import EducationDomainModel from "../../domain/models/Education/Education";
 import PaginationClass from "../../common/uttils/PaginationClass";
+import i18n from "i18n";
 
 export default class EducationService {
     constructor(
@@ -11,7 +12,7 @@ export default class EducationService {
 
     public async createEducation(dto: CreateEducationDto) {
         if (await this.isEducationExist(dto.educationTitle)) {
-            throw ApiError.conflict('Спецальність з такою назвою вже існує');
+            throw ApiError.conflict(i18n.__('educationWithThisTitleAlreadyExist'));
         }
         return await this.educationRepository.createEducation(dto);
     }
@@ -31,7 +32,7 @@ export default class EducationService {
     public async getEducationById(id: number): Promise<EducationDomainModel> {
         const education = await this.educationRepository.getEducationById(id);
         if (!education) {
-            throw ApiError.notFound(`Education with ID: ${id} not founded`);
+            throw ApiError.notFound(i18n.__('educationNotFound'));
         }
         return education;
     }
@@ -39,11 +40,11 @@ export default class EducationService {
     public async updateEducation(id: number, dto: CreateEducationDto): Promise<EducationDomainModel> {
         const updatedEducation = await this.getEducationById(id);
         if (await this.isEducationExist(dto.educationTitle) && dto.educationTitle !== updatedEducation.educationTitle) {
-            throw ApiError.conflict('Education with this title has already existed');
+            throw ApiError.conflict(i18n.__('educationWithThisTitleAlreadyExist'));
         }
         const education = await this.educationRepository.updateEducation(id, dto);
         if (!education) {
-            throw ApiError.notFound(`Education with ID: ${id} not founded`);
+            throw ApiError.notFound(i18n.__('educationNotFound'));
         }
 
         return education;

@@ -6,6 +6,7 @@ import ScannerHistoryDomainModel from "../../domain/models/ScannerHistory/Scanne
 import ActivityDomainModel from "../../domain/models/Acitivity/Activity";
 import EducationDomainModel from "../../domain/models/Education/Education";
 import TimeTableManager from "../../common/classes/TimeTableManager";
+import i18n from "i18n";
 
 export default class TimeTableService {
     constructor(
@@ -17,22 +18,22 @@ export default class TimeTableService {
     public async getWorkForEmployee(userId: number, companyId: number) {
         const user = await this.userRepository.getUserById(userId);
         if (!user) {
-            throw ApiError.notFound(`There no user with ID: ${userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
 
         if (user.companyId !== companyId) {
-            throw ApiError.notFound(`There no company with ID: ${companyId}`);
+            throw ApiError.notFound(i18n.__('companyNotFound'));
         }
 
         if (!user.educations) {
-            throw ApiError.badRequest(`User hasn't any education`)
+            throw ApiError.badRequest(i18n.__('userHasNotEducation'))
         }
 
         let activities = await this.activityRepository.getActivityByCompanyId(companyId);
         const userScannerHistory = await this.scannerHistoryRepository.getScannerHistoryByUserId(userId);
         const lastScannerHistory = this.getLastUserScannerHistory(userScannerHistory);
         if (!lastScannerHistory) {
-            throw ApiError.badRequest(`User with ID: ${userId} has no info`);
+            throw ApiError.badRequest(i18n.__('thisUserHasNotScannerInfo'));
         }
 
         activities = this.getActivityWithRelevantEducation(activities, user.educations);
@@ -43,7 +44,7 @@ export default class TimeTableService {
         const optimalActivityId = timeTableManager.getOptimalActivity();
         const optimalActivity = await this.activityRepository.getActivityById(optimalActivityId);
         if (!optimalActivity) {
-            throw ApiError.internalServerError(`There no activity with ID: ${optimalActivityId}`);
+            throw ApiError.internalServerError(i18n.__('activityNotFound'));
         }
 
         await this.activityRepository.addEmployee(optimalActivity.id, userId);
@@ -76,7 +77,7 @@ export default class TimeTableService {
 
     private getActivityWithNotFullWorker(activities: ActivityDomainModel[]) {
         if (activities.length === 0) {
-            throw ApiError.badRequest(`There no activities`);
+            throw ApiError.badRequest(i18n.__('thereNoActivities'));
         }
 
         return activities.filter(activity => activity.users.length < activity.requiredWorkerCount );
@@ -84,7 +85,7 @@ export default class TimeTableService {
 
     private getActivityWithRelevantEducation(activities: ActivityDomainModel[], educations: EducationDomainModel[]) {
         if (activities.length === 0) {
-            throw ApiError.badRequest(`There no activities`);
+            throw ApiError.badRequest(i18n.__('thereNoActivities'));
         }
 
         let filteredActivities: ActivityDomainModel[] = [];

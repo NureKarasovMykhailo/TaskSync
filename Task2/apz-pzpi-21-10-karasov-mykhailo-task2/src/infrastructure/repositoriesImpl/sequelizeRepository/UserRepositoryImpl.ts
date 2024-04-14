@@ -18,6 +18,7 @@ import RoleDomainModel from "../../../core/domain/models/Role/Role";
 import RoleMapper from "../../mappers/RoleMapper/RoleMapper";
 import EducationDomainModel from "../../../core/domain/models/Education/Education";
 import EducationMapper from "../../mappers/EducationMapper/EducationMapper";
+import i18n from "i18n";
 
 export default class UserRepositoryImpl implements IUserRepository {
     private readonly userMapper: UserMapper = new UserMapper();
@@ -153,17 +154,17 @@ export default class UserRepositoryImpl implements IUserRepository {
             include: [Role, Education]
         });
         if (!user) {
-            throw ApiError.notFound(`There no user with ID: ${userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
 
         const addedRole = await Role.findOne({where: { roleTitle: dto.roleTitle}});
         if (!addedRole) {
-            throw ApiError.notFound(`There no role with title: ${dto.roleTitle}`);
+            throw ApiError.notFound(i18n.__('roleNotFound'));
         }
 
         user.roles?.map(role => {
             if (role.roleTitle === dto.roleTitle) {
-                throw ApiError.conflict(`User has already role: ${addedRole.roleTitle}`);
+                throw ApiError.conflict(i18n.__('userHasAlreadyRole'));
             }
         });
 
@@ -178,11 +179,11 @@ export default class UserRepositoryImpl implements IUserRepository {
     public async deleteUserRole(dto: AddOrDeleteRoleDto, userId: number): Promise<UserDomainModel | null> {
         const user = await User.findOne({where: { id: userId }});
         if (!user) {
-            throw ApiError.notFound(`There no user with ID: ${userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
         const role = await Role.findOne({where: { roleTitle: dto.roleTitle}});
         if (!role) {
-            throw ApiError.notFound(`There no role with title: ${dto.roleTitle}`);
+            throw ApiError.notFound(i18n.__('roleNotFound'));
         }
 
         const userRole = await UserRoles.findOne({
@@ -211,12 +212,12 @@ export default class UserRepositoryImpl implements IUserRepository {
             where: { educationTitle: dto.educationTitle }
         });
         if (!education) {
-            throw ApiError.notFound(`There no education with title: ${dto.educationTitle}`);
+            throw ApiError.notFound(i18n.__('educationNotFound'));
         }
 
         user.educations?.map(education => {
             if (education.educationTitle === dto.educationTitle) {
-                throw ApiError.conflict(`User has already education: ${education.educationTitle}`);
+                throw ApiError.conflict(i18n.__('userHasAlreadyEducation'));
             }
         })
 
@@ -239,7 +240,7 @@ export default class UserRepositoryImpl implements IUserRepository {
             where: { educationTitle: dto.educationTitle }
         });
         if (!education) {
-            throw ApiError.notFound(`There no education with title: ${dto.educationTitle}`);
+            throw ApiError.notFound(i18n.__('educationNotFound'));
         }
 
         const userEducation = await UserEducations.findOne({

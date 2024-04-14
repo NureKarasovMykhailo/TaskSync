@@ -5,6 +5,7 @@ import PaginationClass from "../../common/uttils/PaginationClass";
 import ApiError from "../../common/error/ApiError";
 import IUserRepository from "../../repositories/UserRepository/IUserRepository";
 import UserDomainModel from "../../domain/models/User/User";
+import i18n from "i18n";
 
 export default class ActivityService {
     constructor(
@@ -62,7 +63,7 @@ export default class ActivityService {
     public async getActivityById(id: number, companyId: number) {
         const activity = await this.activityRepository.getActivityById(id);
         if (!activity) {
-            throw ApiError.notFound(`There no activity with ID: ${id}`);
+            throw ApiError.notFound(i18n.__(`activityNotFount`));
         }
         this.isActivityBelongsToCompany(activity, companyId);
 
@@ -72,7 +73,7 @@ export default class ActivityService {
     public async getActivity(id: number) {
         const activity = await this.activityRepository.getActivityById(id);
         if (!activity) {
-            throw ApiError.notFound(`There no activity with ID: ${id}`);
+            throw ApiError.notFound(i18n.__(`activityNotFount`));
         }
 
         return activity;
@@ -101,20 +102,20 @@ export default class ActivityService {
     public async addEmployee(activityId: number, userId: number) {
         const activity = await this.activityRepository.getActivityById(activityId);
         if (!activity) {
-            throw ApiError.notFound(`There no activity with ID: ${activityId}`);
+            throw ApiError.notFound(i18n.__(`activityNotFount`));
         }
 
         const user = await this.userRepository.getUserById(userId);
         if (!user) {
-            throw ApiError.notFound(`There no user with ID: ${userId}`);
+            throw ApiError.notFound(i18n.__(`userNotFound`));
         }
 
         if (user.companyId !== activity.companyId) {
-            throw ApiError.forbidden(`User with ID: ${userId} is not in company with ID: ${activity.companyId}`);
+            throw ApiError.forbidden(i18n.__('userNotInCompany'));
         }
 
         if (!this.isUserHasEducation(activity.education?.educationTitle, user)) {
-            throw ApiError.badRequest(`User with ID: ${userId} has not education: ${activity.education?.educationTitle}`);
+            throw ApiError.badRequest(i18n.__('userHasNotEducation'));
         }
 
         return await this.activityRepository.addEmployee(activityId, userId);
@@ -123,16 +124,16 @@ export default class ActivityService {
     public async deleteEmployee(activityId: number, userId: number) {
         const activity = await this.activityRepository.getActivityById(activityId);
         if (!activity) {
-            throw ApiError.notFound(`There no activity with id: ${activityId}`);
+            throw ApiError.notFound(i18n.__('activityNotFount'));
         }
 
         const user = await this.userRepository.getUserById(userId);
         if (!user) {
-            throw ApiError.notFound(`There no user with ID: ${userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
 
         if (user.companyId !== activity.companyId) {
-            throw ApiError.forbidden(`User with ID: ${userId} is not in company with ID: ${activity.companyId}`);
+            throw ApiError.forbidden(i18n.__('userNotInCompany'));
         }
 
         return await this.activityRepository.deleteEmployee(activityId, userId);
@@ -182,7 +183,7 @@ export default class ActivityService {
 
     private isActivityBelongsToCompany(activity: ActivityDomainModel, companyId: number) {
         if (activity.companyId !== companyId) {
-            throw ApiError.forbidden(`You have not access to this information`);
+            throw ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation'));
         }
         return;
     }

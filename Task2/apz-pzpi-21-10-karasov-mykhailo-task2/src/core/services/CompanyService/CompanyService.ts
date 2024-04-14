@@ -8,6 +8,7 @@ import {DEFAULT_COMPANY_IMAGE_NAME} from "../../../config";
 import RolesEnum from "../../common/enums/RolesEnum";
 import CompanyDomainModel from "../../domain/models/Company/Company";
 import PaginationClass from "../../common/uttils/PaginationClass";
+import i18n from "i18n";
 
 export default class CompanyService {
     private readonly fileManager: FileManager = new FileManager();
@@ -18,14 +19,14 @@ export default class CompanyService {
 
     async createCompany(dto: CreateOrUpdateCompanyDto) {
         if (await this.userRepository.getUserById(dto.creatingUserId) === null) {
-            throw ApiError.badRequest(`There no user with ID: ${dto.creatingUserId}`)
+            throw ApiError.badRequest(i18n.__('userNotFound'))
         }
 
         if (!await this.isCompanyNameUnique(dto.companyName)) {
-            throw ApiError.conflict(`There already existed company with name: ${dto.companyName}`);
+            throw ApiError.conflict(i18n.__('companyWithNameAlreadyExist'));
         }
         if (await this.isUserHasCompany(dto.creatingUserId)) {
-            throw ApiError.forbidden(`This user has already created company`);
+            throw ApiError.forbidden(i18n.__('thisUserHasAlreadyCompany'));
         }
 
         let fileName = DEFAULT_COMPANY_IMAGE_NAME;
@@ -38,7 +39,7 @@ export default class CompanyService {
         if (creatingUser) {
             const user = await this.userRepository.setCompanyId(dto.creatingUserId, company.id);
             if (!user) {
-                throw ApiError.notFound(`There no user with ID: ${dto.creatingUserId}`);
+                throw ApiError.notFound(i18n.__('userNotFound'));
             }
             const roles = await this.userRepository.getUserRoles(user.id);
             const jwt = new JWT(user, roles);
@@ -51,19 +52,19 @@ export default class CompanyService {
     async getCompanyById(companyId: number) {
         const company = await this.companyRepository.getCompanyById(companyId);
         if (!company) {
-            throw ApiError.notFound(`There no company with ID: ${companyId}`);
+            throw ApiError.notFound(i18n.__('companyNotFound'));
         }
         return company;
     }
 
     async updateCompany(companyId: number, dto: CreateOrUpdateCompanyDto) {
         if (await this.userRepository.getUserById(dto.creatingUserId) === null) {
-            throw ApiError.badRequest(`There no user with ID: ${dto.creatingUserId}`)
+            throw ApiError.badRequest(i18n.__('userNotFound'))
         }
 
         const company = await this.getCompanyById(companyId);
         if (!await this.isCompanyNameUnique(dto.companyName) && dto.companyName !== company.companyName) {
-            throw ApiError.conflict(`There are already exist company with name: ${dto.companyName}`);
+            throw ApiError.conflict(i18n.__('companyWithNameAlreadyExist'));
         }
 
         let fileName = null;
@@ -76,7 +77,7 @@ export default class CompanyService {
 
         const updatedCompany = await this.companyRepository.updateCompany(companyId, dto, fileName);
         if (!updatedCompany) {
-            throw ApiError.notFound(`There no company with id: ${companyId}`);
+            throw ApiError.notFound(i18n.__('companyNotFound'));
         }
         return updatedCompany;
     }
@@ -87,12 +88,12 @@ export default class CompanyService {
             await this.fileManager.deleteFile(company.companyImage);
         }
         if (company.ownerId !== userId) {
-            throw ApiError.forbidden(`You cannot delete other user\'s company`);
+            throw ApiError.forbidden(i18n.__('youCannotDeleteOtherCompanyUser'));
         }
         await this.companyRepository.deleteCompany(companyId);
         const user = await this.userRepository.getUserById(userId);
         if (!user) {
-            throw ApiError.notFound(`There no user with ID: ${userId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
         const roles = await this.userRepository.getUserRoles(user.id);
         const jwt = new JWT(user, roles);
@@ -103,15 +104,15 @@ export default class CompanyService {
     public async addEmployee(addedEmployeeId: number, companyId: number) {
         let addedEmployee = await this.userRepository.getUserById(addedEmployeeId);
         if (!addedEmployee) {
-            throw ApiError.notFound(`There no user with ID: ${addedEmployeeId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
         if (addedEmployee.companyId) {
-            throw ApiError.conflict(`User with id: ${addedEmployeeId} has already worked in company`);
+            throw ApiError.conflict(i18n.__('userHasAlreadyWorkingInCompany'));
         }
 
         addedEmployee = await this.userRepository.setCompanyId(addedEmployeeId, companyId);
         if (!addedEmployee) {
-            throw ApiError.internalServerError(`Error with adding employee`);
+            throw ApiError.internalServerError(i18n.__('errorWithAddingEmployee'));
         }
 
         return addedEmployee;
@@ -121,22 +122,22 @@ export default class CompanyService {
         const deletingUser = await this.userRepository.getUserById(deletingUserId);
 
         if (!deletingUser) {
-            throw ApiError.notFound(`There no user with ID: ${deletingUserId}`);
+            throw ApiError.notFound(i18n.__('userNotFound'));
         }
 
         if (deletingUser.companyId !== companyId) {
-            throw ApiError.forbidden(`You cannot delete user of other company`);
+            throw ApiError.forbidden(i18n.__('youCannotDeleteOtherCompanyUser'));
         }
 
         const deletingUserRoles = await this.userRepository.getUserRoles(deletingUserId);
         deletingUserRoles.map(role => {
             if (role.roleTitle === RolesEnum.SUBSCRIBER) {
-                throw ApiError.forbidden(`You cannot delete user with role: ${RolesEnum.SUBSCRIBER}`);
+                throw ApiError.forbidden(i18n.__('youCannotDeleteUserWithThisRole'));
             }
         });
         const unpinUser = await this.userRepository.unpinUserFromCompany(deletingUserId);
         if (!unpinUser) {
-            throw ApiError.internalServerError(`Unexpected error`);
+            throw ApiError.internalServerError(i18n.__('unknownError'));
         }
         const roles = await this.userRepository.getUserRoles(unpinUser.id);
         const jwt = new JWT(unpinUser, roles);

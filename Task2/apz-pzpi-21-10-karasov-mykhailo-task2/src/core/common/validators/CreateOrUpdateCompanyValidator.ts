@@ -5,6 +5,6 @@ export default function createOrUpdateCompanyValidator(): ValidationChain[] {
         body('companyName')
             .trim()
             .notEmpty()
-            .withMessage('Будь-ласка, введіть назву команії')
+            .withMessage('enterCompanyName')
     ]
 }

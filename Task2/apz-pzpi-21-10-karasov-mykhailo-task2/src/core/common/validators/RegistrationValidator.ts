@@ -5,23 +5,23 @@ export default function registrationValidator(): ValidationChain[] {
     return [
         body('email')
             .isEmail()
-            .withMessage('Не коректний формат електроної пошти'),
+            .withMessage('incorrectEmailFormat'),
         body('password')
             .trim()
             .isString()
-            .withMessage('Невірний формат пароля')
+            .withMessage('incorrectPasswordFormat')
             .isLength({min: 8, max: 20})
-            .withMessage('Пароль має бути від 8 до 20 символів'),
+            .withMessage('passwordMustBe'),
         body('firstName')
             .trim()
             .isString()
-            .withMessage('Невірний формат ім\'я'),
+            .withMessage('enterFirstName'),
         body('secondName')
             .trim()
             .isString()
-            .withMessage('Невірний формат прізвища'),
+            .withMessage('enterSecondName'),
         body('birthday')
             .isDate()
-            .withMessage('Невірний формат дати народження')
+            .withMessage('birthday')
     ]
 }
