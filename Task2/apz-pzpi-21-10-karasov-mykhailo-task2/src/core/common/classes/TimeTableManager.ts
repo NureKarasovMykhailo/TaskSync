@@ -54,59 +54,63 @@ export default class TimeTableManager {
     }
 
     private getTemperatureCoefficient(temperature: number): number {
-        if (temperature <= 36.6) {
-            return 1;
-        } else if (temperature > 36.6 && temperature <= 37) {
-            return 1.2;
-        } else if (temperature > 37 && temperature <= 37.5) {
-            return 1.5;
-        } else if (temperature > 37.5 && temperature <= 38) {
-            return 2;
-        } else if (temperature > 38 && temperature <= 38.5) {
-            return 3;
-        } else if (temperature > 38.5 && temperature <= 39) {
-            return 4;
-        } else {
-            return 5;
+        switch (true) {
+            case (temperature <= 36.6):
+                return 1;
+            case (temperature > 36.6 && temperature <= 37):
+                return 1.2;
+            case (temperature > 37 && temperature <= 37.5):
+                return 1.5;
+            case (temperature > 37.5 && temperature <= 38):
+                return 2;
+            case (temperature > 38 && temperature <= 38.5):
+                return 3;
+            case (temperature > 38.5 && temperature <= 39):
+                return 4;
+            default:
+                return 5;
         }
     }
 
     private getPulseCoefficients(pulse: number): number {
-        if (pulse <= 60) {
-            return 1;
-        } else if (pulse > 60 && pulse <= 80) {
-            return 1.2;
-        } else if (pulse > 80 && pulse <= 100) {
-            return 1.5;
-        } else if (pulse > 100 && pulse <= 120) {
-            return 2;
-        } else if (pulse > 120 && pulse <= 140) {
-            return 3;
-        } else if (pulse > 140 && pulse <= 160) {
-            return 4;
-        } else {
-            return 5;
+        switch (true) {
+            case (pulse <= 60):
+                return 1;
+            case (pulse > 60 && pulse <= 80):
+                return 1.2;
+            case (pulse > 80 && pulse <= 100):
+                return 1.5;
+            case (pulse > 100 && pulse <= 120):
+                return 2;
+            case (pulse > 120 && pulse <= 140):
+                return 3;
+            case (pulse > 140 && pulse <= 160):
+                return 4;
+            default:
+                return 5;
         }
     }
 
     private getActiveWorkCoefficients(activeWorkTimeInSeconds: number): number {
-        const activeWorkTimeInHours = activeWorkTimeInSeconds / 3600; // Переводим секунды в часы
-        if (activeWorkTimeInHours <= 7200) {
-            return 1;
-        } else if (activeWorkTimeInHours > 7200 && activeWorkTimeInHours <= 14400) {
-            return 1.2;
-        } else if (activeWorkTimeInHours > 14400 && activeWorkTimeInHours <= 21600) {
-            return 1.5;
-        } else if (activeWorkTimeInHours > 21600 && activeWorkTimeInHours <= 28800) {
-            return 2;
-        } else if (activeWorkTimeInHours > 28800 && activeWorkTimeInHours <= 36000) {
-            return 3;
-        } else if (activeWorkTimeInHours > 36000 && activeWorkTimeInHours <= 43200) {
-            return 4;
-        } else {
-            return 5;
+        const activeWorkTimeInHours = activeWorkTimeInSeconds;
+        switch (true) {
+            case (activeWorkTimeInHours <= 7200):
+                return 1;
+            case (activeWorkTimeInHours > 7200 && activeWorkTimeInHours <= 14400):
+                return 1.2;
+            case (activeWorkTimeInHours > 14400 && activeWorkTimeInHours <= 21600):
+                return 1.5;
+            case (activeWorkTimeInHours > 21600 && activeWorkTimeInHours <= 28800):
+                return 2;
+            case (activeWorkTimeInHours > 28800 && activeWorkTimeInHours <= 36000):
+                return 3;
+            case (activeWorkTimeInHours > 36000 && activeWorkTimeInHours <= 43200):
+                return 4;
+            default:
+                return 5;
         }
     }
+
 
     private getCoefficientsWithMaxData(coefficientsArray: CoefficientsData[]) {
         let maxPulseCoefficient = Number.MIN_SAFE_INTEGER;

@@ -70,57 +70,6 @@ export default class ExportImportManager {
         }
     }
 
-    public async importData(filePath: string) {
-        try {
-            const fileData = fs.readFileSync(filePath, 'utf-8');
-            const jsonData = JSON.parse(fileData);
-            const promises = [];
-            // Отключаем проверку внешних ключей
-            await sequelize.query('BEGIN; SET CONSTRAINTS ALL DEFERRED;');
-
-            for (const modelName in jsonData) {
-                if (Object.prototype.hasOwnProperty.call(jsonData, modelName)) {
-                    const modelData = jsonData[modelName];
-                    console.log(modelName);
-
-                    if (modelName === 'roles') {
-                        promises.push(Role.bulkCreate(modelData));
-                    } else if (modelName === 'users') {
-                        promises.push(User.bulkCreate(modelData));
-                    } else if (modelName === 'user_roles') {
-                        promises.push(UserRoles.bulkCreate(modelData));
-                    } else if (modelName === 'activity') {
-                        promises.push(Activity.bulkCreate(modelData));
-                    } else if (modelName === 'company') {
-                        promises.push(Company.bulkCreate(modelData));
-                    } else if (modelName === 'complexity') {
-                        promises.push(Complexity.bulkCreate(modelData));
-                    } else if (modelName === 'education') {
-                        promises.push(Education.bulkCreate(modelData));
-                    } else if (modelName === 'scanner') {
-                        promises.push(Scanner.bulkCreate(modelData));
-                    } else if (modelName === 'scanner_history') {
-                        promises.push(ScannerHistory.bulkCreate(modelData));
-                    } else if (modelName === 'subscription') {
-                        promises.push(Subscription.bulkCreate(modelData));
-                    } else if (modelName === 'user_activities') {
-                        promises.push(UserActivities.bulkCreate(modelData));
-                    } else if (modelName === 'user_educations') {
-                        promises.push(UserEducations.bulkCreate(modelData));
-                    }
-                }
-            }
-            await Promise.all(promises);
-            // Включаем проверку внешних ключей обратно
-            await sequelize.query('COMMIT;');
-
-            console.log('Import successful.');
-        } catch (error) {
-            console.error('Import failed:', error);
-        }
-    }
-
-
 
 
 }

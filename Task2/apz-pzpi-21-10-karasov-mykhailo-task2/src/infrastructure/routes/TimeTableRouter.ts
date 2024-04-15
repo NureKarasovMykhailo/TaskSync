@@ -20,14 +20,14 @@ const timeTableController = new TimeTableController(timeTableService);
 router.get(
     '/:id',
     authMiddleware,
-    hasUserCompanyMiddleware,
+    //hasUserCompanyMiddleware,
     timeTableController.getWorkForEmployee.bind(timeTableController)
 );
 
 router.get(
     '/',
     authMiddleware,
-    hasUserCompanyMiddleware,
+    //hasUserCompanyMiddleware,
     timeTableController.getFullTimeTable.bind(timeTableController)
 );
 

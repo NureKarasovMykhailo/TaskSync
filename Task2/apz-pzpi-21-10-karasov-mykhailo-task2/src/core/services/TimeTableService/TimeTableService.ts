@@ -40,16 +40,9 @@ export default class TimeTableService {
         activities = this.getActivityWithNotFullWorker(activities);
 
         const timeTableManager = new TimeTableManager(activities, lastScannerHistory);
-        console.log(activities);
         const optimalActivityId = timeTableManager.getOptimalActivity();
-        const optimalActivity = await this.activityRepository.getActivityById(optimalActivityId);
-        if (!optimalActivity) {
-            throw ApiError.internalServerError(i18n.__('activityNotFound'));
-        }
 
-        await this.activityRepository.addEmployee(optimalActivity.id, userId);
-
-        return optimalActivity;
+        return await this.activityRepository.addEmployee(optimalActivityId, userId);
     }
 
     public async createTimeTable(companyId: number) {

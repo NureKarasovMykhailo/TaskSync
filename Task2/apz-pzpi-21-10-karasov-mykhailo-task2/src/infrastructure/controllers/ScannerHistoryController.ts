@@ -49,11 +49,9 @@ export default class ScannerHistoryController {
                 const { limit = '10', page = '1'} = req.query;
                 const offset = Number(limit) * Number(page) - Number(limit);
                 const scannerHistoriesDomainModel = await this.scannerHistoryService.getHistoryOfScanner(Number(id), req.user.companyId, Number(limit), offset);
-                const scannerHistories = scannerHistoriesDomainModel.paginatedItems.map(scannerHistory => {
-                    return this.scannerHistoryMapper.toPersistenceModel(scannerHistory);
-                });
+
                 return res.status(200).json({
-                    scannerHistories: scannerHistories,
+                    scannerHistories: scannerHistoriesDomainModel.paginatedItems,
                     pagination: {
                         totalItems: scannerHistoriesDomainModel.itemsCount,
                         totalPages: scannerHistoriesDomainModel.totalPages,

@@ -51,6 +51,6 @@ export default class SubscriptionClass {
         });
         const subscriptionDetails = await response.json();
         console.log(subscriptionDetails.status)
-        return subscriptionDetails.status === 'ACTIVE' || subscriptionDetails.status === 'APPROVAL_PENDING';
+        return subscriptionDetails.status === 'ACTIVE' || subscriptionDetails.status === 'APPROVAL_PENDING' || subscriptionDetails.status === 'EXPIRED';
     }
 }

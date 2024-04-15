@@ -65,12 +65,14 @@ router.delete(
 
 router.get(
     '/employees',
+    authMiddleware,
     hasUserCompanyMiddleware,
     publicCompanyController.getAllCompanyEmployees.bind(publicCompanyController)
 );
 
 router.get(
     '/employees/:id',
+    authMiddleware,
     hasUserCompanyMiddleware,
     publicCompanyController.getCompanyEmployee.bind(publicCompanyController)
 );

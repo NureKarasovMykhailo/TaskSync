@@ -22,7 +22,7 @@ export default class ScannerHistoryService {
 
         const scannerHistories = await this.scannerHistoryRepository.getScannerHistoryByScannerId(scannerId);
         const pagination: PaginationClass<ScannerHistoryDomainModel> = new PaginationClass();
-        return pagination.paginateItems(scannerHistories, limit, offset);
+        return pagination.paginateItems(scannerHistories, offset, limit);
     }
 
     public async deleteScannerHistory(scannerHistoryId: number) {
