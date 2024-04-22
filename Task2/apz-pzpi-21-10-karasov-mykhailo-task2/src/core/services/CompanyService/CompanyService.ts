@@ -19,14 +19,14 @@ export default class CompanyService {
     ) {}
 
     async createCompany(dto: CreateOrUpdateCompanyDto) {
-        if (await this.userRepository.getUserById(dto.creatingUserId) === null) {
+        if (dto.creatingUserId && await this.userRepository.getUserById(dto.creatingUserId) === null) {
             throw ApiError.badRequest(i18n.__('userNotFound'))
         }
 
         if (!await this.isCompanyNameUnique(dto.companyName)) {
             throw ApiError.conflict(i18n.__('companyWithNameAlreadyExist'));
         }
-        if (await this.isUserHasCompany(dto.creatingUserId)) {
+        if (dto.creatingUserId && await this.isUserHasCompany(dto.creatingUserId)) {
             throw ApiError.forbidden(i18n.__('thisUserHasAlreadyCompany'));
         }
 
@@ -36,18 +36,21 @@ export default class CompanyService {
         }
 
         const company = await this.companyRepository.createCompany(dto, fileName);
-        const creatingUser = await this.userRepository.getUserById(dto.creatingUserId);
-        if (creatingUser) {
-            const user = await this.userRepository.setCompanyId(dto.creatingUserId, company.id);
-            if (!user) {
-                throw ApiError.notFound(i18n.__('userNotFound'));
+        console.log(company)
+        if (dto.creatingUserId) {
+            const creatingUser = await this.userRepository.getUserById(dto.creatingUserId);
+            if (creatingUser) {
+                const user = await this.userRepository.setCompanyId(dto.creatingUserId, company.id);
+                if (!user) {
+                    throw ApiError.notFound(i18n.__('userNotFound'));
+                }
+                const roles = await this.userRepository.getUserRoles(user.id);
+                const jwt = new JWT(user, roles);
+                const token = jwt.generateJwt();
+                return {token: token, company: company};
             }
-            const roles = await this.userRepository.getUserRoles(user.id);
-            const jwt = new JWT(user, roles);
-            const token = jwt.generateJwt();
-            return {token: token, company: company};
         }
-        return "";
+        return { company };
     }
 
     async getCompanyById(companyId: number) {
@@ -59,7 +62,7 @@ export default class CompanyService {
     }
 
     async updateCompany(companyId: number, dto: CreateOrUpdateCompanyDto) {
-        if (await this.userRepository.getUserById(dto.creatingUserId) === null) {
+        if (dto.creatingUserId && await this.userRepository.getUserById(dto.creatingUserId) === null) {
             throw ApiError.badRequest(i18n.__('userNotFound'))
         }
 

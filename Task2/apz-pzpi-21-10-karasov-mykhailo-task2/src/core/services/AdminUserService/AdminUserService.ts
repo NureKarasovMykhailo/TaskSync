@@ -77,6 +77,7 @@ export default class AdminUserService {
     }
 
     public async updateUser(id: number, dto: UpdateUserAdminDto): Promise<UserDomainModel> {
+        console.log(`Id: ${id}`)
         const user = await this.userRepository.getUserById(id);
 
         if (!user) {

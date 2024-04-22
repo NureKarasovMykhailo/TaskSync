@@ -5,6 +5,7 @@ import Company from "../../database/etities/Company";
 import IMapper from "../../mappers/IMapper";
 import MapperFabric from "../../mappers/MapperFabric";
 import MappersEnum from "../../../core/common/enums/MappersEnum";
+import User from "../../database/etities/User";
 
 
 export default class CompanyRepositoryImpl implements ICompanyRepository {
@@ -28,8 +29,16 @@ export default class CompanyRepositoryImpl implements ICompanyRepository {
             companyName: dto.companyName,
             description: dto.description,
             companyImage: companyImage,
-            userId: dto.creatingUserId
         });
+        if (dto.creatingUserId) {
+            console.log('here')
+            const user = await User.findOne({where: {id: dto.creatingUserId}});
+            if (user) {
+                company.userId = user.id;
+                await company.save();
+            }
+        }
+
         return this.companyMapper.toDomainModel(company);
     }
 

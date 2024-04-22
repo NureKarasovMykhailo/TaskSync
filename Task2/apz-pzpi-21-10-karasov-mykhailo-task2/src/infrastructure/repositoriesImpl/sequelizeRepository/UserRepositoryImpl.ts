@@ -103,14 +103,18 @@ export default class UserRepositoryImpl implements IUserRepository {
     }
 
     async updateUser(id: number, dto: UpdateUserAdminDto, userImage: string): Promise<UserDomainModel | null> {
+        console.log(id)
         const updatedUser = await User.findOne({ where: { id } });
         if (!updatedUser) {
             return null;
         }
+        console.log(dto.companyId)
 
-        const company = await Company.findOne({where: {id: dto.companyId}});
-        if (company) {
-            updatedUser.companyId = company.id;
+        if (dto.companyId) {
+            const company = await Company.findOne({where: {id: dto.companyId}});
+            if (company) {
+                updatedUser.companyId = company.id;
+            }
         }
 
         updatedUser.email = dto.email;
@@ -119,7 +123,6 @@ export default class UserRepositoryImpl implements IUserRepository {
         updatedUser.phoneNumber = dto.phoneNumber;
         updatedUser.birthday = dto.birthday;
         updatedUser.userImage = userImage;
-
 
         await updatedUser.save();
         return this.userMapper.toDomainModel(updatedUser);
