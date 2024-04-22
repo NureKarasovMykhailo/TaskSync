@@ -1,6 +1,5 @@
 import express from "express";
 import ScannerHistoryController from "../controllers/ScannerHistoryController";
-import ScannerHistoryMapper from "../mappers/ScannerHistoryMapper/ScannerHistoryMapper";
 import ScannerHistoryRepositoryImpl from "../repositoriesImpl/sequelizeRepository/ScannerHistoryRepositoryImpl";
 import ScannerHistoryService from "../../core/services/ScannerHistoryService/ScannerHistoryService";
 import hasUserCompanyMiddleware from "../../core/common/middlewares/HasUserCompanyMiddleware";
