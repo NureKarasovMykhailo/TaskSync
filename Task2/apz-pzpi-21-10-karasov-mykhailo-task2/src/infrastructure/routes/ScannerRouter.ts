@@ -4,7 +4,6 @@ import ScannerService from "../../core/services/ScannerService/ScannerService";
 import ScannerRepositoryImpl from "../repositoriesImpl/sequelizeRepository/ScannerRepositoryImpl";
 import checkRoleMiddleware from "../../core/common/middlewares/CheckRoleMiddleware";
 import RolesEnum from "../../core/common/enums/RolesEnum";
-import ScannerMapper from "../mappers/ScannerMapper/ScannerMapper";
 import authMiddleware from "../../core/common/middlewares/AuthMiddleware";
 import hasUserCompanyMiddleware from "../../core/common/middlewares/HasUserCompanyMiddleware";
 import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepositoryImpl";

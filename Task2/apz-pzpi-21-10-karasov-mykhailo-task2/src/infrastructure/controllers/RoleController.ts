@@ -2,7 +2,6 @@ import {NextFunction, Request, Response} from "express";
 import RoleService from "../../core/services/RoleService/RoleService";
 import CreateRoleDto from "../../core/repositories/RoleRepository/dto/CreateRoleDto";
 import RoleRepositoryImpl from "../repositoriesImpl/sequelizeRepository/RoleRepositoryImpl";
-import RoleMapper from "../mappers/RoleMapper/RoleMapper";
 import ApiError from "../../core/common/error/ApiError";
 import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";

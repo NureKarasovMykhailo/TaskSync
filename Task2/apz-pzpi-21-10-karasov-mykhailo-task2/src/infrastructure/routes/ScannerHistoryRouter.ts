@@ -15,7 +15,6 @@ import MappersEnum from "../../core/common/enums/MappersEnum";
 
 const router = express.Router();
 
-const scannerHistoryMapper = new ScannerHistoryMapper();
 const scannerService = new ScannerService(new ScannerRepositoryImpl(), new UserRepositoryImpl());
 const scannerHistoryService = new ScannerHistoryService(new ScannerHistoryRepositoryImpl(), new ScannerRepositoryImpl());
 const scannerHistoryController = new ScannerHistoryController(scannerHistoryService, MapperFabric.getMapper(MappersEnum.ScannerHistoryMapper), scannerService);

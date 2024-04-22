@@ -5,7 +5,6 @@ import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUtt
 import ApiError from "../../core/common/error/ApiError";
 import EducationService from "../../core/services/EducationService/EducationService";
 import EducationRepository from "../repositoriesImpl/sequelizeRepository/EducationRepository";
-import EducationMapper from "../mappers/EducationMapper/EducationMapper";
 import EducationDomainModel from "../../core/domain/models/Education/Education";
 import Education from "../database/etities/Education";
 import IMapper from "../mappers/IMapper";

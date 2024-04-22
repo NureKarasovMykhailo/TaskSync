@@ -1,7 +1,6 @@
 import ActivityService from "../../core/services/ActivityService/ActivityService";
 import {NextFunction, Response, Request} from "express";
 import CreateOrUpdateActivityDto from "../../core/repositories/ActivityRepository/dto/CreateOrUpdateActivityDto";
-import ActivityMapper from "../mappers/ActivityMapper/ActivityMapper";
 import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
 import ApiError from "../../core/common/error/ApiError";

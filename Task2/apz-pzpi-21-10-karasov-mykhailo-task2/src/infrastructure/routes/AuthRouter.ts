@@ -4,7 +4,6 @@ const router: Router = express.Router();
 import authMiddleware from '../../core/common/middlewares/AuthMiddleware';
 import AuthService from "../../core/services/AuthService/AuthService";
 import AuthRepositoryImpl from "../repositoriesImpl/sequelizeRepository/AuthRepositoryImpl";
-import UserMapper from "../mappers/UserMapper/UserMapper";
 import AuthController from "../controllers/AuthController";
 import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepositoryImpl";
 import MapperFabric from "../mappers/MapperFabric";

@@ -1,7 +1,6 @@
 import IRoleRepository from "../../../core/repositories/RoleRepository/IRoleRepository";
 import CreateRoleDto from "../../../core/repositories/RoleRepository/dto/CreateRoleDto";
 import RoleDomainModel from "../../../core/domain/models/Role/Role";
-import RoleMapper from "../../mappers/RoleMapper/RoleMapper";
 import Role from "../../database/etities/Role";
 import IMapper from "../../mappers/IMapper";
 import MapperFabric from "../../mappers/MapperFabric";

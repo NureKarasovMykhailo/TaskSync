@@ -6,7 +6,6 @@ import createOrUpdateActivityValidator from "../../core/common/validators/Create
 import ActivityController from "../controllers/ActivityController";
 import ActivityService from "../../core/services/ActivityService/ActivityService";
 import ActivityRepositoryImpl from "../repositoriesImpl/sequelizeRepository/ActivityRepositoryImpl";
-import ActivityMapper from "../mappers/ActivityMapper/ActivityMapper";
 import authMiddleware from "../../core/common/middlewares/AuthMiddleware";
 import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepositoryImpl";
 import MapperFabric from "../mappers/MapperFabric";

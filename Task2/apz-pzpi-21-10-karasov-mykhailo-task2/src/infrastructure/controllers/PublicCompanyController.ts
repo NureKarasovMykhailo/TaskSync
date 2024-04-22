@@ -2,11 +2,9 @@ import {NextFunction, Response, Request} from "express";
 import {DEFAULT_COMPANY_IMAGE_NAME} from "../../config";
 import CreateOrUpdateCompanyDto from "../../core/repositories/CompanyRepository/dto/CreateOrUpdateCompanyDto";
 import CompanyService from "../../core/services/CompanyService/CompanyService";
-import CompanyMapper from "../mappers/CompanyMapper/CompanyMapper";
 import ApiError from "../../core/common/error/ApiError";
 import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
-import UserMapper from "../mappers/UserMapper/UserMapper";
 import i18n from "i18n";
 import IMapper from "../mappers/IMapper";
 

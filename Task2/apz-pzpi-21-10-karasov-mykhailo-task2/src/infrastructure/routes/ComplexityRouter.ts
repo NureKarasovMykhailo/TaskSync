@@ -4,7 +4,6 @@ import RolesEnum from "../../core/common/enums/RolesEnum";
 import ComplexityService from "../../core/services/ComplexityService/ComplexityService";
 import ComplexityRepositoryImpl from "../repositoriesImpl/sequelizeRepository/ComplexityRepositoryImpl";
 import ComplexityController from "../controllers/ComplexityController";
-import ComplexityMapper from "../mappers/ComplexityMapper/ComplexityMapper";
 import createOrUpdateComplexityValidator from "../../core/common/validators/CreateOrUpdateComplexityValidator";
 import authMiddleware from "../../core/common/middlewares/AuthMiddleware";
 import MapperFabric from "../mappers/MapperFabric";

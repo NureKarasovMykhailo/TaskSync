@@ -8,10 +8,8 @@ import PublicCompanyController from "../controllers/PublicCompanyController";
 import CompanyService from "../../core/services/CompanyService/CompanyService";
 import CompanyRepositoryImpl from "../repositoriesImpl/sequelizeRepository/CompanyRepositoryImpl";
 import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepositoryImpl";
-import CompanyMapper from "../mappers/CompanyMapper/CompanyMapper";
 import authMiddleware from "../../core/common/middlewares/AuthMiddleware";
 import hasUserCompanyMiddleware from "../../core/common/middlewares/HasUserCompanyMiddleware";
-import UserMapper from "../mappers/UserMapper/UserMapper";
 import MapperFabric from "../mappers/MapperFabric";
 import MappersEnum from "../../core/common/enums/MappersEnum";
 

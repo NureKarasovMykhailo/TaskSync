@@ -1,5 +1,4 @@
 import ScannerHistoryService from "../../core/services/ScannerHistoryService/ScannerHistoryService";
-import ScannerHistoryMapper from "../mappers/ScannerHistoryMapper/ScannerHistoryMapper";
 import {NextFunction, Request, Response} from "express";
 import ScannerService from "../../core/services/ScannerService/ScannerService";
 import CreateOrUpdateScannerHistoryDto

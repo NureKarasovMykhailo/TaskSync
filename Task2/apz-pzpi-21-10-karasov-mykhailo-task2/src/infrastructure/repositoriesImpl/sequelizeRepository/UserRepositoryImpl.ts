@@ -26,12 +26,6 @@ export default class UserRepositoryImpl implements IUserRepository {
     private readonly educationMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.EducationMapper);
 
     async createUser(dto: CreateUserDto, userImage: string, hashPassword: string): Promise<UserDomainModel> {
-        let companyId = null;
-        const company = await Company.findOne({where: { id: dto.companyId }})
-        if (company) {
-            companyId = company.id;
-        }
-        console.log('here')
         const user: User = await User.create({
             ...dto,
             userImage,

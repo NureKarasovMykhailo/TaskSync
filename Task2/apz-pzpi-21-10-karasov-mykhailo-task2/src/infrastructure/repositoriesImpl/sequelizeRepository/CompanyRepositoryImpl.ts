@@ -2,7 +2,6 @@ import ICompanyRepository from "../../../core/repositories/CompanyRepository/ICo
 import CreateOrUpdateCompanyDto from "../../../core/repositories/CompanyRepository/dto/CreateOrUpdateCompanyDto";
 import CompanyDomainModel from "../../../core/domain/models/Company/Company";
 import Company from "../../database/etities/Company";
-import CompanyMapper from "../../mappers/CompanyMapper/CompanyMapper";
 import IMapper from "../../mappers/IMapper";
 import MapperFabric from "../../mappers/MapperFabric";
 import MappersEnum from "../../../core/common/enums/MappersEnum";

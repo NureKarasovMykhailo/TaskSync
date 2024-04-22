@@ -1,7 +1,6 @@
 import ScannerService from "../../core/services/ScannerService/ScannerService";
 import {NextFunction, Request, Response} from "express";
 import CreateOrUpdateScannerDto from "../../core/repositories/ScannerRepository/dto/CreateOrUpdateScannerDto";
-import ScannerMapper from "../mappers/ScannerMapper/ScannerMapper";
 import ApiError from "../../core/common/error/ApiError";
 import i18n from "i18n";
 import IMapper from "../mappers/IMapper";
