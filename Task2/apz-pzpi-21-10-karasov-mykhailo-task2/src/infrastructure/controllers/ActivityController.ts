@@ -5,11 +5,12 @@ import ActivityMapper from "../mappers/ActivityMapper/ActivityMapper";
 import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
 import ApiError from "../../core/common/error/ApiError";
+import IMapper from "../mappers/IMapper";
 
 export default class ActivityController {
     constructor(
        private readonly activityService: ActivityService,
-       private readonly activityMapper: ActivityMapper
+       private readonly activityMapper: IMapper<any, any>
     ) {}
 
     public async createActivity(req: Request, res: Response, next: NextFunction) {

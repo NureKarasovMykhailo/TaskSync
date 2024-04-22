@@ -2,14 +2,16 @@ import IScannerRepository from "../../../core/repositories/ScannerRepository/ISc
 import CreateOrUpdateScannerDto from "../../../core/repositories/ScannerRepository/dto/CreateOrUpdateScannerDto";
 import ScannerDomainModel from "../../../core/domain/models/Scanner/Scanner";
 import Scanner from "../../database/etities/Scanner";
-import ScannerMapper from "../../mappers/ScannerMapper/ScannerMapper";
 import User from "../../database/etities/User";
 import ApiError from "../../../core/common/error/ApiError";
 import Company from "../../database/etities/Company";
 import i18n from "i18n";
+import IMapper from "../../mappers/IMapper";
+import MapperFabric from "../../mappers/MapperFabric";
+import MappersEnum from "../../../core/common/enums/MappersEnum";
 
 export default class ScannerRepositoryImpl implements IScannerRepository {
-    private readonly scannerMapper: ScannerMapper = new ScannerMapper();
+    private readonly scannerMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.ScannerMapper);
 
     async createScanner(dto: CreateOrUpdateScannerDto): Promise<ScannerDomainModel> {
         const user = await User.findOne({

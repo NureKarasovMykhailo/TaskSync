@@ -3,10 +3,13 @@ import CreateRoleDto from "../../../core/repositories/RoleRepository/dto/CreateR
 import RoleDomainModel from "../../../core/domain/models/Role/Role";
 import RoleMapper from "../../mappers/RoleMapper/RoleMapper";
 import Role from "../../database/etities/Role";
+import IMapper from "../../mappers/IMapper";
+import MapperFabric from "../../mappers/MapperFabric";
+import MappersEnum from "../../../core/common/enums/MappersEnum";
 
 export default class RoleRepositoryImpl implements  IRoleRepository {
 
-    private roleMapper: RoleMapper = new RoleMapper();
+    private roleMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.RoleMapper);
 
     async createRole(dto: CreateRoleDto): Promise<RoleDomainModel> {
         const role: Role =  await Role.create({...dto});

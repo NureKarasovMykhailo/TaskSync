@@ -3,15 +3,17 @@ import CreateOrUpdateScannerHistoryDto
     from "../../../core/repositories/ScannerHistoryRepository/dto/CreateOrUpdateScannerHistoryDto";
 import ScannerHistoryDomainModel from "../../../core/domain/models/ScannerHistory/ScannerHistory";
 import ScannerHistory from "../../database/etities/ScannerHistory";
-import ScannerHistoryMapper from "../../mappers/ScannerHistoryMapper/ScannerHistoryMapper";
 import Scanner from "../../database/etities/Scanner";
 import ApiError from "../../../core/common/error/ApiError";
 import User from "../../database/etities/User";
 import i18n from "i18n";
+import IMapper from "../../mappers/IMapper";
+import MapperFabric from "../../mappers/MapperFabric";
+import MappersEnum from "../../../core/common/enums/MappersEnum";
 
 export default class ScannerHistoryRepositoryImpl implements IScannerHistoryRepository {
 
-    private readonly scannerHistoryMapper: ScannerHistoryMapper = new ScannerHistoryMapper();
+    private readonly scannerHistoryMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.ScannerHistoryMapper);
 
     async createScannerHistory(dto: CreateOrUpdateScannerHistoryDto): Promise<ScannerHistoryDomainModel> {
         const scannerHistory = await ScannerHistory.create({

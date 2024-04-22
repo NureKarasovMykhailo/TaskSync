@@ -17,15 +17,18 @@ import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
 import ApiError from "../../core/common/error/ApiError";
 import i18n from 'i18n';
+import MapperFabric from "../mappers/MapperFabric";
+import MappersEnum from "../../core/common/enums/MappersEnum";
+import IMapper from "../mappers/IMapper";
 
 class AdminUserController {
-    private readonly userMapper: UserMapper = new UserMapper();
+    private readonly userMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.UserMapper);
 
     constructor(
         private readonly userService: AdminUserService,
         private readonly publicUserService: PublicUserService,
-        private readonly roleMapper: RoleMapper,
-        private readonly educationMapper: EducationMapper
+        private readonly roleMapper: IMapper<any, any>,
+        private readonly educationMapper: IMapper<any, any>
     ) {}
 
 

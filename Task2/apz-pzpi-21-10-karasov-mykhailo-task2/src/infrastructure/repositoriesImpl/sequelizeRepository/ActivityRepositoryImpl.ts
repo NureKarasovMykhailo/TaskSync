@@ -5,14 +5,16 @@ import Activity from "../../database/etities/Activity";
 import Complexity from "../../database/etities/Complexity";
 import Education from "../../database/etities/Education";
 import Company from "../../database/etities/Company";
-import ActivityMapper from "../../mappers/ActivityMapper/ActivityMapper";
 import ApiError from "../../../core/common/error/ApiError";
 import User from "../../database/etities/User";
 import UserActivities from "../../database/etities/UserActivities";
 import i18n from "i18n";
+import IMapper from "../../mappers/IMapper";
+import MapperFabric from "../../mappers/MapperFabric";
+import MappersEnum from "../../../core/common/enums/MappersEnum";
 
 export default class ActivityRepositoryImpl implements IActivityRepository{
-    private activityMapper: ActivityMapper = new ActivityMapper();
+    private activityMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.ActivityMapper);
 
     async createActivity(dto: CreateOrUpdateActivityDto): Promise<ActivityDomainModel> {
         const { company, complexity, education } = await this.checkDto(dto);

@@ -2,7 +2,6 @@ import IUserRepository from "../../../core/repositories/UserRepository/IUserRepo
 import CreateUserDto from "../../../core/repositories/UserRepository/dto/CreateUserDto";
 import UserDomainModel from "../../../core/domain/models/User/User";
 import User from "../../database/etities/User";
-import UserMapper from "../../mappers/UserMapper/UserMapper";
 import RolesEnum from "../../../core/common/enums/RolesEnum";
 import Role from "../../database/etities/Role";
 import UserRoles from "../../database/etities/UserRoles";
@@ -15,17 +14,24 @@ import Education from "../../database/etities/Education";
 import UserEducations from "../../database/etities/UserEducations";
 import Company from "../../database/etities/Company";
 import RoleDomainModel from "../../../core/domain/models/Role/Role";
-import RoleMapper from "../../mappers/RoleMapper/RoleMapper";
 import EducationDomainModel from "../../../core/domain/models/Education/Education";
-import EducationMapper from "../../mappers/EducationMapper/EducationMapper";
 import i18n from "i18n";
+import IMapper from "../../mappers/IMapper";
+import MapperFabric from "../../mappers/MapperFabric";
+import MappersEnum from "../../../core/common/enums/MappersEnum";
 
 export default class UserRepositoryImpl implements IUserRepository {
-    private readonly userMapper: UserMapper = new UserMapper();
-    private readonly roleMapper: RoleMapper = new RoleMapper();
-    private readonly educationMapper: EducationMapper = new EducationMapper();
+    private readonly userMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.UserMapper);
+    private readonly roleMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.RoleMapper);
+    private readonly educationMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.EducationMapper);
 
     async createUser(dto: CreateUserDto, userImage: string, hashPassword: string): Promise<UserDomainModel> {
+        let companyId = null;
+        const company = await Company.findOne({where: { id: dto.companyId }})
+        if (company) {
+            companyId = company.id;
+        }
+        console.log('here')
         const user: User = await User.create({
             ...dto,
             userImage,

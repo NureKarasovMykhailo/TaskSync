@@ -6,11 +6,12 @@ import CreateOrUpdateScannerHistoryDto
     from "../../core/repositories/ScannerHistoryRepository/dto/CreateOrUpdateScannerHistoryDto";
 import ApiError from "../../core/common/error/ApiError";
 import i18n from "i18n";
+import IMapper from "../mappers/IMapper";
 
 export default class ScannerHistoryController {
     constructor(
        private readonly scannerHistoryService: ScannerHistoryService,
-       private readonly scannerHistoryMapper: ScannerHistoryMapper,
+       private readonly scannerHistoryMapper: IMapper<any, any>,
        private readonly scannerService: ScannerService,
     ) {}
 

@@ -8,10 +8,13 @@ import EducationRepository from "../repositoriesImpl/sequelizeRepository/Educati
 import EducationMapper from "../mappers/EducationMapper/EducationMapper";
 import EducationDomainModel from "../../core/domain/models/Education/Education";
 import Education from "../database/etities/Education";
+import IMapper from "../mappers/IMapper";
+import MapperFabric from "../mappers/MapperFabric";
+import MappersEnum from "../../core/common/enums/MappersEnum";
 
 class EducationController {
 
-    private readonly educationMapper: EducationMapper = new EducationMapper();
+    private readonly educationMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.EducationMapper);
 
     constructor(
        private readonly educationService: EducationService

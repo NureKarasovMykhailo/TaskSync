@@ -5,11 +5,12 @@ import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
 import ApiError from "../../core/common/error/ApiError";
 import CreateOrUpdateComplexityDto from "../../core/repositories/ComplexityRepository/dto/CreateOrUpdateComplexityDto";
+import IMapper from "../mappers/IMapper";
 
 export default class ComplexityController {
     constructor(
         private readonly complexityService: ComplexityService,
-        private readonly complexityMapper: ComplexityMapper
+        private readonly complexityMapper: IMapper<any, any>
     ) {}
 
     public async createComplexity(req: Request, res: Response, next: NextFunction) {

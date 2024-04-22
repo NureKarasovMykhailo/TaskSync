@@ -7,9 +7,10 @@ import Role from "../../database/etities/Role";
 import RolesEnum from "../../../core/common/enums/RolesEnum";
 import UserRoles from "../../database/etities/UserRoles";
 import Education from "../../database/etities/Education";
+import IMapper from "../../mappers/IMapper";
 
 export default class AuthRepositoryImpl implements IAuthRepository {
-    constructor(private readonly userMapper: UserMapper) {}
+    constructor(private readonly userMapper: IMapper<any, any>) {}
 
     async getUserByEmail(email: string): Promise<UserDomainModel | null> {
         const user: User | null = await User.findOne(

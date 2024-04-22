@@ -7,8 +7,10 @@ import AuthRepositoryImpl from "../repositoriesImpl/sequelizeRepository/AuthRepo
 import UserMapper from "../mappers/UserMapper/UserMapper";
 import AuthController from "../controllers/AuthController";
 import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepositoryImpl";
+import MapperFabric from "../mappers/MapperFabric";
+import MappersEnum from "../../core/common/enums/MappersEnum";
 
-const authController =  new AuthController(new AuthService(new AuthRepositoryImpl(new UserMapper()), new UserRepositoryImpl()));
+const authController =  new AuthController(new AuthService(new AuthRepositoryImpl( MapperFabric.getMapper(MappersEnum.UserMapper)), new UserRepositoryImpl()));
 
 router.post('/registration', registrationValidator(), authController.registration.bind(authController));
 router.post('/login', authController.login.bind(authController));

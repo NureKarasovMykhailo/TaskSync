@@ -7,12 +7,14 @@ import ComplexityController from "../controllers/ComplexityController";
 import ComplexityMapper from "../mappers/ComplexityMapper/ComplexityMapper";
 import createOrUpdateComplexityValidator from "../../core/common/validators/CreateOrUpdateComplexityValidator";
 import authMiddleware from "../../core/common/middlewares/AuthMiddleware";
+import MapperFabric from "../mappers/MapperFabric";
+import MappersEnum from "../../core/common/enums/MappersEnum";
 
 const router = express.Router();
 
 const complexityRepository = new ComplexityRepositoryImpl();
 const complexityService = new ComplexityService(complexityRepository);
-const complexityController = new ComplexityController(complexityService, new ComplexityMapper());
+const complexityController = new ComplexityController(complexityService, MapperFabric.getMapper(MappersEnum.ComplexityMapper));
 
 router.post(
     '/',

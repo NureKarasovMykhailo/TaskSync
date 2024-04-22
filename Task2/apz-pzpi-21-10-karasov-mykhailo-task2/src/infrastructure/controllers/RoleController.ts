@@ -6,10 +6,13 @@ import RoleMapper from "../mappers/RoleMapper/RoleMapper";
 import ApiError from "../../core/common/error/ApiError";
 import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
+import IMapper from "../mappers/IMapper";
+import MapperFabric from "../mappers/MapperFabric";
+import MappersEnum from "../../core/common/enums/MappersEnum";
 
 class RoleController {
 
-    private roleMapper: RoleMapper = new RoleMapper();
+    private roleMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.RoleMapper);
     private roleService: RoleService = new RoleService(new RoleRepositoryImpl());
 
 

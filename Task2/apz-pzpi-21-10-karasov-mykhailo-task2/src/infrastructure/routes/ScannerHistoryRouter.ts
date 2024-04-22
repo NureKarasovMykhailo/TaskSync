@@ -10,13 +10,15 @@ import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepo
 import authMiddleware from "../../core/common/middlewares/AuthMiddleware";
 import checkRoleMiddleware from "../../core/common/middlewares/CheckRoleMiddleware";
 import RolesEnum from "../../core/common/enums/RolesEnum";
+import MapperFabric from "../mappers/MapperFabric";
+import MappersEnum from "../../core/common/enums/MappersEnum";
 
 const router = express.Router();
 
 const scannerHistoryMapper = new ScannerHistoryMapper();
 const scannerService = new ScannerService(new ScannerRepositoryImpl(), new UserRepositoryImpl());
 const scannerHistoryService = new ScannerHistoryService(new ScannerHistoryRepositoryImpl(), new ScannerRepositoryImpl());
-const scannerHistoryController = new ScannerHistoryController(scannerHistoryService, scannerHistoryMapper, scannerService);
+const scannerHistoryController = new ScannerHistoryController(scannerHistoryService, MapperFabric.getMapper(MappersEnum.ScannerHistoryMapper), scannerService);
 
 router.post(
     '/',

@@ -1,12 +1,14 @@
 import IEducationRepository from "../../../core/repositories/EducationRepository/IEducationRepository";
 import EducationDomainModel from "../../../core/domain/models/Education/Education";
 import Education from "../../database/etities/Education";
-import EducationMapper from "../../mappers/EducationMapper/EducationMapper";
 import CreateEducationDto from "../../../core/repositories/EducationRepository/dto/CreateEducation";
+import IMapper from "../../mappers/IMapper";
+import MapperFabric from "../../mappers/MapperFabric";
+import MappersEnum from "../../../core/common/enums/MappersEnum";
 
 export default class EducationRepository implements IEducationRepository{
 
-    private educationMapper: EducationMapper = new EducationMapper();
+    private educationMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.EducationMapper);
     async getEducationByTitle(educationTitle: string): Promise<EducationDomainModel | null> {
         const education = await Education.findOne({where: {educationTitle}});
         if (!education) {

@@ -8,12 +8,13 @@ import {validationResult} from "express-validator";
 import formatValidationErrors from "../../core/common/uttils/ValidationErrorsUttils";
 import UserMapper from "../mappers/UserMapper/UserMapper";
 import i18n from "i18n";
+import IMapper from "../mappers/IMapper";
 
 export default class PublicCompanyController {
     constructor(
        private readonly companyService: CompanyService,
-       private readonly companyMapper: CompanyMapper,
-       private readonly userMapper: UserMapper
+       private readonly companyMapper: IMapper<any, any>,
+       private readonly userMapper: IMapper<any, any>
     ) {}
 
     public async createCompany(req: Request, res: Response, next: NextFunction) {

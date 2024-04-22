@@ -12,6 +12,8 @@ import CompanyMapper from "../mappers/CompanyMapper/CompanyMapper";
 import authMiddleware from "../../core/common/middlewares/AuthMiddleware";
 import hasUserCompanyMiddleware from "../../core/common/middlewares/HasUserCompanyMiddleware";
 import UserMapper from "../mappers/UserMapper/UserMapper";
+import MapperFabric from "../mappers/MapperFabric";
+import MappersEnum from "../../core/common/enums/MappersEnum";
 
 const router = express.Router();
 
@@ -20,7 +22,7 @@ const checkUserSubscription: CheckSubscribeMiddleware = new CheckSubscribeMiddle
 
 const companyService = new CompanyService(new CompanyRepositoryImpl(), new UserRepositoryImpl());
 const publicCompanyController =
-    new PublicCompanyController(companyService, new CompanyMapper(), new UserMapper);
+    new PublicCompanyController(companyService,  MapperFabric.getMapper(MappersEnum.CompanyMapper),  MapperFabric.getMapper(MappersEnum.UserMapper));
 
 router.post(
     '/',

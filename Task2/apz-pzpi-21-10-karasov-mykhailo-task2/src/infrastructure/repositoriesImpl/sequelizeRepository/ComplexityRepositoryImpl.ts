@@ -3,12 +3,14 @@ import CreateOrUpdateComplexityDto
     from "../../../core/repositories/ComplexityRepository/dto/CreateOrUpdateComplexityDto";
 import ComplexityDomainModel from "../../../core/domain/models/Complexity/Complexity";
 import Complexity from "../../database/etities/Complexity";
-import ComplexityMapper from "../../mappers/ComplexityMapper/ComplexityMapper";
 import ApiError from "../../../core/common/error/ApiError";
 import i18n from "i18n";
+import IMapper from "../../mappers/IMapper";
+import MapperFabric from "../../mappers/MapperFabric";
+import MappersEnum from "../../../core/common/enums/MappersEnum";
 
 export default class ComplexityRepositoryImpl implements IComplexityRepository {
-    private readonly complexityMapper: ComplexityMapper = new ComplexityMapper();
+    private readonly complexityMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.ComplexityMapper);
 
     async createComplexity(dto: CreateOrUpdateComplexityDto): Promise<ComplexityDomainModel> {
         const complexity = await Complexity.create({

@@ -3,10 +3,13 @@ import CreateOrUpdateCompanyDto from "../../../core/repositories/CompanyReposito
 import CompanyDomainModel from "../../../core/domain/models/Company/Company";
 import Company from "../../database/etities/Company";
 import CompanyMapper from "../../mappers/CompanyMapper/CompanyMapper";
+import IMapper from "../../mappers/IMapper";
+import MapperFabric from "../../mappers/MapperFabric";
+import MappersEnum from "../../../core/common/enums/MappersEnum";
 
 
 export default class CompanyRepositoryImpl implements ICompanyRepository {
-    private readonly companyMapper: CompanyMapper = new CompanyMapper();
+    private readonly companyMapper: IMapper<any, any> = MapperFabric.getMapper(MappersEnum.CompanyMapper);
 
     async getCompanyByTitle(companyTitle: string): Promise<CompanyDomainModel | null> {
         const company = await Company.findOne({where: { companyName: companyTitle}});

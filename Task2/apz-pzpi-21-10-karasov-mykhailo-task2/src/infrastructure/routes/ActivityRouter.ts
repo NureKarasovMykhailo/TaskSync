@@ -9,11 +9,13 @@ import ActivityRepositoryImpl from "../repositoriesImpl/sequelizeRepository/Acti
 import ActivityMapper from "../mappers/ActivityMapper/ActivityMapper";
 import authMiddleware from "../../core/common/middlewares/AuthMiddleware";
 import UserRepositoryImpl from "../repositoriesImpl/sequelizeRepository/UserRepositoryImpl";
+import MapperFabric from "../mappers/MapperFabric";
+import MappersEnum from "../../core/common/enums/MappersEnum";
 
 const router = express.Router();
 
 const activityService = new ActivityService(new ActivityRepositoryImpl(), new UserRepositoryImpl());
-const activityController = new ActivityController(activityService, new ActivityMapper());
+const activityController = new ActivityController(activityService, MapperFabric.getMapper(MappersEnum.ActivityMapper));
 
 router.post(
     '/',

@@ -8,6 +8,9 @@ export default class UserActivities extends Model {
     @Column({type: DataType.INTEGER, primaryKey: true, autoIncrement: true})
     id!: number;
 
+    @Column({type: DataType.INTEGER})
+    rang!: number;
+
     @ForeignKey(() => User)
     @Column({type: DataType.INTEGER, allowNull: true})
     userId!: number | null;

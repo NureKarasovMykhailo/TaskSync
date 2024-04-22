@@ -4,11 +4,12 @@ import CreateOrUpdateScannerDto from "../../core/repositories/ScannerRepository/
 import ScannerMapper from "../mappers/ScannerMapper/ScannerMapper";
 import ApiError from "../../core/common/error/ApiError";
 import i18n from "i18n";
+import IMapper from "../mappers/IMapper";
 
 export default class ScannerController {
     constructor(
        private readonly scannerService: ScannerService,
-       private readonly scannerMapper: ScannerMapper
+       private readonly scannerMapper: IMapper<any, any>
     ) {}
 
     public async createScanner(req: Request, res: Response, next: NextFunction) {
