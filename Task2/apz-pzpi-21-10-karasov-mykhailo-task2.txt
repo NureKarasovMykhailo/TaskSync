@@ -1,226 +1,248 @@
-2.5 Опис інженерних рішень
+1 ОПИС АРХІТЕКТУРИ СИСТЕМИ
+
+Система складається з бази даних, серверної частини, IoT пристроїв, клієнтської частини та мобільної прикладної програми. У якості сервера бази даних обрано PostgreSQL. Обмін даними між сервером та БД проходить за допомогою відповідного драйверу.
+Система взаємодіє з базою даних, за допомогою серверної частини. Крім цього серверна частина взаємодіє з веб – застосунком, мобільною прикладною програмою та IoT пристроями за протоколом HTTPS.
+Сам користувач взаємодіє з системою за допомогою свого персонального комп’ютеру чи мобільного пристрою, які у свою чергу взаємодіють з клієнтською частиною по протоколу HTTPS.
+
+2 ПОБУДОВА ДІАГРАМИ РОЗГОРТАННЯ
+
+Мета розробки UML діаграми розгортання полягає у моделюванні фізичної архітектури системи та її розміщення в середовищі виконання, визначення зав’язків між компонентами. UML діаграма розгортання для розроблюваної системи наведена на рисунку 1.
+Система взаємодіє з базою даних, за допомогою серверної частини. Крім цього серверна частина взаємодіє з веб – застосунком, мобільною прикладною програмою та IoT пристроями за протоколом HTTPS.
+Сам користувач взаємодіє з системою за допомогою свого персонального комп’ютеру чи мобільного пристрою, які у свою чергу взаємодіють з клієнтською частиною по протоколу HTTPS.
+
+3 ОПИС АРХІТЕКТУРИ СЕРВЕРНОЇ ЧАСТИНИ
+
+Серверна частина побудована за принципами чистої архітектури. Головна ідея даної архітектури полягає у розподілу системи на окремі рівні абстракції. Це дозволяє забезпечити високий рівень масштабованості, зручності тестування та підтримки, та зменшує залежність між компонентами системи. Застосунок поділений на декілька шарів: шар домену (шар, який містить основну бізнес – логіку застосунку та моделі даних), шар застосунку (містить бізнес – логіку та функції обробки даних), шар представлення (шар, який містить інтерфейс користувача або API інтерфейс, через який користувач взаємодіє з сервером), шар інфраструктури (шар у якому розташовані залежності від бази даних, зовнішніх API, фреймворків та бібліотек).
+
+4 ПОБУДОВА ДІАГРАМИ ПРЕЦЕДЕНТІВ
+
+У системі наявні три види звичайних акторів: незареєстрований користувач, зареєстрований користувач та робітник підприємства. Незареєстрований користувач має лише можливість зареєструватися чи авторизуватися у системі. Зареєстрований користувач може приєднатися до підприємства та оформити підписку на сервіс. Робітник підприємства (тобто користувач який зареєстрований у будь-якому підприємстві) має можливість провести сканування свого стану, та отримати результат сканування.
+Також у системі наявні три типи акторів – адміністраторів: власник підприємства (користувач, який створив відповідне підприємство), адміністратор компанії та системний адміністратор. Власник підприємства може керувати усіма сутностями, які знаходяться у даному підприємстві, та формувати оптимальний робочий розклад робітників. Адміністратор підприємства має усі ж можливості власника підприємства, окрім зміни даних про саму сутність відповідного підприємства.
+Системний адміністратор це окрема роль, користувачі з даним статусом мають можливість керувати усіма сутностями у системи, а також формувати резервні копії даних.
 
 
-Посилання на демонстрацію функціоналу серверної частини: https://youtu.be/DjWw4isPj3M 
-Почнемо з опису бази даних. У якості СУБД, було обрано реляційну базу даних PostgreSQL. Даний тип баз даних було обрано через те, вони дозволяють структурувати та узгодити дані за допомогою таблиць, що сприяє цілісності даних, та забезпеченню транзакційної безпеки. Сама СУБД PostgreSQL обрана через те, що вона є масштабованою, продуктивною, має велику спільноту та підтримує високу кількість вбудованих функцій.
-Серверна / back-end частина написана за допомогою програмної платформи Node JS, фреймворку Express JS та мови програмування TypeScript.
-Серверна частина відповідає за усю бізнес – логіку програмної системи. Серверна частина побудована за принципами чистої архітектури. Головна ідея даної архітектури полягає у розподілу системи на окремі рівні абстракції. Це дозволяє забезпечити високий рівень масштабованості, зручності тестування та підтримки, та зменшує залежність між компонентами системи. Застосунок поділений на декілька шарів: шар домену (шар, який містить основну бізнес – логіку застосунку та моделі даних), шар застосунку (містить бізнес – логіку та функції обробки даних), шар представлення (шар, який містить інтерфейс користувача або API інтерфейс, через який користувач взаємодіє з сервером), шар інфраструктури (шар у якому розташовані залежності від бази даних, зовнішніх API, фреймворків та бібліотек).
-Сам сервер взаємодіє у усіма іншими клієнтськими компонентами програмної системи за допомогою REST API (див. таблицю 1). Взаємодія з базою даних відбувається за допомогою ORM Sequelize.
-Розглянемо бізнес – логіку пов’язану з авторизацією у системі. Авторизація у системі здійснюється за допомогою «Json Web Token», або JWT токену. Токен генерується при успішній авторизації чи реєстрації користувача, та містить дані користувача, до яких є необхідність часто звертатися. Час існування токену дорівнює 24 години, після закінчення цього часу користувачу прийдеться знову авторизуватися у системі.
-Інша частина бізнес – логіки, яку я б хотів описати, це оформлення підписки на сервіс (див. додаток А). Оформлення підписки здійснюється за допомогою PayPal API. Якщо користувач, успішно оформив підписку, то для даного користувача створюється сутність підписки, яка містить усі дані про неї. Користувач, який оформив підписку може додати власне підприємство (тільки одне) до системи.
-Опишемо бізнес – логіку з формування оптимального робочого розкладу (див. додаток б). Для пошуку для даної активності кращого робітника використовується метод математичної згортки. Обирається користувач, який має необхідну освіту, потім отримується інформація від IoT пристрою, про стан даного робітника (температура, пульс, час, який користувач працював). Ці дані, та складність виконання активності переводяться у чисельний коефіцієнт, який чим більший тим більш даний коефіцієнт відхиляється від норми. На основі цих даних формується згортка та обирається користувач, який має найбільше значення згортки.
-ПЕРЕЛІК ДЖЕРЕЛ ПОСИЛАННЯ
-1. Відеоролик з демонстрацією роботи серверної частини. URL https://youtu.be/DjWw4isPj3M 
-2. Посилання на GitHub репозиторій з джерельним кодом https://github.com/NureKarasovMykhailo/apz-pzpi-21-10-karasov-mykhailo 
- 
+5 ПОБУДОВА ER-ДІАГРАМИ
+
+ER – модель даних створюється з метою моделювання та візуалізації структури бази даних з точки зору сутностей та їх взаємозв’яків. Сама ER – модель наведена на рисунку 3.
+ER – діаграма містить наступні сутності:
+̶	Користувачі. Містить інформацію про користувачів застосунку;
+̶	Ролі. Ролі, які можуть мати користувачі, окремий користувач може мати декілька ролей;
+̶	Освіти. Освіти, які можуть мати користувачі. Користувач може мати декілька освіт;
+̶	Підписки. Зберігають інформацію про підписку певного користувача. Одна підписка може належати одному користувача, користувач може мати багато підписок;
+̶	Складність. Представляють дані про складність певної діяльності на підприємстві. Діяльність може мати лише одну складність, одна складність може відповідати декільком діяльностям;
+̶	Підприємство. Містить інформацію про певне підприємство, у одному підприємстві може бути багато користувачів, один користувач може бути лише у одному підприємстві;
+̶	Сканер. Представляє IoT пристрій  який можна закріпити за користувачем, підприємтство може мати багато сканерів, один сканер належить лише одному підприємству;
+̶	Діяльності. Містить інформацію про певну діяльність, виконання якої вимагає певну освіту, та за яку можна закріпити користувачів, одна діяльність може мати багато користувачів;
+̶	Історія сканування. Містить інформацію, яку надсилають IoT пристрої, відносяться до певного сканеру та користувача, історія сканування відповідає одному сканеру, один 
+сканер може мати декілька історій сканування;
+
+6 СПЕЦИФІКАЦІЯ REST
+
+REST це архітектурний стиль для створення розподілених веб-систем. Свторімо REST специфікацію для серверної частини програмної системи (див. додаток А). REST специфікація допоможе визначити доступні маршрути, та їх призначення.
+
+7 ПОБУДОВА ДІАГРАМИ КОМПОНЕНТІВ
+
+Створення UML діаграми компонентів дозволяє промоделювати високорівневу архітектуру системи, іденифікувати основні компоненти та їх зв'яки.
+ВИділимо наступні компоненти:
+- Employee - робітник на підприємстві
+- ScannerInfo - інформація від сканеру, про стан робітника
+- Scanner - IoT пристрій
+Компонент Employee отримує від компоненту Scanner обьект ScannerInfo
+
+ВИСНОВКИ
+
+У ході виконання даної лабораторної роботи була розроблена серверна
+частини програмної системи. З метою проектування архітектури, визначення 
+функціоналу та бізнес – процесів були створені UML – діаграми. Окрім, того була
+розроблена база даних та втілена бізнес – логіка серверної частини.
+
 ДОДАТОК А
-Оформлення підписки
-
-1. export default class SubscriptionClass {
-2. 
-3.     private RETURN_URL:string = 
-4. 	'http://localhost:5000/api/public-user/subscribe/succeed';
-5.     private CANCEL_URL:string = 
-6. 	'http://localhost:5000/api/subscription/pay-pal-cancel-  7.payment';
-8.     private AUTH: string = 
-9. 	Buffer.from(process.env.CLIENT_ID + 
-10. 	':' + 
-11. 	process.env.PAY_PAL_SECRET_KEY).toString('base64');
-12.     private SUBSCRIPTION_PAY_LOAD = {
-13.         "plan_id": process.env.PLAN_ID,
-14.         "application_context": {
-15.             "brand_name": "TaskSync Subscription",
-16.             "locale": "en-US",
-17.             "user_action": "SUBSCRIBE_NOW",
-18.             "payment_method": {
-19.                 "payer_selected": "PAYPAL",
-20.                 "payee_preferred": 21."IMMEDIATE_PAYMENT_REQUIRED"
-22.             },
-23.             "return_url": this.RETURN_URL,
-24.             "cancel_url": this.CANCEL_URL
-25.         }
-26.     }
-27. 
-28.     constructor() {
-29. 
-30.     }
-31. 
-32.     async subscribeRequest() {
-33. 
-34.         return await 
-35. 	    fetch('https://api-36.m.sandbox.paypal.com/v1/billing/subscriptions', {
-37.             method: 'post',
-38.             body: 36.JSON.stringify(this.SUBSCRIPTION_PAY_LOAD),
-39.             headers: {
-40.                 'Authorization': 'Basic ' + this.AUTH,
-41.                 'Content-Type': 'application/json'
-42.             },
-43.         });
-44.     }
-45. 
-46.     async isSubscriptionValid(subscribe: Subscribe) {
-47.         const response = await fetch(
-48. 		`https://api-m.sandbox.paypal.com/v1/ ` + `
-49. 		billing/subscriptions/${subscribe.code}`, {
-50.             method: 'get',
-51.             headers: {
-52.                 'Authorization': 'Basic ' + this.AUTH,
-53.                 'Content-Type': 'application/json'
-54.             }
-55.         });
-56.         const subscriptionDetails = await response.json();
-57.         console.log(subscriptionDetails.status)
-58.         return subscriptionDetails.status === 'ACTIVE' 
-59. 		|| subscriptionDetails.status === 'APPROVAL_PENDING'
-60. 		 || subscriptionDetails.status === 'EXPIRED';
-61.     }
-62. }
- 
-Додаток Б
-Знаходження найкращого робітника для виконання активності
-
-1. export default class TimeTableManager {
-2. 
-3.     private _activities: ActivityDomainModel[];
-4.     private _scannerHistory: ScannerHistoryDomainModel;
-5.     private _coefficientsArray!: CoefficientsData[];
-6. 
-7.     constructor(
-8.        activities: ActivityDomainModel[],
-9.        scannerHistory: ScannerHistoryDomainModel
-10.     ) {
-11.         this._activities = activities;
-12.         this._scannerHistory = scannerHistory;
-13.         this._coefficientsArray = 14.this.getCoefficientsArray();
-15.     }
-16. 
-17.     public getOptimalActivity(): number {
-18.         const maxCoefficientData = 19.this.getCoefficientsWithMaxData(this._coefficientsArray);
-20. 
-21. 
-22.         for (let i = 0; i < this._coefficientsArray.length; 23.i++) {
-24.             this._coefficientsArray[i].totalCoefficient =
-25.                 26.this._coefficientsArray[i].complexityCoefficient / 27.maxCoefficientData.complexityCoefficient +
-28.                 this._coefficientsArray[i].pulseCoefficient  29./ maxCoefficientData.pulseCoefficient +
-30.                 31.this._coefficientsArray[i].temperatureCoefficient / 32.maxCoefficientData.temperatureCoefficient +
-33.                 34.this._coefficientsArray[i].complexityCoefficient / 35.maxCoefficientData.complexityCoefficient;
-36.         }
-37. 
-38.         this._coefficientsArray = 39.this._coefficientsArray.sort((a, b) => b.totalCoefficient – 40.a.totalCoefficient);
-41. 
-42.         return this._coefficientsArray[0].activityId;
-43. 
-44.     }
-45. 
-46.     private getCoefficientsArray() {
-47.         let coefficientsArray: CoefficientsData[] = [];
-48. 
-49.         for (let i = 0; i < this._activities.length; i++) {
-50. 
-51.             let coefficientsData = new CoefficientsData(
-52.                 this._activities[i].id,
-53.                 54.this.getTemperatureCoefficient(this._scannerHistory.temperature),
-55.                 56.this.getPulseCoefficients(this._scannerHistory.pulse),
-57.                 58.this.getActiveWorkCoefficients(this._scannerHistory.activeWo 59.rkedTime),
-60.                 this._activities[i].complexity?.evaluation 45.|| 61
-62.             );
-63.             coefficientsArray.push(coefficientsData);
-64.         }
-65. 
-66.         return coefficientsArray;
-67.     }
-68. 
-69.     private getTemperatureCoefficient(temperature: number): 70.number {
-71.         switch (true) {
-72.             case (temperature <= 36.6):
-73.                 return 1;
-74.             case (temperature > 36.6 && temperature <= 37):
-75.                 return 1.2;
-76.             case (temperature > 37 && temperature <= 37.5):
-77.                 return 1.5;
-78.             case (temperature > 37.5 && temperature <= 38):
-79.                 return 2;
-80.             case (temperature > 38 && temperature <= 38.5):
-81.                 return 3;
-82.             case (temperature > 38.5 && temperature <= 39):
-83.                 return 4;
-84.             default:
-85.                 return 5;
-86.         }
-87.     }
-88. 
-89.     private getPulseCoefficients(pulse: number): number {
-90.         switch (true) {
-91.             case (pulse <= 60):
-92.                 return 1;
-93.             case (pulse > 60 && pulse <= 80):
-94.                 return 1.2;
-95.             case (pulse > 80 && pulse <= 100):
-96.                 return 1.5;
-97.             case (pulse > 100 && pulse <= 120):
-98.                 return 2;
-99.             case (pulse > 120 && pulse <= 140):
-100.                 return 3;
-101.             case (pulse > 140 && pulse <= 160):
-102.                 return 4;
-103.             default:
-104.                 return 5;
-105.         }
-106.     }
-107. 
-108.     private 109.getActiveWorkCoefficients(activeWorkTimeInSeconds: number): 110.number {
-111.         const activeWorkTimeInHours = 112.activeWorkTimeInSeconds;
-113.         switch (true) {
-114.             case (activeWorkTimeInHours <= 7200):
-115.                 return 1;
-116.             case (activeWorkTimeInHours > 7200 && 117.activeWorkTimeInHours <= 14400):
-118.                 return 1.2;
-119.             case (activeWorkTimeInHours > 14400 && 120.activeWorkTimeInHours <= 21600):
-121.                 return 1.5;
-122.             case (activeWorkTimeInHours > 21600 && 123.activeWorkTimeInHours <= 28800):
-124.                 return 2;
-125.             case (activeWorkTimeInHours > 28800 && 126.activeWorkTimeInHours <= 36000):
-127.                 return 3;
-128.             case (activeWorkTimeInHours > 36000 && 129.activeWorkTimeInHours <= 43200):
-130.                 return 4;
-131.             default:
-132.                 return 5;
-133.         }
-134.     }
-135. 
-136. 
-137.     private getCoefficientsWithMaxData(coefficientsArray: 138.CoefficientsData[]) {
-139.         let maxPulseCoefficient = Number.MIN_SAFE_INTEGER;
-140.         let maxTemperatureCoefficient = 141.Number.MIN_SAFE_INTEGER;
-142.         let maxActiveWorkTimeCoefficient = 143.Number.MIN_SAFE_INTEGER;
-144.         let maxComplexityCoefficient = 145.Number.MIN_SAFE_INTEGER;
-146. 
-147.         for (let i = 0; i < coefficientsArray.length; i++) 148.{
-149.             if (maxPulseCoefficient < 150.coefficientsArray[i].pulseCoefficient) {
-151.                 maxPulseCoefficient = 152.coefficientsArray[i].pulseCoefficient;
-153.             }
-154.
-155.             if (maxTemperatureCoefficient < 156.coefficientsArray[i].temperatureCoefficient) {
-157.                 maxTemperatureCoefficient = 158.coefficientsArray[i].temperatureCoefficient;
-159.             }
-160. 
-161.             if (maxActiveWorkTimeCoefficient < 162.coefficientsArray[i].workTimeCoefficient) {
-163.                 maxActiveWorkTimeCoefficient = 164.coefficientsArray[i].workTimeCoefficient;
-165.             }
-166. 
-167.             if (maxComplexityCoefficient < 168.coefficientsArray[i].complexityCoefficient) {
-169.                 maxComplexityCoefficient = 170.coefficientsArray[i].complexityCoefficient;
-171.             }
-172.         }
-173. 
-174.         return new CoefficientsData(
-175.             0,
-176.             maxTemperatureCoefficient,
-177.             maxPulseCoefficient,
-178.             maxActiveWorkTimeCoefficient,
-179.             maxComplexityCoefficient
-180.         );
-181. 
-182.     }
-183. 
-184. }
+Специфікація REST
+1. Контролер: «Активності»
+Метод: POST	
+URL: /activity/	
+Опис: Створює нову активність
+2. Контролер: «Активності»	
+Метод: GET
+URL: /activity/ 
+Опис:Отримання усіх активностей
+3. Контролер: «Активності»
+Метод: GET	
+URL: /activity/{id} 	
+Опис: Отримання активності по id
+4. Контролер: «Активності»
+Метод: PUT	
+URL: /activity/{id} 	
+Опис: Оновлення активності
+5. Контролер: «Активності»
+Метод: POST	
+URL: /activity/add-employee/{id}	
+Опис: Закріплення робітника за аквтиностею
+6. Контролер: «Активності»
+Метод: POST	
+URL: /activity/delete-employee/{id}	
+Опис: Видалення робітника з активності
+7. Контролер: «Авторизація»
+Метод: POST	
+URL: /auth/registration	
+Опис: Реєстрація користувача
+8. Контролер: «Авторизація»
+Метод: POST	
+URL: /auth/login	
+Опис: Авторизація
+9. Контролер: «Авторизація»
+Метод: GET	
+URL: /auth/check-auth	
+Опис: Перевірка авторизації
+10. Контролер: «Підприємство»
+Метод: POST	
+URL: /company/ 	
+Опис: Створення нового підприємства
+11. Контролер: «Підприємство»
+Метод: GET	
+URL: /company/	
+Опис: Отримання підприємства по JWT токену
+12. Контролер: «Активності»
+Метод: PATCH	
+URL: /company/	
+Опис: Оновлення підприємства по JWT токену
+13. Контролер: «Підприємство»
+Метод: POST	
+URL: /company/add-employee/{id}	
+Опис: Додавання робітника до підприємства
+14. Контролер: «Підприємство»
+Метод: DELETE	
+URL: /company/delete-employee/{id}
+Опис: Видалення робітника з підприємства
+15. Контролер: «Підприємство»
+Метод: GET	
+URL: /company/employees
+Опис: Отримання усіх користувачів підприємства
+16. Контролер: «Підприємство»
+Метод: GET	
+URL: /company/employees/{id}
+Опис: Отримання робітника підприємства по ID
+17. Контролер: «Складність»
+Метод: POST	
+URL: /complexity/ 
+Опис: Створення нової складності
+18. Контролер: «Складність»
+Метод: GET	
+URL: /complexity/ 
+Опис: Отримання усіх складностей
+19. Контролер: «Складність»
+Метод: GET	
+URL: /complexity/{id} 
+Опис: Отримати складність по id
+20. Контролер: «Складність»
+Метод: PUT	
+URL: /complexity/{id} 
+Опис: Оновити складність по {id}
+21. Контролер: «Складність»
+Метод: DELETE	
+URL: /complexity/{id} 
+Опис: Видалити складність по id
+22. Контролер: «База даних»
+Метод: GET	
+URL: /db/ 
+Опис: Отримання резервної копії бази даних
+23. Контролер: «Освіти»
+Метод: POST	
+URL: /education/ 
+Опис: Створення нової освіти
+24. Контролер: «Освіти»
+Метод: GET	
+URL: /education/ 
+Опис: Отримання усіх освіт
+25. Контролер: «Освіти»
+Метод: GET	
+URL: /education/{id}
+Опис: Отримання освіти по id
+26. Контролер: «Освіти»
+Метод: PUT	
+URL: /education/{id}
+Опис: Оновити освіту по id
+27. Контролер: «Освіти»
+Метод: DELETE	
+URL: /education/{id}
+Опис: Видалити освіту по id
+28. Контролер: «Користувач»
+Метод: POST	
+URL: /public-user/patch/
+Опис:  Оновлення даних користувача по JWT токену
+29. Контролер: «Користувач»
+Метод: PUT	
+URL: public-user/add-education/
+Опис:  Додавання освіти користувачу
+30. Контролер: «Користувач»
+Метод: PUT	
+URL: public-user/delete-education
+Опис: Видалення освіти у користувача
+31. Контролер: «Користувач»
+Метод: POST	
+URL: /public-user/subscribe
+Опис: Відправити до API запит на оформлення підписки
+32. Контролер: «Ролі»
+Метод: POST	
+URL: /role/ 
+Опис: Додати роль
+33. Контролер: «Ролі»
+Метод: GET	
+URL: /role/ 
+Опис: Отримати усі ролі
+35. Контролер: «Ролі»
+Метод: PUT	
+URL: /role/{id}
+Опис: Оновити роль по id
+36. Контролер: «Ролі»
+Метод: DELETE	
+URL: /role/{id}
+Опис: Видалити роль по id
+37. Контролер: «Історія сканеру»
+Метод: POST	
+URL: /scanner-history 
+Опис: Створення історії сканеру
+38. Контролер: «Історія сканеру»
+Метод: GET	
+URL: /scanner-history/scanner/{id}
+Опис: Отримати історію сканування для певного сканеру
+39. Контролер: «Історія сканеру»
+Метод: GET	
+URL: /scanner-history/{id}
+Опис: Отримати історію сканеру по id
+40. Контролер: «Історія сканеру»
+Метод: DELETE	
+URL: /scanner-history/scanner/{id}
+Опис: Очистити історію певного сканеру
+40. Контролер: «Історія сканеру»
+Метод: DELETE	
+URL: /scanner-history/{id}
+Опис: Видалення історії сканеру по id
+41. Контролер: «Сканер»
+Метод: POST	
+URL: /scanner/
+Опис: Створення нового сканеру
+42. Контролер: «Сканер»
+Метод: GET	
+URL: /scanner/
+Опис: Отримання усіх сканерів
+43. Контролер: «Сканер»
+Метод: GET	
+URL: /scanner/{id} 
+Опис: Отримання сканеру по id
+44. Контролер: «Сканер»
+Метод: PUT	
+URL: /scanner/{id} 
+Опис: Оновлення сканеру по id
+45. Контролер: «Сканер»
+Метод: DELETE	
+URL: /scanner/{id} 
+Опис: Видалення сканеру по id
+46. Контролер: «Робочий розклад»
+Метод: GET	
+URL: /time-table/{id}  
+Опис: Отримання найбільш підходящого робітника для виконання активності
+47. Контролер: «Робочий розклад»
+Метод: GET	
+URL: /time-table/{id} 
+Опис: Формування оптимальногорозподілу робітників по активностям
