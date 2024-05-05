@@ -6,6 +6,7 @@ import {observer} from "mobx-react-lite";
 import {useContext, useEffect} from "react";
 import {Context} from "./index";
 import {checkAuth} from "./API/authApi";
+import Footer from "./components/footer/Footer";
 
 const App = observer(() => {
     const { userStore } = useContext(Context);
@@ -31,12 +32,13 @@ const App = observer(() => {
                 <div>
                     <Header />
                 </div>
-                <div style={{height: '90%'}}>
-                    <div style={{ height: '100%'}}>
+                <div style={{minHeight: '100%'}}>
+                    <div style={{ minHeight: '100%'}}>
                         <AppRouter />
                     </div>
                 </div>
             </div>
+            <Footer />
         </BrowserRouter>
       );
 });

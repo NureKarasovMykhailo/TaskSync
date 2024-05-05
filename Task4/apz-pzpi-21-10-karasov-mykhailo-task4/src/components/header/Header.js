@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {Button, Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
-import {useNavigate} from "react-router-dom";
-import {AUTH_PAGE_PATH, MAIN_PAGE_PATH} from "../../utils/consts";
+import {Link, useNavigate} from "react-router-dom";
+import {AUTH_PAGE_PATH, MAIN_PAGE_PATH, PROFILE_PAGE_PATH} from "../../utils/consts";
 import './Header.css';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
@@ -48,7 +48,9 @@ const Header = observer(() => {
                     <Navbar.Text>
                         {userStore.isAuth ?
                             (<div className={"d-flex align-items-center"}>
-                                <div className={"p-md-2"}>{userStore.user.email}</div>
+                                <div className={"p-md-2"}>
+                                    <Link to={PROFILE_PAGE_PATH}>{userStore.user.email}</Link>
+                                </div>
                                 <Button variant={"danger"} type={"submit"} onClick={handleExitClick}>
                                     Вийти
                                 </Button>

@@ -5,7 +5,7 @@ import {observer} from "mobx-react-lite";
 
 const AuthPage = observer(() => {
     return (
-        <Container className= "row-cols-md-2 d-flex justify-content-center align-items-center" style={{height: '100%'}} >
+        <Container className= "row-cols-md-2 d-flex justify-content-center align-items-center" style={{minHeight: '100%', padding: '10% 0 0 0'}} >
             <Card className={"p-5"}>
                 <h2 className={"m-auto"}>Авторизація</h2>
                 <AuthForm />
