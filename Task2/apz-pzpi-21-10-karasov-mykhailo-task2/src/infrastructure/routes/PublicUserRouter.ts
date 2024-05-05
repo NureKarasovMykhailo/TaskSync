@@ -38,4 +38,10 @@ router.post(
     publicUserController.subscribe.bind(publicUserController)
 );
 
+router.get(
+    '/',
+    authMiddleware,
+    publicUserController.getUserInfoByToken.bind(publicUserController)
+);
+
 export default router;

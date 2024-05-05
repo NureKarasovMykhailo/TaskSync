@@ -88,6 +88,15 @@ export default class PublicUserService {
         }
     }
 
+    public async getUserInfo(id: number) {
+        const user = await this.userRepository.getUserById(id);
+        if (!user) {
+            throw ApiError.badRequest(`There no user with Id: ${id}`);
+        }
+
+        return user;
+    }
+
 
     private isUserHasRoleSubscriber(roles: RoleDomainModel[] | null) {
         if (!roles) {

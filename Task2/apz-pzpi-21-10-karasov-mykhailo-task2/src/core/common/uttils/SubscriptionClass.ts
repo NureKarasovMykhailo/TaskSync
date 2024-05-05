@@ -7,8 +7,8 @@ dotenv.config();
 
 export default class SubscriptionClass {
 
-    private RETURN_URL:string = 'http://localhost:5000/api/public-user/subscribe/succeed';
-    private CANCEL_URL:string = 'http://localhost:5000/api/subscription/pay-pal-cancel-payment';
+    private RETURN_URL:string = 'http://localhost:3000/profile/subscribe/success';
+    private CANCEL_URL:string = 'http://localhost:3000/profile/subscribe/fail';
     private AUTH: string = Buffer.from(process.env.CLIENT_ID + ':' + process.env.PAY_PAL_SECRET_KEY).toString('base64');
     private SUBSCRIPTION_PAY_LOAD = {
         "plan_id": process.env.PLAN_ID,

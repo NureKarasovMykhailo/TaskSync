@@ -81,6 +81,20 @@ class PublicUserController {
         }
    }
 
+   public async getUserInfoByToken(req: Request, res: Response, next: NextFunction) {
+        try {
+            if (req.user) {
+                const userData = await this.userService.getUserInfo(req.user.id);
+
+                return res.status(200).json({user: userData});
+            }
+
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+   }
+
 }
 
 export default PublicUserController;
