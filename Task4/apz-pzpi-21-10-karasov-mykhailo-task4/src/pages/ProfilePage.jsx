@@ -6,6 +6,7 @@ import UserEducations from "../components/UserProfile/UserEducations/UserEducati
 import UserSubscription from "../components/UserProfile/UserSubscription/UserSubscription";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
+import Company from "../components/UserProfile/Company/Company";
 
 const ProfilePage = observer(() => {
     const { userStore } = useContext(Context);
@@ -13,7 +14,8 @@ const ProfilePage = observer(() => {
     const navLinks = [
         {eventKey: 'profile', label: 'Профіль'},
         {eventKey: 'educations', label: 'Освіти'},
-        {eventKey: 'subscription', label: 'Підписка'}
+        {eventKey: 'subscription', label: 'Підписка'},
+        {eventKey: 'company', label: 'Компанія'}
     ];
 
     const [selectedKey, setSelectedKey] = useState('profile');
@@ -26,6 +28,8 @@ const ProfilePage = observer(() => {
                 return <UserEducations />
             case 'subscription':
                 return <UserSubscription user={userStore.user} />
+            case 'company':
+                return <Company user={userStore.user} />
         }
     }
 

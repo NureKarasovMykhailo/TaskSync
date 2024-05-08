@@ -2,3 +2,7 @@
     width: 100%;
     min-height: 70vh;
 }
+
+.user-educations__list{
+    min-height: 100%;
+}

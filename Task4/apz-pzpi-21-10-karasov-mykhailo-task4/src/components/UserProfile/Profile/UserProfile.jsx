@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 import {Button, Form} from "react-bootstrap";
 import {observer} from "mobx-react-lite";
 import {Context} from "../../../index";
-import {updateProfile} from "../../../API/userApi";
+import { updateProfile} from "../../../API/userApi";
 import {useNavigate} from "react-router-dom";
 import {PROFILE_PAGE_PATH} from "../../../utils/consts";
 import {decodeToken} from "react-jwt";
