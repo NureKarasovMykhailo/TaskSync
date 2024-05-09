@@ -5,6 +5,7 @@ import {AUTH_PAGE_PATH, MAIN_PAGE_PATH, PROFILE_PAGE_PATH} from "../../utils/con
 import './Header.css';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
+import LanguageSelector from "../LanguageSelector/LanguageSelector";
 
 const Header = observer(() => {
     const { userStore } = useContext(Context);
@@ -45,6 +46,7 @@ const Header = observer(() => {
                     </Nav>
                 </Navbar.Collapse>
                 <Navbar.Collapse className={"justify-content-end"}>
+                    <LanguageSelector />
                     <Navbar.Text>
                         {userStore.isAuth ?
                             (<div className={"d-flex align-items-center"}>

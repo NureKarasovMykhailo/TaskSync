@@ -27,3 +27,21 @@ export const deleteUserEducation = async (formData) => {
     const { data } = await $authHost.put(`api/public-user/delete-education`, formData);
     return data;
 }
+
+export const fetchUsersWithoutCompany = async (
+    limit = 1,
+    page = 1
+) => {
+    const { data } = await $authHost.get(`api/public-company/users/without-company`, {
+        params: {
+            limit: limit,
+            page: page
+        }
+    });
+    return data;
+}
+
+export const fetchUserById = async (userId) => {
+    const { data } = await $authHost.get(`api/admin-user/${userId}`);
+    return data;
+}

@@ -71,7 +71,6 @@ const RegistrationForm = observer(() => {
                             ...validationErrors,
                             ...formattingErrors
                         });
-                        console.log(validationErrors);
                     }
                 }
             }

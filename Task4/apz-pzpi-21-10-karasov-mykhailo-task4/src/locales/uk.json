@@ -1,0 +1,18 @@
+{
+  "companyCreating": "Додавання компанії",
+  "companyName": "Назва компанії",
+  "enterCompanyName": "Введіть назву компанії",
+  "description": "Опис",
+  "companyLogo": "Лого компанії",
+  "addButton": "Додати",
+  "editButton": "Редагувати",
+  "acceptButton": "Прийняти",
+  "deleteButton": "Видалити",
+  "cancelButton": "Отмена",
+  "companyManagement": "Управління компанією",
+  "workers": "Робітники",
+  "activities": "Активності",
+  "scanners": "Сканнери",
+  "yourCompanyHasNoUser": "У вашій компанії не додано, ще не одного працівника",
+  "addWorkerNow": "Додайто робітників прямо зараз"
+}

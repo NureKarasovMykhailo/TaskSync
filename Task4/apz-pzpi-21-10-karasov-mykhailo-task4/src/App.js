@@ -14,6 +14,7 @@ const App = observer(() => {
     useEffect(() => {
         const getUserData = async () => {
             try {
+                console.log('update')
                 const data = await checkAuth();
                 userStore.setUser(data);
                 userStore.setIsAuth(true);
@@ -24,7 +25,7 @@ const App = observer(() => {
         }
 
         getUserData().then();
-    }, [userStore]);
+    }, [userStore, localStorage]);
 
     return (
         <BrowserRouter >

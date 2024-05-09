@@ -1,0 +1,18 @@
+{
+  "companyCreating": "Company creating",
+  "companyName": "Company name",
+  "enterCompanyName": "Enter company name",
+  "description": "Description",
+  "companyLogo": "Company logo",
+  "addButton": "Add",
+  "editButton": "Edit",
+  "acceptButton": "Accept",
+  "deleteButton": "Delete",
+  "cancelButton": "Cancel",
+  "companyManagement": "Company management",
+  "workers": "Workers",
+  "activities": "Activities",
+  "scanners": "Scanners",
+  "yourCompanyHasNoUser": "No employees have been added to your company yet",
+  "addWorkerNow": "Add workers right now"
+}
