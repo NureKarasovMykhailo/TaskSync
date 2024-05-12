@@ -16,11 +16,14 @@ const AddWorkerItemPage = () => {
     const [user, setUser] = useState({});
     const [educations, setEducations] = useState([{}]);
     const { t } = useTranslation();
+    const [addButtonText, setAddButtonText] = useState(t('addButton'));
+    const [isAddButtonActive, setIsAddButtonActive] = useState(true);
 
     const handleAddClick = () => {
         try {
             const response = addWorker(id);
-            navigation(ADD_WORKER_PAGE);
+            setIsAddButtonActive(false);
+            setAddButtonText('Даний користувач був доданий')
         } catch (error) {
             console.log(error);
         }
@@ -38,7 +41,7 @@ const AddWorkerItemPage = () => {
 
     return (
         isLoading ?
-            <Container className={"w-100 d-flex align-items-center justify-content-center"} style={{height: '100vh'}}>
+            <Container className={"w-100 d-flex align-items-center justify-content-center"} style={{minHeight: '100vh'}}>
                 <Loader />
             </Container>
             :
@@ -53,8 +56,9 @@ const AddWorkerItemPage = () => {
                         variant={"primary"}
                         className={"w-50"}
                         onClick={handleAddClick}
+                        disabled={!isAddButtonActive}
                     >
-                        {t('addButton')}
+                        {addButtonText}
                     </Button>
                 </div>
             </Container>

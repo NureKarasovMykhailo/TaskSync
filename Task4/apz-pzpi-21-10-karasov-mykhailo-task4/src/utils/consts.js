@@ -9,3 +9,6 @@ export const ADD_COMPANY = '/company/add';
 export const WORKER_PAGE = '/company/workers';
 export const ADD_WORKER_PAGE = '/company/add-worker';
 export const ADD_WORKER_ITEM_PAGE = '/company/add-worker/:id'
+export const COMPANY_WORKER_ITEM_PAGE = '/company/worker/:id';
+export const COMPANY_SCANNERS = '/company/scanners';
+export const ONE_SCANNER_PAGE = '/company/scanner/:id';

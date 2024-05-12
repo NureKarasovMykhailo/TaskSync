@@ -1,8 +1,6 @@
 .footer__container{
-    position: relative;
-    left: 0;
-    padding: 0 5%;
     width: 100%;
+    padding: 0 5%;
 }
 
 .footer__content{

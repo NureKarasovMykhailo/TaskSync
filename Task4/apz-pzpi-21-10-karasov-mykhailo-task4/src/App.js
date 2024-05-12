@@ -30,16 +30,16 @@ const App = observer(() => {
     return (
         <BrowserRouter >
             <div className={'app__container'} >
-                <div>
+                <div className={'app__header-container'}>
                     <Header />
                 </div>
-                <div style={{minHeight: '100%'}}>
-                    <div style={{ minHeight: '100%'}}>
-                        <AppRouter />
-                    </div>
+                <div className={'app__main-container'}>
+                    <AppRouter />
+                </div>
+                <div className={'app__footer-container'}>
+                    <Footer />
                 </div>
             </div>
-            <Footer />
         </BrowserRouter>
       );
 });

@@ -39,38 +39,46 @@ const AddWorkerPage = () => {
         :
         <Container
             className={'add-worker__container m-3 border p-4'}
+            style={{height: "100%"}}
         >
             <h2>Користувачі:</h2>
             <hr />
-            <Row className={"d-flex"}>
-                {users.map(user => (
-                    <Col key={user.id} md={3} className={"mt-3"} >
-                        <Card>
-                            <div className={"d-flex justify-content-center"}>
-                                <Image width={150} height={150} src={process.env.REACT_APP_API_URL + user.userImage} />
-                            </div>
-                            <div className={"text-black-50 mt-1 justify-content-between align-items-center p-1"}>
-                                <hr/>
-                                <div>Email: {user.email}</div>
-                                <div>Ім'я: {user.firstName}</div>
-                                <div>Прізвище: {user.secondName}</div>
-                                <div>Вік: {calculateAge(user.birthday)}</div>
-                                <div className={"w-100 p-2"}>
-                                    <Button
-                                        variant={"outline-primary"}
-                                        className={"w-100"}
-                                        onClick={() => navigation(ADD_WORKER_ITEM_PAGE.replace(':id', user.id))}
-                                    >
-                                        Переглянути
-                                    </Button>
+            { users.length > 0
+                ?
+                <Row className={"d-flex"}>
+                    {users.map(user => (
+                        <Col key={user.id} md={3} className={"mt-3"} >
+                            <Card>
+                                <div className={"d-flex justify-content-center"}>
+                                    <Image width={150} height={150} src={process.env.REACT_APP_API_URL + user.userImage} />
                                 </div>
-                            </div>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
+                                <div className={"text-black-50 mt-1 justify-content-between align-items-center p-1"}>
+                                    <hr/>
+                                    <div>Email: {user.email}</div>
+                                    <div>Ім'я: {user.firstName}</div>
+                                    <div>Прізвище: {user.secondName}</div>
+                                    <div>Вік: {calculateAge(user.birthday)}</div>
+                                    <div className={"w-100 p-2"}>
+                                        <Button
+                                            variant={"outline-primary"}
+                                            className={"w-100"}
+                                            onClick={() => navigation(ADD_WORKER_ITEM_PAGE.replace(':id', user.id))}
+                                        >
+                                            Переглянути
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+                :
+                <div className={"w-100 h-100 d-flex align-items-center justify-content-center"} style={{height: "100vh"}}>
+                    <h3>Користувачі, яких можна додати до компанії відсутні</h3>
+                </div>
+            }
             <div
-                className={"h-100 d-flex flex-grow-1 h-100 p-4"}
+                className={"h-100 d-flex p-4"}
             >
                 <CustomPagination pageCount={pages} currentPage={currentPage} onClick={(newPage) => setCurrentPage(newPage)}/>
             </div>

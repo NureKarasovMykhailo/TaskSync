@@ -21,15 +21,27 @@ export const deleteCompanyByToken = async () => {
 }
 
 export const fetchCompanyUsers = async (
-    limit = 10,
+    limit = 8,
     page = 1,
     email = ''
 ) => {
-    const { data } = await $authHost.get(`api/public-company/employees`);
+    const { data } = await $authHost.get(`api/public-company/employees`, {
+        params: {
+            limit,
+            page,
+            email
+        }
+    });
     return data;
 }
 
 export const addWorker = async (id) => {
     const { data } = await $authHost.post(`api/public-company/add-employee/${id}`);
     return data;
+}
+
+export const deleteWorker = async(id) => {
+    const { data } = await $authHost.delete(`api/public-company/delete-employee/${id}`);
+    return data;
+
 }

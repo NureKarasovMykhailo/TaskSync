@@ -45,3 +45,12 @@ export const fetchUserById = async (userId) => {
     const { data } = await $authHost.get(`api/admin-user/${userId}`);
     return data;
 }
+
+export const addRole = async (userId, formData) => {
+    const { data } = await $authHost.patch(`api/admin-user/add-role/${userId}`, formData);
+    return data;
+}
+
+export const deleteRole = async (userId, formData) => {
+    const { data } = await $authHost.patch(`api/admin-user/delete-role/${userId}`, formData)
+}

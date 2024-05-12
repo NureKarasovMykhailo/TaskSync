@@ -5,9 +5,11 @@ import {deleteCompanyByToken, fetchCompanyByToken, updateCompany} from "../../AP
 import Loader from "../UI/Loader/Loader";
 import getFormattingErrors from "../../utils/validationErrorsFormating";
 import {useNavigate} from "react-router-dom";
-import {MAIN_PAGE_PATH, WORKER_PAGE} from "../../utils/consts";
+import {COMPANY_SCANNERS, MAIN_PAGE_PATH, WORKER_PAGE} from "../../utils/consts";
+import {hasUserRole} from "../../utils/hasUserRole";
+import {RoleEnum} from "../../utils/enums/RoleEnum";
 
-const UserCompany = () => {
+const UserCompany = ({ userRoleTitles }) => {
     const { t } = useTranslation();
     const navigation = useNavigate();
     const [error, setError] = useState('');
@@ -177,41 +179,43 @@ const UserCompany = () => {
                     { error &&
                         <Alert variant={"danger"}>{error}</Alert>
                     }
-                    { !isEdit ?
-                        <div className={"w-100 d-flex justify-content-end"}>
-                            <Button
-                                className={"w-10 m-1"}
-                                onClick={() => setIsEdit(true)}
-                                variant={"success"}
-                            >
-                                {t('editButton')}
-                            </Button>
-                            <Button
-                                className={"w-10 m-1"}
-                                variant={"danger"}
-                                onClick={handleDeleteCompanyClick}
-                            >
-                                {t('deleteButton')}
-                            </Button>
-                        </div>
-                        :
-                        <div className={"w-100 d-flex justify-content-end"}>
-                            <Button
-                                className={"w-10 m-1 "}
-                                onClick={handleUpdateClick}
-                            >
-                                {t('acceptButton')}
-                            </Button>
-                            <Button
-                                className={"w-10 m-1"}
-                                variant={"danger"}
-                                onClick={handleCancelClick}
-                            >
-                                {t('cancelButton')}
-                            </Button>
+                    { hasUserRole(userRoleTitles, [RoleEnum.SUBSCRIBER]) && (
+                        !isEdit ? (
+                            <div className={"w-100 d-flex justify-content-end"}>
+                                <Button
+                                    className={"w-10 m-1"}
+                                    onClick={() => setIsEdit(true)}
+                                    variant={"success"}
+                                >
+                                    {t('editButton')}
+                                </Button>
+                                <Button
+                                    className={"w-10 m-1"}
+                                    variant={"danger"}
+                                    onClick={handleDeleteCompanyClick}
+                                >
+                                    {t('deleteButton')}
+                                </Button>
+                            </div>
+                        ) : (
+                            <div className={"w-100 d-flex justify-content-end"}>
+                                <Button
+                                    className={"w-10 m-1 "}
+                                    onClick={handleUpdateClick}
+                                >
+                                    {t('acceptButton')}
+                                </Button>
+                                <Button
+                                    className={"w-10 m-1"}
+                                    variant={"danger"}
+                                    onClick={handleCancelClick}
+                                >
+                                    {t('cancelButton')}
+                                </Button>
+                            </div>
+                        )
+                    )}
 
-                        </div>
-                    }
 
                     <div>
                         <hr />
@@ -221,7 +225,7 @@ const UserCompany = () => {
                         <div className={"w-100 d-flex justify-content-between p-3"}>
                             <Button onClick={() => navigation(WORKER_PAGE)} className={"m-1 w-100"}>{t('workers')}</Button>
                             <Button className={"m-1 w-100"}>{t('activities')}</Button>
-                            <Button className={"m-1 w-100"}>{t('scanners')}</Button>
+                            <Button onClick={() => navigation(COMPANY_SCANNERS)} className={"m-1 w-100"}>{t('scanners')}</Button>
                         </div>
                     </div>
                 </div>

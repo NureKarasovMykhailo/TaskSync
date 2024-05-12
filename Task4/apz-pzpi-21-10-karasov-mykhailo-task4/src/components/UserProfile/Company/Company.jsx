@@ -4,6 +4,7 @@ import './Company.css';
 import {useNavigate} from "react-router-dom";
 import {ADD_COMPANY} from "../../../utils/consts";
 import UserCompany from "../../Company/UserCompany";
+import {getRoleTitles} from "../../../utils/getRoleTitles";
 
 const Company = ({ user }) => {
     const navigation = useNavigate();
@@ -21,7 +22,7 @@ const Company = ({ user }) => {
                 <h2>Компанія</h2>
             </div>
             {user.companyId ?
-                <UserCompany />
+                <UserCompany userRoleTitles={getRoleTitles(user.roles)} />
                 :
                 <div className={"company-page__no-company-container"}>
                     <p>Ви ще не додали компанію. Ви можете зробити це у будь-який момент.</p>
