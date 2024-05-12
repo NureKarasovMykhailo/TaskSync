@@ -5,7 +5,7 @@ import {deleteCompanyByToken, fetchCompanyByToken, updateCompany} from "../../AP
 import Loader from "../UI/Loader/Loader";
 import getFormattingErrors from "../../utils/validationErrorsFormating";
 import {useNavigate} from "react-router-dom";
-import {COMPANY_SCANNERS, MAIN_PAGE_PATH, WORKER_PAGE} from "../../utils/consts";
+import {ACTIVITIES_LIST_PAGE, COMPANY_SCANNERS, MAIN_PAGE_PATH, WORKER_PAGE} from "../../utils/consts";
 import {hasUserRole} from "../../utils/hasUserRole";
 import {RoleEnum} from "../../utils/enums/RoleEnum";
 
@@ -224,7 +224,7 @@ const UserCompany = ({ userRoleTitles }) => {
                         </div>
                         <div className={"w-100 d-flex justify-content-between p-3"}>
                             <Button onClick={() => navigation(WORKER_PAGE)} className={"m-1 w-100"}>{t('workers')}</Button>
-                            <Button className={"m-1 w-100"}>{t('activities')}</Button>
+                            <Button onClick={() => navigation(ACTIVITIES_LIST_PAGE)} className={"m-1 w-100"}>{t('activities')}</Button>
                             <Button onClick={() => navigation(COMPANY_SCANNERS)} className={"m-1 w-100"}>{t('scanners')}</Button>
                         </div>
                     </div>

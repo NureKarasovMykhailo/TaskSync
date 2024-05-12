@@ -45,5 +45,7 @@
   "minutes": "minutes",
   "seconds": "seconds",
   "noInfoFromScanner": "No information has been received from this scanner yet",
-  "clearScannerHistory": "Clear all scanner history"
+  "clearScannerHistory": "Clear all scanner history",
+  "companyActivities": "Company activities",
+  "addingActivity": "Activity adding"
 }

@@ -12,3 +12,5 @@ export const ADD_WORKER_ITEM_PAGE = '/company/add-worker/:id'
 export const COMPANY_WORKER_ITEM_PAGE = '/company/worker/:id';
 export const COMPANY_SCANNERS = '/company/scanners';
 export const ONE_SCANNER_PAGE = '/company/scanner/:id';
+export const ACTIVITIES_LIST_PAGE = '/company/activities';
+export const ADD_ACTIVITY_PAGE = '/company/activity/add';

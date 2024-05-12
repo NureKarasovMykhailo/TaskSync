@@ -45,5 +45,7 @@
   "minutes": "хв.",
   "seconds": "с.",
   "noInfoFromScanner": "С даного сканеру, ще не було отримано інформації",
-  "clearScannerHistory": "Очистити всю історію сканера"
+  "clearScannerHistory": "Очистити всю історію сканера",
+  "companyActivities": "Активності компанії",
+  "addingActivity": "Додавання активності"
 }
