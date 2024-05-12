@@ -314,6 +314,15 @@ export default class UserRepositoryImpl implements IUserRepository {
         });
     }
 
+    async getUserWithoutCompany(): Promise<UserDomainModel[]> {
+        const users = await User.findAll({
+            where: { companyId: null}
+        });
+
+        return users.map(user => {
+            return this.userMapper.toDomainModel(user);
+        });
+    }
 
 
 }

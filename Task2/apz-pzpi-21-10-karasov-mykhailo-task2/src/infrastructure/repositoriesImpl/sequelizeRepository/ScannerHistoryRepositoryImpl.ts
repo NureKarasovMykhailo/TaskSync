@@ -28,7 +28,10 @@ export default class ScannerHistoryRepositoryImpl implements IScannerHistoryRepo
     }
 
     async getScannerHistoryByScannerId(scannerId: number): Promise<ScannerHistoryDomainModel[]> {
-        const scannerHistories = await ScannerHistory.findAll({ where: { scannerId }});
+        const scannerHistories = await ScannerHistory.findAll({
+            where: { scannerId },
+            include: [User]
+        });
         return scannerHistories.map(scannerHistory => {
             return this.scannerHistoryMapper.toDomainModel(scannerHistory);
         });

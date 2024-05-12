@@ -64,7 +64,11 @@ export default class ScannerRepositoryImpl implements IScannerRepository {
         if (!scanner) {
             throw ApiError.notFound(i18n.__('scannerNotFound'));
         }
+        console.log(user);
+        scanner.user = user || null;
         scanner.userId = user?.id || null;
+        console.log(scanner.user)
+
         scanner.companyId = company.id;
         scanner.description = dto.description;
         await scanner.save();

@@ -20,9 +20,14 @@ export default class ScannerService {
     }
 
     public async updateScanner(dto: CreateOrUpdateScannerDto, scannerId: number) {
-        if (dto.userId && dto.companyId) {
+
+        //@ts-ignore
+        if (dto.userId !== null && dto.companyId !== null) {
+            console.log('here')
+            // @ts-ignore
             await this.checkUser(dto.userId, dto.companyId);
         }
+        console.log('here')
         return await this.scannerRepository.updateScanner(dto, scannerId);
     }
 

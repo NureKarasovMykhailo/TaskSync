@@ -16,6 +16,7 @@ import adminScannerRouter from "./AdminScannerRouter";
 import adminScannerHistoryRouter from "./AdminScannerHistoryRouter";
 import timeTableRouter from "./TimeTableRouter";
 import dbRouter from "./DbRouter";
+import subscribeRouter from "./SubscribeRouter";
 
 router.use('/education', educationRouter);
 router.use('/auth', authRouter);
@@ -33,5 +34,6 @@ router.use('/scanner-admin', adminScannerRouter);
 router.use('/admin-scanner-history', adminScannerHistoryRouter);
 router.use('/timetable', timeTableRouter);
 router.use('/db', dbRouter);
+router.use('/subscribe', subscribeRouter);
 
 export default router;

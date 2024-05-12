@@ -71,6 +71,13 @@ router.get(
 );
 
 router.get(
+    '/users/without-company',
+    authMiddleware,
+    hasUserCompanyMiddleware,
+    publicCompanyController.getUsersWithoutCompany.bind(publicCompanyController)
+);
+
+router.get(
     '/employees/:id',
     authMiddleware,
     hasUserCompanyMiddleware,

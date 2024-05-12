@@ -191,4 +191,25 @@ export default class PublicCompanyController {
             next(error);
         }
     }
+
+    public async getUsersWithoutCompany(req: Request, res: Response, next: NextFunction) {
+        try {
+            const {  limit = '10', page = '1' } = req.query;
+            const offset = Number(page) * Number(limit) - Number(limit);
+            const paginatedUsers = await this.companyService.getUsersWithoutCompany(offset, Number(limit));
+
+            return res.status(200).json({
+                users: paginatedUsers.paginatedItems,
+                pagination: {
+                    totalItems: paginatedUsers.itemsCount,
+                    totalPages: paginatedUsers.totalPages,
+                    currentPage: page,
+                    itemsPerPage: limit
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    }
 }

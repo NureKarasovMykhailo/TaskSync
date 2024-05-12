@@ -71,8 +71,14 @@ export default class ScannerController {
     public async updateScanner(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
-            const { description, userId } = req.body;
+            let { description, userId } = (req.body);
+
+            if (userId === 'null') {
+                userId = null
+            }
+
             const dto: CreateOrUpdateScannerDto = new CreateOrUpdateScannerDto(description, userId, req.user.companyId);
+
             const updatedScannerDomain = await this.scannerService.updateScanner(dto, Number(id));
             const scanner = this.scannerMapper.toPersistenceModel(updatedScannerDomain);
             return res.status(200).json({ scanner: scanner });

@@ -1,3 +1,5 @@
+import UserDomainModel from "../User/User";
+
 export default class ScannerHistoryDomainModel {
     constructor(
         public readonly id: number,
@@ -6,6 +8,7 @@ export default class ScannerHistoryDomainModel {
         public readonly activeWorkedTime: number,
         public readonly userId: number | null,
         public readonly scannerId: number | null,
-        public readonly createdAt: Date
+        public readonly createdAt: Date,
+        public readonly user: UserDomainModel | null = null
 ) {}
 }

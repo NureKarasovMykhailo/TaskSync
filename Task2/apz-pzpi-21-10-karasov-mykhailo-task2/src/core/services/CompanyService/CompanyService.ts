@@ -202,6 +202,12 @@ export default class CompanyService {
         return user;
     }
 
+    public async getUsersWithoutCompany(offset: number, limit: number) {
+        const users = await this.userRepository.getUserWithoutCompany();
+        const pagination: PaginationClass<UserDomainModel> = new PaginationClass();
+        return pagination.paginateItems(users, offset, limit);
+    }
+
     private async isUserHasCompany(userId: number): Promise<boolean> {
         const candidateCompany = await this.companyRepository.getCompanyByUserId(userId);
         return candidateCompany !== null;
