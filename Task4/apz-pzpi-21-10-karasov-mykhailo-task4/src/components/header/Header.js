@@ -1,11 +1,14 @@
 import React, {useContext} from 'react';
 import {Button, Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom";
-import {AUTH_PAGE_PATH, MAIN_PAGE_PATH, PROFILE_PAGE_PATH} from "../../utils/consts";
+import {ADMIN_PAGE, AUTH_PAGE_PATH, MAIN_PAGE_PATH, PROFILE_PAGE_PATH} from "../../utils/consts";
 import './Header.css';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
 import LanguageSelector from "../LanguageSelector/LanguageSelector";
+import {hasUserRole} from "../../utils/hasUserRole";
+import {getRoleTitles} from "../../utils/getRoleTitles";
+import {RoleEnum} from "../../utils/enums/RoleEnum";
 
 const Header = observer(() => {
     const { userStore } = useContext(Context);
@@ -31,7 +34,12 @@ const Header = observer(() => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link href={MAIN_PAGE_PATH}>На головну</Nav.Link>
-                        <Nav.Link href="#link">Link</Nav.Link>
+                        <Nav.Link
+                            href={"#"}
+                        >
+                            Адмін
+                        </Nav.Link>
+
                         <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">

@@ -1,50 +1,47 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Form, InputGroup} from "react-bootstrap";
-import {fetchComplexities} from "../../../API/complexityApi";
-import {fetchEducations} from "../../../API/educationApi";
-import Loader from "../../UI/Loader/Loader";
+import {Button, Container, Form, InputGroup} from "react-bootstrap";
+import {fetchEducations} from "../../API/educationApi";
+import {fetchComplexities} from "../../API/complexityApi";
+import {getTimeInHours} from "../../utils/getTimeInHours";
 import {useTranslation} from "react-i18next";
-import {getTimeInSeconds} from "../../../utils/getTimeInSeconds";
-import {createActivity} from "../../../API/activityApi";
-import getFormattingErrors from "../../../utils/validationErrorsFormating";
-import {useNavigate} from "react-router-dom";
-import {ACTIVITIES_LIST_PAGE} from "../../../utils/consts";
+import {getTimeInSeconds} from "../../utils/getTimeInSeconds";
+import {updateActivityById} from "../../API/activityApi";
+import getFormattingErrors from "../../utils/validationErrorsFormating";
 
-const AddActivityForm = () => {
+const ActivityFormUpdate = ({ activity, onUpdate }) => {
     const { t } = useTranslation();
-    const navigation = useNavigate();
 
     const [isLoading, setIsLoading] = useState(true);
+    const [isEdit, setIsEdit] = useState(false);
+    const [educations, setEducation] = useState([{}]);
     const [complexities, setComplexities] = useState([{}]);
-    const [educations, setEducations] = useState([{}]);
     const [activityInfo, setActivityInfo] = useState({
-        activityTitle: '',
-        description: '',
-        requiredWorkerCount: '',
-        hoursShift: '',
-        minutesShift: '',
-        complexityId: complexities[0].complexityId,
-        educationId: educations[0].educationId
+        activityTitle: activity.activityTitle,
+        description: activity.description,
+        requiredWorkerCount: activity.requiredWorkerCount,
+        educationId: activity.educationId,
+        complexityId: activity.complexityId,
+        hoursShift: getTimeInHours(activity.timeShift).split(':')[0],
+        minutesShift: getTimeInHours(activity.timeShift).split(':')[1],
     });
     const [validationErrors, setValidationErrors] = useState({
         activityTitle: '',
         description: '',
         requiredWorkerCount: '',
-        timeShift: '',
+        educationId: '',
+        complexityId: '',
+        hoursShift: '',
+        minutesShift: '',
     });
+
 
     useEffect(() => {
         setIsLoading(true);
-        setValidationErrors({
-            activityTitle: '',
-            description: '',
-            requiredWorkerCount: '',
-            timeShift: '',
-        });
-        fetchComplexities(999, 1).then(responseComplexity => {
-            setComplexities(responseComplexity.complexities);
-            fetchEducations(999, 1).then(responseEducations => {
-                setEducations(responseEducations.educations);
+        setIsEdit(false);
+        fetchEducations().then(response => {
+            setEducation(response.educations);
+            fetchComplexities(999, 1).then(complexityResponse => {
+                setComplexities(complexityResponse.complexities);
                 setIsLoading(false);
             });
         });
@@ -57,11 +54,21 @@ const AddActivityForm = () => {
         });
     }
 
-    const handleCreateActivityClick = async () => {
-        try {
-            console.log(activityInfo.educationId)
-            console.log(activityInfo.complexityId)
+    const handleCancelClick = () => {
+        setActivityInfo({
+            activityTitle: activity.activityTitle,
+            description: activity.description,
+            requiredWorkerCount: activity.requiredWorkerCount,
+            educationId: activity.educationId,
+            complexityId: activity.complexityId,
+            hoursShift: getTimeInHours(activity.timeShift).split(':')[0],
+            minutesShift: getTimeInHours(activity.timeShift).split(':')[1],
+        });
+        setIsEdit(false);
+    }
 
+    const handleUpdate = async () => {
+        try {
             const formData = new FormData();
             formData.append('activityTitle', activityInfo.activityTitle);
             formData.append('description', activityInfo.description);
@@ -70,23 +77,25 @@ const AddActivityForm = () => {
             formData.append('complexityId', activityInfo.complexityId);
             formData.append('educationId', activityInfo.educationId);
 
-            const response = await createActivity(formData);
-            navigation(ACTIVITIES_LIST_PAGE);
+            await updateActivityById(activity.id, formData);
+            onUpdate(true);
         } catch (error) {
             if (error.response) {
-                if (error.response.status === 400) {
-                    const formattingErrors = getFormattingErrors(error.response.data.message)
-                    setValidationErrors({
-                        ...validationErrors,
-                        ...formattingErrors
-                    });
-                }
+                const formattingErrors = getFormattingErrors(error.response.data.message)
+                setValidationErrors({
+                    ...validationErrors,
+                    ...formattingErrors
+                });
             }
         }
     }
 
     return (
-        !isLoading ?
+        isLoading ?
+            <Container>
+
+            </Container>
+            :
             <Form>
                 <Form.Group className={"mb-3"} controlId={"activityTitle"}>
                     <Form.Label>Назва активності</Form.Label>
@@ -94,10 +103,10 @@ const AddActivityForm = () => {
                         <Form.Control
                             type={"text"}
                             name={"activityTitle"}
-                            placeholder={"Назва активності"}
                             value={activityInfo.activityTitle}
+                            disabled={!isEdit}
                             onChange={onChange}
-                            isInvalid={!!validationErrors.activityTitle}
+                            isInvalid={validationErrors.activityTitle}
                         />
                         <Form.Control.Feedback type="invalid">
                             {validationErrors.activityTitle}
@@ -113,8 +122,9 @@ const AddActivityForm = () => {
                             name={"description"}
                             placeholder={"Опис"}
                             value={activityInfo.description}
+                            disabled={!isEdit}
                             onChange={onChange}
-                            isInvalid={!!validationErrors.description}
+                            isInvalid={validationErrors.description}
                         />
                         <Form.Control.Feedback type="invalid">
                             {validationErrors.description}
@@ -130,11 +140,12 @@ const AddActivityForm = () => {
                             name={"requiredWorkerCount"}
                             placeholder={"Необхідна кількість робітників"}
                             value={activityInfo.requiredWorkerCount}
+                            disabled={!isEdit}
                             onChange={onChange}
-                            isInvalid={!!validationErrors.requiredWorkerCount}
+                            isInvalid={validationErrors.requiredWorkerCount}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {validationErrors.requiredWorkerCount}
+                            {validationErrors.description}
                         </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
@@ -148,8 +159,8 @@ const AddActivityForm = () => {
                             name={"hoursShift"}
                             placeholder={"Час робочої зміни"}
                             value={activityInfo.hoursShift}
+                            disabled={!isEdit}
                             onChange={onChange}
-                            isInvalid={!!validationErrors.timeShift}
                         />
                         <strong>год.</strong>
                         <Form.Control
@@ -158,11 +169,11 @@ const AddActivityForm = () => {
                             name={"minutesShift"}
                             placeholder={"Час робочої зміни"}
                             value={activityInfo.minutesShift}
+                            disabled={!isEdit}
                             onChange={onChange}
-                            isInvalid={!!validationErrors.timeShift}
                         />
                         <Form.Control.Feedback type="invalid">
-                            {validationErrors.timeShift}
+
                         </Form.Control.Feedback>
                         <strong>хв.</strong>
                     </InputGroup>
@@ -170,12 +181,13 @@ const AddActivityForm = () => {
 
                 <Form.Group className={"mb-3"} controlId={"educationId"}>
                     <Form.Label>Необхідна освіта</Form.Label>
-                    <Form.Select name={"educationId"} onChange={onChange} value={activityInfo.educationId}>
+                    <Form.Select name={"educationId"}  disabled={!isEdit} onChange={onChange} >
                         <option disabled selected>Необхідна освіта</option>
                         {educations.map(education => (
                             <option
                                 key={education.id}
                                 value={education.id}
+                                selected={education.id === activityInfo.educationId}
                             >
                                 {education.educationTitle}
                             </option>
@@ -185,7 +197,7 @@ const AddActivityForm = () => {
 
                 <Form.Group className={"mb-3"} controlId={"complexityId"}>
                     <Form.Label>Складність виокнання діяльності</Form.Label>
-                    <Form.Select name={"complexityId"} onChange={onChange} value={activityInfo.complexityId}>
+                    <Form.Select name={"complexityId"} disabled={!isEdit} onChange={onChange}>
                         <option disabled selected>Оберіть складність</option>
                         { complexities.map(complexity => (
                             <option
@@ -198,18 +210,36 @@ const AddActivityForm = () => {
                         )) }
                     </Form.Select>
                 </Form.Group>
-                <Button
-                    className={"w-50"}
-                    onClick={handleCreateActivityClick}
-                >
-                    {t('addButton')}
-                </Button>
+                <div className={"w-100 d-flex justify-content-end mt-3"}>
+                    {isEdit ?
+                        <div>
+                            <Button
+                                onClick={handleUpdate}
+                            >
+                                {t('acceptButton')}
+                            </Button>
+                            <Button
+                                variant={"danger"}
+                                className={"m-1"}
+                                onClick={handleCancelClick}
+                            >
+                                {t('cancelButton')}
+                            </Button>
+                        </div>
+                        :
+                        <div>
+                            <Button
+                                variant={"success"}
+                                className={"m-1"}
+                                onClick={() => setIsEdit(true)}
+                            >
+                                {t('editButton')}
+                            </Button>
+                        </div>
+                    }
+                </div>
             </Form>
-            :
-            <div className={"w-100 min-vh-100 d-flex align-items-center justify-content-center"}>
-                <Loader />
-            </div>
     );
 };
 
-export default AddActivityForm;
+export default ActivityFormUpdate;

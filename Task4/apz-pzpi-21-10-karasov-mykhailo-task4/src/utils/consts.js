@@ -14,3 +14,5 @@ export const COMPANY_SCANNERS = '/company/scanners';
 export const ONE_SCANNER_PAGE = '/company/scanner/:id';
 export const ACTIVITIES_LIST_PAGE = '/company/activities';
 export const ADD_ACTIVITY_PAGE = '/company/activity/add';
+export const ACTIVITY_PAGE = '/company/activity/:id';
+export const ADMIN_PAGE = '/admin'

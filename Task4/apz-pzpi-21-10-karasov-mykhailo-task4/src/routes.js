@@ -1,6 +1,6 @@
 import {
-    ACTIVITIES_LIST_PAGE, ADD_ACTIVITY_PAGE,
-    ADD_COMPANY, ADD_WORKER_ITEM_PAGE, ADD_WORKER_PAGE,
+    ACTIVITIES_LIST_PAGE, ACTIVITY_PAGE, ADD_ACTIVITY_PAGE,
+    ADD_COMPANY, ADD_WORKER_ITEM_PAGE, ADD_WORKER_PAGE, ADMIN_PAGE,
     AUTH_PAGE_PATH, COMPANY_SCANNERS, COMPANY_WORKER_ITEM_PAGE,
     MAIN_PAGE_PATH, ONE_SCANNER_PAGE,
     PROFILE_PAGE_PATH,
@@ -21,6 +21,8 @@ import ScannersPage from "./pages/ScannersPage";
 import OneScannerPage from "./pages/OneScannerPage";
 import ActivitiesPage from "./pages/ActivitiesPage";
 import AddActivityPage from "./pages/AddActivityPage";
+import ActivityPage from "./pages/ActivityPage";
+import AdminPage from "./pages/AdminPage";
 
 const defaultRoutes = [
     {
@@ -81,6 +83,14 @@ export const authRoutes = [
     {
         path: ADD_ACTIVITY_PAGE,
         Element: AddActivityPage
+    },
+    {
+        path: ACTIVITY_PAGE,
+        Element: ActivityPage
+    },
+    {
+        path: ADMIN_PAGE,
+        Element: AdminPage
     }
 ];
 
