@@ -3,10 +3,9 @@ import {Alert, Button, Card, Container, Form, FormGroup, FormLabel, InputGroup} 
 import '../styles/AddCompanyPage.css';
 import {createCompany} from "../API/companyApi";
 import {useTranslation} from "react-i18next";
-import LanguageSelector from "../components/LanguageSelector/LanguageSelector";
 import getFormattingErrors from "../utils/validationErrorsFormating";
 import {useNavigate} from "react-router-dom";
-import {MAIN_PAGE_PATH, PROFILE_PAGE_PATH} from "../utils/consts";
+import {MAIN_PAGE_PATH} from "../utils/consts";
 import Loader from "../components/UI/Loader/Loader";
 
 const AddCompanyPage = () => {

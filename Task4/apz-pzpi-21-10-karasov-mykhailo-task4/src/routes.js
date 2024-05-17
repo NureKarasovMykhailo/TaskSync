@@ -1,11 +1,23 @@
 import {
-    ACTIVITIES_LIST_PAGE, ACTIVITY_PAGE, ADD_ACTIVITY_PAGE,
-    ADD_COMPANY, ADD_WORKER_ITEM_PAGE, ADD_WORKER_PAGE, ADMIN_PAGE,
-    AUTH_PAGE_PATH, COMPANY_SCANNERS, COMPANY_WORKER_ITEM_PAGE,
-    MAIN_PAGE_PATH, ONE_SCANNER_PAGE,
+    ACTIVITIES_LIST_PAGE,
+    ACTIVITY_PAGE,
+    ADD_ACTIVITY_PAGE,
+    ADD_COMPANY,
+    ADD_COMPLEXITY_ADMIN,
+    ADD_WORKER_ITEM_PAGE,
+    ADD_WORKER_PAGE, ADMIN_ADD_COMPANY,
+    ADMIN_ADD_EDUCATION, ADMIN_ADD_USER_PAGE, ADMIN_COMPANY_PAGE,
+    ADMIN_COMPLEXITY_PAGE, ADMIN_EDUCATION_PAGE,
+    ADMIN_PAGE, ADMIN_USER_PAGE,
+    AUTH_PAGE_PATH,
+    COMPANY_SCANNERS,
+    COMPANY_WORKER_ITEM_PAGE,
+    MAIN_PAGE_PATH,
+    ONE_SCANNER_PAGE,
     PROFILE_PAGE_PATH,
     REGISTRATION_PAGE_PATH,
-    SUCCESS_SUBSCRIBE, WORKER_PAGE
+    SUCCESS_SUBSCRIBE,
+    WORKER_PAGE
 } from "./utils/consts";
 import AuthPage from "./pages/AuthPage";
 import RegistrationPage from "./pages/RegistrationPage";
@@ -23,6 +35,14 @@ import ActivitiesPage from "./pages/ActivitiesPage";
 import AddActivityPage from "./pages/AddActivityPage";
 import ActivityPage from "./pages/ActivityPage";
 import AdminPage from "./pages/AdminPage";
+import AddComplexityAdminPage from "./pages/AddComplexityAdminPage";
+import AdminOneComplexityPage from "./pages/AdminOneComplexityPage";
+import AdminAddEducation from "./pages/AdminAddEducation";
+import AdminOneEducation from "./pages/AdminOneEducation";
+import AdminAddUser from "./pages/AdminAddUser";
+import AdminOneUser from "./pages/AdminOneUser";
+import AdminAddCompany from "./pages/AdminAddCompany";
+import AdminOneCompany from "./pages/AdminOneCompany";
 
 const defaultRoutes = [
     {
@@ -88,10 +108,46 @@ export const authRoutes = [
         path: ACTIVITY_PAGE,
         Element: ActivityPage
     },
+
+];
+
+export const adminRoutes = [
     {
         path: ADMIN_PAGE,
         Element: AdminPage
+    },
+    {
+        path: ADD_COMPLEXITY_ADMIN,
+        Element: AddComplexityAdminPage
+    },
+    {
+        path: ADMIN_COMPLEXITY_PAGE,
+        Element: AdminOneComplexityPage
+    },
+    {
+        path: ADMIN_ADD_EDUCATION,
+        Element: AdminAddEducation
+    },
+    {
+        path: ADMIN_EDUCATION_PAGE,
+        Element: AdminOneEducation
+    },
+    {
+        path: ADMIN_ADD_USER_PAGE,
+        Element: AdminAddUser
+    },
+    {
+        path: ADMIN_USER_PAGE,
+        Element: AdminOneUser
+    },
+    {
+        path: ADMIN_ADD_COMPANY,
+        Element: AdminAddCompany
+    },
+    {
+        path: ADMIN_COMPANY_PAGE,
+        Element: AdminOneCompany
     }
-];
+]
 
 export default defaultRoutes;

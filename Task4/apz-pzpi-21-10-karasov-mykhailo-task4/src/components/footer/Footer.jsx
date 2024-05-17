@@ -19,14 +19,6 @@ const Footer = () => {
                         <p>@2024 платформа "TaskSync"</p>
                     </div>
                 </div>
-                <div className={"footer__content-links-container"}>
-                    <div className={"footer__content-link"}>
-                        <img src={"Assets/footer-telegram-icon.png"} alt={"Error while loading image"}/>
-                    </div>
-                    <div className={"footer__content-link"}>
-                        <img src={"Assets/footer-gmail-icon.png"} alt={"Error while loading image"}/>
-                    </div>
-                </div>
             </div>
         </div>
     );
