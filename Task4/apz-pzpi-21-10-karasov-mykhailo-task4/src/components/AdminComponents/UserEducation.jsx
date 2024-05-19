@@ -48,7 +48,7 @@ const UserEducation = ({ educations, userId, onUpdate }) => {
     return (
         !isLoading ?
             <div>
-                <strong>Освіти користувача</strong>
+                <strong>{t('userEducations')}</strong>
 
                 <ListGroup className={"mt-3"}>
                     {educations.map((education, index) => (

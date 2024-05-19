@@ -21,8 +21,8 @@ const ScannerItemList = ({ scanner, onDelete }) => {
     return (
         <Col md={3}>
             <Card className={"p-2 mb-3"}>
-                <p>ID сканеру: {scanner.id}</p>
-                <p>Опис: {scanner.description}</p>
+                <p>{t('scannerId')}: {scanner.id}</p>
+                <p>{t('description')}: {scanner.description}</p>
                 <hr />
                 <Button
                     className={"mb-2"}

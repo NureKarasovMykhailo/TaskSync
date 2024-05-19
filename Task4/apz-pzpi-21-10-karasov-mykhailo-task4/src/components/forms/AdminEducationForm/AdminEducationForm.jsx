@@ -51,11 +51,11 @@ const AdminEducationForm = () => {
     return (
         <Form>
             <Form.Group controlId={"educationTitle"} className={"mb-3 mt-3"}>
-                <Form.Label>Назва освіти</Form.Label>
+                <Form.Label>{t('educationName')}</Form.Label>
                 <InputGroup hasValidation>
                     <Form.Control
                         type={"text"}
-                        placeholder={"Назва освіти"}
+                        placeholder={t('educationName')}
                         name={"educationTitle"}
                         required
                         value={educationData.educationTitle}
@@ -68,11 +68,11 @@ const AdminEducationForm = () => {
                 </InputGroup>
             </Form.Group>
             <Form.Group controlId={"description"} className={"mb-3"}>
-                <Form.Label>Числовий коефіціент</Form.Label>
+                <Form.Label>{t('description')}</Form.Label>
                 <InputGroup hasValidation>
                     <Form.Control
                         as={"textarea"}
-                        placeholder={"Опис"}
+                        placeholder={t('description')}
                         name={"description"}
                         required
                         value={educationData.description}

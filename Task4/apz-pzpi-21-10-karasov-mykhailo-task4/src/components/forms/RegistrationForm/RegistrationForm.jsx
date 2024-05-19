@@ -7,8 +7,10 @@ import getFormattingErrors from "../../../utils/validationErrorsFormating";
 import {decodeToken} from "react-jwt";
 import {observer} from "mobx-react-lite";
 import {Context} from "../../../index";
+import {useTranslation} from "react-i18next";
 
 const RegistrationForm = observer(() => {
+    const { t } = useTranslation();
 
     const [registrationData, setRegistrationData] = useState({
         email: '',
@@ -85,7 +87,7 @@ const RegistrationForm = observer(() => {
                     <Form.Control
                         name={"email"}
                         type={"email"}
-                        placeholder={"Введіть email"}
+                        placeholder={"Email"}
                         onChange={onChange}
                         isInvalid={!!validationErrors.email}
                     />
@@ -96,12 +98,12 @@ const RegistrationForm = observer(() => {
             </Form.Group>
 
             <Form.Group className={"mb-3"} controlId={"password"}>
-                <Form.Label>Пароль</Form.Label>
+                <Form.Label>{t('password')}</Form.Label>
                 <InputGroup hasValidation>
                     <Form.Control
                         name={"password"}
                         type={"password"}
-                        placeholder={"Введіть пароль"}
+                        placeholder={t('password')}
                         onChange={onChange}
                         isInvalid={!!validationErrors.password}
                     />
@@ -112,21 +114,21 @@ const RegistrationForm = observer(() => {
             </Form.Group>
 
             <Form.Group className={"mb-3"} controlId={"passwordConfirm"}>
-                <Form.Label>Підтвердження паролю</Form.Label>
+                <Form.Label>{t('passwordConfirm')}</Form.Label>
                 <InputGroup hasValidation>
                     <Form.Control
                         name={"passwordConfirm"}
                         type={"password"}
-                        placeholder={"Підтвердіть пароль"}
+                        placeholder={t('passwordConfirm')}
                         onChange={onChange}
                     />
                 </InputGroup>
             </Form.Group>
 
             <Form.Group className={"mb-3"} controlId={"firstName"}>
-                <Form.Label>Ім'я</Form.Label>
+                <Form.Label>{t('name')}</Form.Label>
                 <InputGroup hasValidation>
-                    <Form.Control name={"firstName"} type={"text"} placeholder={"Введіть ім'я"} onChange={onChange} isInvalid={!!validationErrors.firstName}/>
+                    <Form.Control name={"firstName"} type={"text"} placeholder={t('name')} onChange={onChange} isInvalid={!!validationErrors.firstName}/>
                     <Form.Control.Feedback>
                         { validationErrors.firstName }
                     </Form.Control.Feedback>
@@ -134,9 +136,9 @@ const RegistrationForm = observer(() => {
             </Form.Group>
 
             <Form.Group className={"mb-3"} controlId={"secondName"}>
-                <Form.Label>Прізвище</Form.Label>
+                <Form.Label>{t('surname')}</Form.Label>
                 <InputGroup hasValidation>
-                    <Form.Control name={"secondName"} type={"text"} placeholder={"Введіть прізвище"} onChange={onChange} isInvalid={!!validationErrors.secondName}/>
+                    <Form.Control name={"secondName"} type={"text"} placeholder={t('surname')} onChange={onChange} isInvalid={!!validationErrors.secondName}/>
                     <Form.Control.Feedback>
                         { validationErrors.secondName }
                     </Form.Control.Feedback>
@@ -144,9 +146,9 @@ const RegistrationForm = observer(() => {
             </Form.Group>
 
             <Form.Group className={"mb-3"} controlId={"birthday"}>
-                <Form.Label>Дата народження</Form.Label>
+                <Form.Label>{t('birthday')}</Form.Label>
                 <InputGroup hasValidation>
-                    <Form.Control name={"birthday"} type={"date"} placeholder={"День народження"} onChange={onChange} isInvalid={!!validationErrors.birthday}/>
+                    <Form.Control name={"birthday"} type={"date"} placeholder={t('birthday')} onChange={onChange} isInvalid={!!validationErrors.birthday}/>
                     <Form.Control.Feedback>
                         { validationErrors.birthday }
                     </Form.Control.Feedback>
@@ -154,17 +156,17 @@ const RegistrationForm = observer(() => {
             </Form.Group>
 
             <Form.Group className={"mb-3"} controlId={"phoneNumber"}>
-                <Form.Label>Номер телефону</Form.Label>
-                <Form.Control name={"phoneNumber"} type={"text"} placeholder={"Введіть номер телефону"} onChange={onChange}/>
+                <Form.Label>{t('phoneNumber')}</Form.Label>
+                <Form.Control name={"phoneNumber"} type={"text"} placeholder={t('phoneNumber')} onChange={onChange}/>
             </Form.Group>
-            <p className={"mb-2"}>Вже маєте аккаунт? <Link to={AUTH_PAGE_PATH}>Авторизуйтеся!</Link></p>
+            <p className={"mb-2"}>{t('haveAccount')} <Link to={AUTH_PAGE_PATH}>{t('authorize!')}</Link></p>
             {error && (
                 <Alert variant={"danger"}>
                     { error }
                 </Alert>
             )}
             <Button variant={"primary"} className={"col-md-12 mb-3"} onClick={handleRegistration} type={"button"}>
-                Зареєструватися
+                {t('registrationButton')}
             </Button>
         </Form>
     );

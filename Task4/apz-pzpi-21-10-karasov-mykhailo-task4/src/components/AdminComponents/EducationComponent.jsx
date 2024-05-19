@@ -12,8 +12,8 @@ const EducationComponent = () => {
     const { t } = useTranslation();
     const tableHeaders = [
         'Id',
-        'Назва освіти',
-        'Опис'
+        t('educationName'),
+        t('description')
     ];
 
     const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +38,7 @@ const EducationComponent = () => {
             :
             <div className={"h-100"}>
                 <div>
-                    <h2>Освіти</h2>
+                    <h2>{t('educationName')}</h2>
                 </div>
                 <hr/>
                 <Table striped border hover>

@@ -88,12 +88,12 @@ const AdminAddScannerHistoryForm = () => {
             :
             <Form>
                 <Form.Group className={"mb-3"}>
-                    <Form.Label>Температура</Form.Label>
+                    <Form.Label>{t('temperature')}</Form.Label>
                     <InputGroup hasValidation>
                         <InputGroup.Text>°C</InputGroup.Text>
                         <Form.Control
                             type={'number'}
-                            placeholder={"Температура"}
+                            placeholder={t('temperature')}
                             name={"temperature"}
                             value={scannerHistoryData.temperature}
                             onChange={onChange}
@@ -107,12 +107,12 @@ const AdminAddScannerHistoryForm = () => {
                 </Form.Group>
 
                 <Form.Group className={"mb-3"}>
-                    <Form.Label>Пульс</Form.Label>
+                    <Form.Label>{t('pulse')}</Form.Label>
                     <InputGroup hasValidation>
                         <InputGroup.Text>уд.з.хв</InputGroup.Text>
                         <Form.Control
                             type={'number'}
-                            placeholder={"Пульс"}
+                            placeholder={t('pulse')}
                             name={"pulse"}
                             value={scannerHistoryData.pulse}
                             onChange={onChange}
@@ -126,23 +126,23 @@ const AdminAddScannerHistoryForm = () => {
                 </Form.Group>
 
                 <Form.Group className={"mb-3 w-50"} controlId={"requiredWorkerCount"}>
-                    <Form.Label>Час робочої зміни</Form.Label>
+                    <Form.Label>{t('timeShift')}</Form.Label>
                     <InputGroup className={"d-flex align-items-center"} hasValidation>
                         <Form.Control
                             className={"w-25 m-1"}
                             type={"number"}
                             name={"hours"}
-                            placeholder={"Час робочої зміни"}
+                            placeholder={t('timeShift')}
                             value={scannerHistoryData.hours}
                             onChange={onChange}
                             isInvalid={!!validationErrors.activeWorkedTime}
                         />
-                        <strong>год.</strong>
+                        <strong>{t('hours')}</strong>
                         <Form.Control
                             className={"w-25 m-1"}
                             type={"number"}
                             name={"minutes"}
-                            placeholder={"Час робочої зміни"}
+                            placeholder={t('timeShift')}
                             value={scannerHistoryData.minutes}
                             onChange={onChange}
                             isInvalid={!!validationErrors.activeWorkedTime}
@@ -150,14 +150,14 @@ const AdminAddScannerHistoryForm = () => {
                         <Form.Control.Feedback type="invalid">
                             {validationErrors.activeWorkedTime}
                         </Form.Control.Feedback>
-                        <strong>хв.</strong>
+                        <strong>{t('minutes')}</strong>
                     </InputGroup>
                 </Form.Group>
 
                 <Form.Group className={"mb-3"} controlId={"scannerId"}>
-                    <Form.Label>Id сканеру</Form.Label>
+                    <Form.Label>{t('scannerId')}</Form.Label>
                     <Form.Select name={"scannerId"} onChange={onChange} value={scannerHistoryData.scannerId}>
-                        <option disabled selected>Id сканеру</option>
+                        <option disabled selected>{t('scannerId')}</option>
                         {scanners.map(scanner => (
                             <option
                                 key={scanner.id}
@@ -170,9 +170,9 @@ const AdminAddScannerHistoryForm = () => {
                 </Form.Group>
 
                 <Form.Group className={"mb-3"} controlId={"userId"}>
-                    <Form.Label>Email користувача</Form.Label>
+                    <Form.Label>{t('userEmail')}</Form.Label>
                     <Form.Select name={"userId"} onChange={onChange} value={scannerHistoryData.userId}>
-                        <option disabled selected>Оберіть email користувача</option>
+                        <option disabled selected>{t('userEmail')}</option>
                         { users.map(user => (
                             <option
                                 key={user.id}

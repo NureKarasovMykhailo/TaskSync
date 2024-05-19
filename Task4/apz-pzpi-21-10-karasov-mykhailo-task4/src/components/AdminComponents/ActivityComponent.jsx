@@ -16,17 +16,17 @@ import {getTimeInHours} from "../../utils/getTimeInHours";
 import {formatTime} from "../../utils/formatTime";
 
 const ActivityComponent = () => {
+    const { t }  = useTranslation();
     const tableHeaders = [
-        'Id активності',
-        'Назва активності',
-        'Необхідна кількість робітників',
-        'Час робочої зміни',
-        'Складність',
-        'Необхідна освіта',
-        'Id компанії'
+        t('activityId'),
+        t('activityName'),
+        t('requiredWorkerCount'),
+        t('timeShift'),
+        t('complexity'),
+        t('requiredEducation'),
+        t('companyId')
     ];
 
-    const { t }  = useTranslation();
     const navigation = useNavigate();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -51,7 +51,7 @@ const ActivityComponent = () => {
             :
             <div className={"h-100"}>
                 <div>
-                    <h2>Аквтиновсті</h2>
+                    <h2>{t('activities')}</h2>
                 </div>
                 <hr/>
                 <Table striped border hover>

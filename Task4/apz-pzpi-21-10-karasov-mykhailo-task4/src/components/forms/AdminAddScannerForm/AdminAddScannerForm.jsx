@@ -77,9 +77,9 @@ const AdminAddScannerForm = () => {
                 </Form.Group>
 
                 <Form.Group className={"mb-3"} controlId={"companyId"}>
-                    <Form.Label>Назва компанії</Form.Label>
+                    <Form.Label>{t('companyName')}</Form.Label>
                     <Form.Select onChange={onChange} name={"companyId"} value={scannerData.companyId}>
-                        <option value={null}>Не закріплений за компанією</option>
+                        <option value={null}>{t('dontUnpinToUser')}</option>
                         { companies.map(company => (
                             <option value={company.id}>
                                 {company.companyName}
@@ -89,9 +89,9 @@ const AdminAddScannerForm = () => {
                 </Form.Group>
 
                 <Form.Group className={"mb-3"} controlId={"userId"}>
-                    <Form.Label>Email користувача</Form.Label>
+                    <Form.Label>{t('userEmail')}</Form.Label>
                     <Form.Select onChange={onChange} name={"userId"} value={scannerData.userId}>
-                        <option value={null}>Не закріплений за користувачем</option>
+                        <option value={null}>{t('dontUnpinToUser')}</option>
                         { users.map(user => (
                             <option value={user.id}>
                                 {user.email}

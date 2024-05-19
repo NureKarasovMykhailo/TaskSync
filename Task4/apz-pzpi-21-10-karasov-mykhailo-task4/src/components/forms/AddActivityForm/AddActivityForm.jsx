@@ -86,12 +86,12 @@ const AddActivityForm = () => {
         !isLoading ?
             <Form>
                 <Form.Group className={"mb-3"} controlId={"activityTitle"}>
-                    <Form.Label>Назва активності</Form.Label>
+                    <Form.Label>{t('activityName')}</Form.Label>
                     <InputGroup hasValidation>
                         <Form.Control
                             type={"text"}
                             name={"activityTitle"}
-                            placeholder={"Назва активності"}
+                            placeholder={t('activityName')}
                             value={activityInfo.activityTitle}
                             onChange={onChange}
                             isInvalid={!!validationErrors.activityTitle}
@@ -103,12 +103,12 @@ const AddActivityForm = () => {
                 </Form.Group>
 
                 <Form.Group  className={"mb-3"} controlId={"description"} >
-                    <Form.Label>Опис</Form.Label>
+                    <Form.Label>{t('description')}</Form.Label>
                     <InputGroup hasValidation>
                         <Form.Control
                             as={"textarea"}
                             name={"description"}
-                            placeholder={"Опис"}
+                            placeholder={t('description')}
                             value={activityInfo.description}
                             onChange={onChange}
                             isInvalid={!!validationErrors.description}
@@ -120,12 +120,12 @@ const AddActivityForm = () => {
                 </Form.Group>
 
                 <Form.Group className={"mb-3"} controlId={"requiredWorkerCount"}>
-                    <Form.Label>Необхідна кількість робітників</Form.Label>
+                    <Form.Label>{t('requiredWorkerCount')}</Form.Label>
                     <InputGroup hasValidation>
                         <Form.Control
                             type={"number"}
                             name={"requiredWorkerCount"}
-                            placeholder={"Необхідна кількість робітників"}
+                            placeholder={t('requiredWorkerCount')}
                             value={activityInfo.requiredWorkerCount}
                             onChange={onChange}
                             isInvalid={!!validationErrors.requiredWorkerCount}
@@ -137,23 +137,23 @@ const AddActivityForm = () => {
                 </Form.Group>
 
                 <Form.Group className={"mb-3 w-50"} controlId={"requiredWorkerCount"}>
-                    <Form.Label>Час робочої зміни</Form.Label>
+                    <Form.Label>{t('timeShift')}</Form.Label>
                     <InputGroup className={"d-flex align-items-center"} hasValidation>
                         <Form.Control
                             className={"w-25 m-1"}
                             type={"number"}
                             name={"hoursShift"}
-                            placeholder={"Час робочої зміни"}
+                            placeholder={t('timeShift')}
                             value={activityInfo.hoursShift}
                             onChange={onChange}
                             isInvalid={!!validationErrors.timeShift}
                         />
-                        <strong>год.</strong>
+                        <strong>{t('hours')}</strong>
                         <Form.Control
                             className={"w-25 m-1"}
                             type={"number"}
                             name={"minutesShift"}
-                            placeholder={"Час робочої зміни"}
+                            placeholder={t('timeShift')}
                             value={activityInfo.minutesShift}
                             onChange={onChange}
                             isInvalid={!!validationErrors.timeShift}
@@ -161,14 +161,14 @@ const AddActivityForm = () => {
                         <Form.Control.Feedback type="invalid">
                             {validationErrors.timeShift}
                         </Form.Control.Feedback>
-                        <strong>хв.</strong>
+                        <strong>{t('minutes')}</strong>
                     </InputGroup>
                 </Form.Group>
 
                 <Form.Group className={"mb-3"} controlId={"educationId"}>
-                    <Form.Label>Необхідна освіта</Form.Label>
+                    <Form.Label>{t('requiredEducation')}</Form.Label>
                     <Form.Select name={"educationId"} onChange={onChange} value={activityInfo.educationId}>
-                        <option disabled selected>Необхідна освіта</option>
+                        <option disabled selected>{t('requiredEducation')}</option>
                         {educations.map(education => (
                             <option
                                 key={education.id}
@@ -181,9 +181,9 @@ const AddActivityForm = () => {
                 </Form.Group>
 
                 <Form.Group className={"mb-3"} controlId={"complexityId"}>
-                    <Form.Label>Складність виокнання діяльності</Form.Label>
+                    <Form.Label>{t('complexity')}</Form.Label>
                     <Form.Select name={"complexityId"} onChange={onChange} value={activityInfo.complexityId}>
-                        <option disabled selected>Оберіть складність</option>
+                        <option disabled selected>{t('complexity')}</option>
                         { complexities.map(complexity => (
                             <option
                                 key={complexity.id}

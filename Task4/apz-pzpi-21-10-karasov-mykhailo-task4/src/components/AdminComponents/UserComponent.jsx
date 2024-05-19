@@ -8,14 +8,15 @@ import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 
 const UserComponent = () => {
+    const { t } = useTranslation();
+
     const tableHeaders = [
         'Id',
         'Email',
-        'Прізвище',
-        'Ім\'я'
+        t('surname'),
+        t('name')
     ];
 
-    const { t } = useTranslation();
     const navigation = useNavigate();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -41,7 +42,7 @@ const UserComponent = () => {
             :
             <div>
                 <div>
-                    <h2>Користувачі</h2>
+                    <h2>{t('users')}</h2>
                 </div>
                 <hr />
                 <Table striped border hover>

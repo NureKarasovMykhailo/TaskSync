@@ -58,7 +58,7 @@ const AddWorkerItemPage = () => {
                         onClick={handleAddClick}
                         disabled={!isAddButtonActive}
                     >
-                        {addButtonText}
+                        {t('addButton')}
                     </Button>
                 </div>
             </Container>

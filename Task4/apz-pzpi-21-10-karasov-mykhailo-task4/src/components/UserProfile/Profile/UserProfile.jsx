@@ -6,10 +6,12 @@ import { updateProfile} from "../../../API/userApi";
 import {useNavigate} from "react-router-dom";
 import {PROFILE_PAGE_PATH} from "../../../utils/consts";
 import {decodeToken} from "react-jwt";
+import {useTranslation} from "react-i18next";
 
 const UserProfile = observer(() => {
     const { userStore } = useContext(Context);
     const navigation = useNavigate();
+    const { t } = useTranslation();
 
     const [isUpdating, setIsUpdating] = useState(false);
     const [userInfo, setUserInfo] = useState({
@@ -58,7 +60,7 @@ const UserProfile = observer(() => {
 
     return (
         <Form className={"justify-content-center w-100 border p-4"}>
-            <div className={"d-flex justify-content-center p-3"}><h2 className={"align-items-center"}>Профіль</h2></div>
+            <div className={"d-flex justify-content-center p-3"}><h2 className={"align-items-center"}>{t('profile')}</h2></div>
             <div className={"d-flex  align-items-center justify-content-center"}>
                 <div>
                     <Form.Group className={"mb-3"}>
@@ -66,25 +68,25 @@ const UserProfile = observer(() => {
                         <Form.Control disabled={true} name={"email"} size={"lg"} type={"email"} value={userStore.user.email} onChange={handleChange}/>
                     </Form.Group>
                     <Form.Group className={"mb-3"}>
-                        <Form.Label>Ім'я</Form.Label>
+                        <Form.Label>{t('name')}</Form.Label>
                         <Form.Control disabled={!isUpdating} name={"firstName"} type={"text"} value={userInfo.firstName} onChange={handleChange}/>
                     </Form.Group>
                     <Form.Group className={"mb-3"}>
-                        <Form.Label>Прізвище</Form.Label>
+                        <Form.Label>{t('surname')}</Form.Label>
                         <Form.Control disabled={!isUpdating} name={"secondName"} type={"text"} value={userInfo.secondName} onChange={handleChange}/>
                     </Form.Group>
                     <Form.Group className={"mb-3"}>
-                        <Form.Label>Дата народження</Form.Label>
+                        <Form.Label>{t('birthday')}</Form.Label>
                         <Form.Control disabled={!isUpdating} name={"birthday"} type={"date"} value={userInfo.birthday} onChange={handleChange}/>
                     </Form.Group>
                     <Form.Group className={"mb-3"}>
-                        <Form.Label>Телефоний номер</Form.Label>
+                        <Form.Label>{t('phoneNumber')}</Form.Label>
                         <Form.Control disabled={!isUpdating} name={"phoneNumber"} type={"text"} value={userInfo.phoneNumber} onChange={handleChange}/>
                     </Form.Group>
                 </div>
                 <div className={"d-flex flex-column align-items-start"}>
                     <Form.Group className={"px-4"}>
-                        <Form.Label>Зображення профіля</Form.Label>
+                        <Form.Label>{t('profileImage')}</Form.Label>
                         <div className={"h-100 w-auto p-3"}>
                             <img
                                 alt={"Error while loading photo"}
@@ -99,14 +101,14 @@ const UserProfile = observer(() => {
             </div>
             <div className={"p-4 d-flex justify-content-end"}>
                 {isUpdating ?
-                    <Button variant={"success"} onClick={updateUser}>Прийняти</Button>
+                    <Button variant={"success"} onClick={updateUser}>{t('acceptButton')}</Button>
                     :
                     <Button
                         type={"button"}
                         variant={"primary"}
                         onClick={() => setIsUpdating(true)}
                     >
-                        Редагувати
+                        {t('editButton')}
                     </Button>
                 }
             </div>

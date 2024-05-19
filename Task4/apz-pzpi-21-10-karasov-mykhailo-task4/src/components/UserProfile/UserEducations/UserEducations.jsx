@@ -7,6 +7,7 @@ import Modal from "../../UI/Modal/Modal";
 import AddEducationModel from "../../Modal/AddEducationModal/AddEducationModel";
 import {fetchEducations} from "../../../API/educationApi";
 import EducationList from "./EducationList/EducationList";
+import {useTranslation} from "react-i18next";
 
 const UserEducations = () => {
     const [isAddEducationSuccess, setIsAddEducationSuccess] = useState(false);
@@ -15,6 +16,7 @@ const UserEducations = () => {
     const [userData, setUserData] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [educations, setEducations] = useState([{}]);
+    const { t } = useTranslation();
 
     useEffect(() => {
         fetchUserByToken().then(response => {
@@ -45,12 +47,12 @@ const UserEducations = () => {
         :
             <Container className={"border user-educations__container p-4 h-100"} >
                 <div className={"user-educations__header w-100 d-flex justify-content-center"}>
-                    <h2>Освіти</h2>
+                    <h2>{t('educations')}</h2>
                 </div>
                 <div className={"user-educations__list h-100 w-100 d-flex flex-column align-items-center justify-content-center"}>
                     { !userData.educations || userData.educations.length === 0 ?
                         <div className={"w-100 h-100 p-4 d-flex justify-content-center"}>
-                            <p>Освіти відсутні. Ви можете додати собі освіту, нижче.</p>
+                            <p>{t('noEducations')}</p>
                         </div>
                         :
                         <div className={"w-100 p-4 mb-4"}>
@@ -63,7 +65,7 @@ const UserEducations = () => {
                                 setIsModalActive(true);
                             }}
                         >
-                            Додати освіту
+                            {t('addEducationButton')}
                         </Button>
                     </div>
                 </div>

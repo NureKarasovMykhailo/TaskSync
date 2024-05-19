@@ -80,11 +80,11 @@ const AdminAddCompanyForm = () => {
     return (
         <Form>
             <Form.Group controlId={"companyName"} className={"mb-3"}>
-                <Form.Label>Назва компанії</Form.Label>
+                <Form.Label>{t('companyName')}</Form.Label>
                 <InputGroup hasValidation>
                     <Form.Control
                         type={"text"}
-                        placeholder={"Назва компанії"}
+                        placeholder={t('companyName')}
                         name={"companyName"}
                         required
                         value={companyData.companyName}
@@ -97,11 +97,11 @@ const AdminAddCompanyForm = () => {
                 </InputGroup>
             </Form.Group>
             <Form.Group controlId={"description"} className={"mb-3"}>
-                <Form.Label>Опис</Form.Label>
+                <Form.Label>{t('description')}</Form.Label>
                 <InputGroup hasValidation>
                     <Form.Control
                         as={"textarea"}
-                        placeholder={"Опис"}
+                        placeholder={t('description')}
                         name={"description"}
                         required
                         value={companyData.description}
@@ -115,7 +115,7 @@ const AdminAddCompanyForm = () => {
             </Form.Group>
 
             <Form.Group controlId={'companyImage'} className={"mb-3"}>
-                <Form.Label>Логотип компанії</Form.Label>
+                <Form.Label>{t('companyLogo')}</Form.Label>
                 <InputGroup hasValidation>
                     <Form.Control
                         type={"file"}
@@ -126,12 +126,12 @@ const AdminAddCompanyForm = () => {
             </Form.Group>
 
             <Form.Group controlId={"userId"} className={"mb-3"}>
-                <Form.Label>Id користувача</Form.Label>
+                <Form.Label>{t('userId')}</Form.Label>
                 <Form.Select
                     name={"userId"}
                     onChange={onChange}
                 >
-                    <option value={null}>Не закріплена за користувачем</option>
+                    <option value={null}>{t('dontUnpinToUser')}</option>
                     { users.map(user => (
                         <option
                             key={user.id}

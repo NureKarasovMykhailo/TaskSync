@@ -9,9 +9,11 @@ import {RoleEnum} from "../../utils/enums/RoleEnum";
 import {deleteActivity} from "../../API/activityApi";
 import {useNavigate} from "react-router-dom";
 import {ACTIVITY_PAGE} from "../../utils/consts";
+import {useTranslation} from "react-i18next";
 
 const ActivityListItem = observer(({ activity, onDelete }) => {
     const { userStore } = useContext(Context);
+    const { t } = useTranslation();
     const navigation = useNavigate();
 
     const handleDeleteActivity = async (activityId) => {
@@ -31,12 +33,12 @@ const ActivityListItem = observer(({ activity, onDelete }) => {
                 </div>
                 <hr />
                 <div className={"mt-2 w-100"}>
-                    <p><strong>Опис:</strong> {activity.description}</p>
+                    <p><strong>{t('description')}:</strong> {activity.description}</p>
                 </div>
                 <div>
-                    <p><strong>Необхідна освіта:</strong> {activity.education.educationTitle}</p>
-                    <p><strong>Час робочої зміни:</strong> {formatTime(activity.timeShift)} </p>
-                    <p><strong>Необхідна кількість робочого персоналу:</strong> {activity.requiredWorkerCount} </p>
+                    <p><strong>{t('requiredEducation')}:</strong> {activity.education.educationTitle}</p>
+                    <p><strong>{t('timeShift')}:</strong> {formatTime(activity.timeShift)} </p>
+                    <p><strong>{t('requiredWorkerCount')}:</strong> {activity.requiredWorkerCount} </p>
                 </div>
                 < hr/>
                 <div className={"mt-3 w-100 d-flex flex-column align-items-center"}>
@@ -45,7 +47,7 @@ const ActivityListItem = observer(({ activity, onDelete }) => {
                         variant={"outline-primary"}
                         onClick={() => navigation(ACTIVITY_PAGE.replace(':id', activity.id))}
                     >
-                        Переглянути
+                        {t('seeDetailButton')}
                     </Button>
                     { hasUserRole(getRoleTitles(userStore.user.roles), [RoleEnum.SUBSCRIBER, RoleEnum.COMPANY_ADMIN]) &&
                         <Button
@@ -53,7 +55,7 @@ const ActivityListItem = observer(({ activity, onDelete }) => {
                             variant={"outline-danger"}
                             onClick={() => handleDeleteActivity(activity.id)}
                         >
-                            Видалити
+                            {t('deleteButton')}
                         </Button>
                     }
                 </div>

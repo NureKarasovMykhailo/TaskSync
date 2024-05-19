@@ -56,11 +56,11 @@ const AdminAddComplexity = () => {
     return (
         <Form>
             <Form.Group controlId={"complexityTitle"} className={"mb-3"}>
-                <Form.Label>Назва складності</Form.Label>
+                <Form.Label>{t('complexityName')}</Form.Label>
                 <InputGroup hasValidation>
                     <Form.Control
                         type={"text"}
-                        placeholder={"Назва складності"}
+                        placeholder={t('complexityName')}
                         name={"complexityTitle"}
                         required
                         value={complexityData.complexityTitle}
@@ -73,11 +73,11 @@ const AdminAddComplexity = () => {
                 </InputGroup>
             </Form.Group>
             <Form.Group controlId={"evaluation"} className={"mb-3"}>
-                <Form.Label>Числовий коефіціент</Form.Label>
+                <Form.Label>{t('numericalCoefficient')}</Form.Label>
                 <InputGroup hasValidation>
                     <Form.Control
                         type={"number"}
-                        placeholder={"Числовий коефіцієнт"}
+                        placeholder={t('numericalCoefficient')}
                         name={"evaluation"}
                         required
                         value={complexityData.evaluation}

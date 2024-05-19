@@ -33,10 +33,10 @@ const SetWorkerAdmin = ({ activityId, onUpdate }) => {
     return (
         <Form>
             <Form.Group className={"p-1"}>
-                <Form.Label>Email користувача</Form.Label>
+                <Form.Label>Email</Form.Label>
                 <Form.Control
                     type={"email"}
-                    placeholder={"Email користувача"}
+                    placeholder={"Email"}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />

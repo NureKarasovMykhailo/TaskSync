@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
-import {deleteEducationById, fetchEducationById, updateEducation} from "../API/educationApi";
-import {Alert, Button, Container, Form, InputGroup} from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteEducationById, fetchEducationById, updateEducation } from "../API/educationApi";
+import { Alert, Button, Container, Form, InputGroup } from "react-bootstrap";
 import Loader from "../components/UI/Loader/Loader";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import getFormattingErrors from "../utils/validationErrorsFormating";
-import {ADMIN_PAGE} from "../utils/consts";
+import { ADMIN_PAGE } from "../utils/consts";
 
 const AdminOneEducation = () => {
     const { t } = useTranslation();
@@ -94,16 +94,16 @@ const AdminOneEducation = () => {
             :
             <Container className={"w-100 min-vh-100 mt-3 mb-3 p-3 border"}>
                 <div>
-                    <h2>Освіта</h2>
+                    <h2>{t('education')}</h2>
                 </div>
 
                 <Form>
                     <Form.Group controlId={"educationTitle"} className={"mb-3"}>
-                        <Form.Label>Назва освіти</Form.Label>
+                        <Form.Label>{t('educationTitle')}</Form.Label>
                         <InputGroup hasValidation>
                             <Form.Control
                                 type={"text"}
-                                placeholder={"Назва освіти"}
+                                placeholder={t('educationTitlePlaceholder')}
                                 name={"educationTitle"}
                                 required
                                 value={educationPreview.educationTitle}
@@ -112,17 +112,17 @@ const AdminOneEducation = () => {
                                 disabled={!isEdit}
                             />
                             <Form.Control.Feedback type={"invalid"}>
-                                { validationErrors.educationTitle }
+                                {validationErrors.educationTitle}
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
                     <Form.Group controlId={"description"} className={"mb-3"}>
-                        <Form.Label>Опис</Form.Label>
+                        <Form.Label>{t('description')}</Form.Label>
                         <InputGroup hasValidation>
                             <Form.Control
                                 as={"textarea"}
-                                placeholder={"Опис"}
-                                name={"evaluation"}
+                                placeholder={t('descriptionPlaceholder')}
+                                name={"description"}
                                 required
                                 value={educationPreview.description}
                                 onChange={handleChange}
@@ -130,13 +130,13 @@ const AdminOneEducation = () => {
                                 disabled={!isEdit}
                             />
                             <Form.Control.Feedback type={"invalid"}>
-                                { validationErrors.description }
+                                {validationErrors.description}
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
-                    { error &&
+                    {error &&
                         <Alert variant={"danger"}>
-                            { error }
+                            {error}
                         </Alert>
                     }
 

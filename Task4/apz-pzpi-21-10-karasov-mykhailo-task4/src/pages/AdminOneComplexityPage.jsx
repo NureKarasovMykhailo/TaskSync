@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
-import {Alert, Button, Container, Form, InputGroup} from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import { Alert, Button, Container, Form, InputGroup } from "react-bootstrap";
 import Loader from "../components/UI/Loader/Loader";
-import {deleteComplexity, fetchComplexityById, updateComplexity} from "../API/complexityApi";
-import {useTranslation} from "react-i18next";
+import { deleteComplexity, fetchComplexityById, updateComplexity } from "../API/complexityApi";
+import { useTranslation } from "react-i18next";
 import getFormattingErrors from "../utils/validationErrorsFormating";
-import {ADMIN_PAGE} from "../utils/consts";
+import { ADMIN_PAGE } from "../utils/consts";
 
 const AdminOneComplexityPage = () => {
     const { id } = useParams();
@@ -22,7 +22,7 @@ const AdminOneComplexityPage = () => {
     const [validationErrors, setValidationErrors] = useState({
         complexityTitle: '',
         evaluation: ''
-    })
+    });
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -42,14 +42,14 @@ const AdminOneComplexityPage = () => {
             ...complexityPreview,
             [e.target.name]: e.target.value
         });
-    }
+    };
 
     const handleCancelClick = () => {
         setIsEdit(false);
         setComplexityPreview({
             ...complexity
         });
-    }
+    };
 
     const handleUpdateClick = async () => {
         try {
@@ -75,7 +75,7 @@ const AdminOneComplexityPage = () => {
                 }
             }
         }
-    }
+    };
 
     const handleDeleteClick = async () => {
         try {
@@ -84,8 +84,7 @@ const AdminOneComplexityPage = () => {
         } catch (error) {
             console.log(error);
         }
-    }
-
+    };
 
     return (
         isLoading ?
@@ -95,15 +94,15 @@ const AdminOneComplexityPage = () => {
             :
             <Container className={"w-100 min-vh-100 border mt-3 mb-3 p-3"}>
                 <div>
-                    <h2>Складність</h2>
+                    <h2>{t('complexity')}</h2>
                 </div>
                 <Form>
                     <Form.Group controlId={"complexityTitle"} className={"mb-3"}>
-                        <Form.Label>Назва складності</Form.Label>
+                        <Form.Label>{t('complexityTitle')}</Form.Label>
                         <InputGroup hasValidation>
                             <Form.Control
                                 type={"text"}
-                                placeholder={"Назва складності"}
+                                placeholder={t('complexityTitlePlaceholder')}
                                 name={"complexityTitle"}
                                 required
                                 value={complexityPreview.complexityTitle}
@@ -112,16 +111,16 @@ const AdminOneComplexityPage = () => {
                                 disabled={!isEdit}
                             />
                             <Form.Control.Feedback type={"invalid"}>
-                                { validationErrors.complexityTitle }
+                                {validationErrors.complexityTitle}
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
                     <Form.Group controlId={"evaluation"} className={"mb-3"}>
-                        <Form.Label>Числовий коефіціент</Form.Label>
+                        <Form.Label>{t('evaluation')}</Form.Label>
                         <InputGroup hasValidation>
                             <Form.Control
                                 type={"number"}
-                                placeholder={"Числовий коефіцієнт"}
+                                placeholder={t('evaluationPlaceholder')}
                                 name={"evaluation"}
                                 required
                                 value={complexityPreview.evaluation}
@@ -130,13 +129,13 @@ const AdminOneComplexityPage = () => {
                                 disabled={!isEdit}
                             />
                             <Form.Control.Feedback type={"invalid"}>
-                                { validationErrors.evaluation }
+                                {validationErrors.evaluation}
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
-                    { error &&
+                    {error &&
                         <Alert variant={"danger"}>
-                            { error }
+                            {error}
                         </Alert>
                     }
 

@@ -116,11 +116,11 @@ const AdminAddUserForm = () => {
                </Form.Group>
 
                <Form.Group controlId={"firstName"} className={"mb-3"}>
-                   <Form.Label>Ім'я</Form.Label>
+                   <Form.Label>{t('name')}</Form.Label>
                    <InputGroup hasValidation>
                        <Form.Control
                            type={"text"}
-                           placeholder={"Ім\'я"}
+                           placeholder={t('name')}
                            name={"firstName"}
                            required
                            value={userData.firstName}
@@ -134,11 +134,11 @@ const AdminAddUserForm = () => {
                </Form.Group>
 
                <Form.Group controlId={"secondName"} className={"mb-3"}>
-                   <Form.Label>Прізвище</Form.Label>
+                   <Form.Label>{t('surname')}</Form.Label>
                    <InputGroup hasValidation>
                        <Form.Control
                            type={"text"}
-                           placeholder={"Прізвище"}
+                           placeholder={t('surname')}
                            name={"secondName"}
                            required
                            value={userData.secondName}
@@ -152,11 +152,11 @@ const AdminAddUserForm = () => {
                </Form.Group>
 
                <Form.Group controlId={"password"} className={"mb-3"}>
-                   <Form.Label>Пароль</Form.Label>
+                   <Form.Label>{t('password')}</Form.Label>
                    <InputGroup hasValidation>
                        <Form.Control
                            type={"password"}
-                           placeholder={"Пароль"}
+                           placeholder={t('password')}
                            name={"password"}
                            required
                            value={userData.password}
@@ -170,7 +170,7 @@ const AdminAddUserForm = () => {
                </Form.Group>
 
                <Form.Group controlId={"birthday"} className={"mb-3"}>
-                   <Form.Label>Дата народження</Form.Label>
+                   <Form.Label>{t('birthday')}</Form.Label>
                    <InputGroup hasValidation>
                        <Form.Control
                            type={"date"}
@@ -187,12 +187,12 @@ const AdminAddUserForm = () => {
                </Form.Group>
 
                <Form.Group controlId={"phoneNumber"} className={"mb-3"}>
-                   <Form.Label>Телефоний номер</Form.Label>
+                   <Form.Label>{t('phoneNumber')}</Form.Label>
                    <InputGroup hasValidation>
                        <Form.Control
                            type={"text"}
                            name={"phoneNumber"}
-                           placeholder={"Телефоний номер"}
+                           placeholder={t('phoneNumber')}
                            required
                            value={userData.phoneNumber}
                            onChange={onChange}
@@ -205,12 +205,12 @@ const AdminAddUserForm = () => {
                </Form.Group>
 
                <FormGroup className={"mb-3"} controlId={"userImage"}>
-                   <FormLabel>Аватар користувача</FormLabel>
+                   <FormLabel>{t('userImage')}</FormLabel>
                    <Form.Control type={"file"} name={"userImage"} onChange={onChange} />
                </FormGroup>
 
                <Form.Group controlId={"companyId"} className={"mb-3"}>
-                   <Form.Label>Id компанії</Form.Label>
+                   <Form.Label>{t('companyId')}</Form.Label>
                    <InputGroup hasValidation>
                        <Form.Select
                            name={"companyId"}
@@ -221,7 +221,7 @@ const AdminAddUserForm = () => {
                            <option
                                value={null}
                            >
-                               Не закріплений за компанією
+                               {t('dontPinToCompany')}
                            </option>
                            { companies.map(company => (
                                <option

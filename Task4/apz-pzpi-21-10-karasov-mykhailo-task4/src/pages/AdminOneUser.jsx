@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
-import {Alert, Button, Container, Form, FormGroup, FormLabel, InputGroup, ListGroup} from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import { Alert, Button, Container, Form, FormGroup, FormLabel, InputGroup, ListGroup } from "react-bootstrap";
 import Loader from "../components/UI/Loader/Loader";
-import {deleteUser, fetchUserById, updateUser} from "../API/adminUserApi";
-import {useTranslation} from "react-i18next";
-import {fetchAdminCompany} from "../API/adminCompany";
+import { deleteUser, fetchUserById, updateUser } from "../API/adminUserApi";
+import { useTranslation } from "react-i18next";
+import { fetchAdminCompany } from "../API/adminCompany";
 import getFormattingErrors from "../utils/validationErrorsFormating";
-import {ADMIN_PAGE} from "../utils/consts";
-import {getRoleTitles} from "../utils/getRoleTitles";
-import {addRole, deleteRole} from "../API/userApi";
-import {RoleEnum} from "../utils/enums/RoleEnum";
+import { ADMIN_PAGE } from "../utils/consts";
+import { getRoleTitles } from "../utils/getRoleTitles";
+import { addRole, deleteRole } from "../API/userApi";
+import { RoleEnum } from "../utils/enums/RoleEnum";
 import UserEducation from "../components/AdminComponents/UserEducation";
 
 const AdminOneUser = () => {
@@ -54,7 +54,7 @@ const AdminOneUser = () => {
         setError('');
         fetchUserById(id).then(response => {
             setUserPreview({
-               ...response.user
+                ...response.user
             });
             setUser(response.user);
             setRoles(response.role);
@@ -182,15 +182,15 @@ const AdminOneUser = () => {
             :
             <Container className={"w-100 min-vh-100 mt-3 mb-3 border p-3"}>
                 <div>
-                    <h2>Користувач</h2>
+                    <h2>{t('user')}</h2>
                 </div>
                 <Form className={"mt-3"}>
                     <Form.Group controlId={"email"} className={"mb-3"}>
-                        <Form.Label>Email</Form.Label>
+                        <Form.Label>{t('email')}</Form.Label>
                         <InputGroup hasValidation>
                             <Form.Control
                                 type={"email"}
-                                placeholder={"Email"}
+                                placeholder={t('emailPlaceholder')}
                                 name={"email"}
                                 required
                                 value={userPreview.email}
@@ -205,11 +205,11 @@ const AdminOneUser = () => {
                     </Form.Group>
 
                     <Form.Group controlId={"firstName"} className={"mb-3"}>
-                        <Form.Label>Ім'я</Form.Label>
+                        <Form.Label>{t('firstName')}</Form.Label>
                         <InputGroup hasValidation>
                             <Form.Control
                                 type={"text"}
-                                placeholder={"Ім\'я"}
+                                placeholder={t('firstNamePlaceholder')}
                                 name={"firstName"}
                                 required
                                 value={userPreview.firstName}
@@ -224,11 +224,11 @@ const AdminOneUser = () => {
                     </Form.Group>
 
                     <Form.Group controlId={"secondName"} className={"mb-3"}>
-                        <Form.Label>Прізвище</Form.Label>
+                        <Form.Label>{t('secondName')}</Form.Label>
                         <InputGroup hasValidation>
                             <Form.Control
                                 type={"text"}
-                                placeholder={"Прізвище"}
+                                placeholder={t('secondNamePlaceholder')}
                                 name={"secondName"}
                                 required
                                 value={userPreview.secondName}
@@ -243,7 +243,7 @@ const AdminOneUser = () => {
                     </Form.Group>
 
                     <Form.Group controlId={"birthday"} className={"mb-3"}>
-                        <Form.Label>Дата народження</Form.Label>
+                        <Form.Label>{t('birthday')}</Form.Label>
                         <InputGroup hasValidation>
                             <Form.Control
                                 type={"date"}
@@ -261,12 +261,12 @@ const AdminOneUser = () => {
                     </Form.Group>
 
                     <Form.Group controlId={"phoneNumber"} className={"mb-3"}>
-                        <Form.Label>Телефоний номер</Form.Label>
+                        <Form.Label>{t('phoneNumber')}</Form.Label>
                         <InputGroup hasValidation>
                             <Form.Control
                                 type={"text"}
                                 name={"phoneNumber"}
-                                placeholder={"Телефоний номер"}
+                                placeholder={t('phoneNumberPlaceholder')}
                                 required
                                 value={userPreview.phoneNumber}
                                 onChange={onChange}
@@ -280,19 +280,19 @@ const AdminOneUser = () => {
                     </Form.Group>
 
                     <FormGroup className={"mb-3"} controlId={"userImage"}>
-                        <FormLabel>Аватар користувача</FormLabel>
+                        <FormLabel>{t('userImage')}</FormLabel>
                         <div className={"p-3"}>
                             {imagePreview ?
                                 <img
                                     style={{maxHeight: "250px", width: "auto", borderRadius: "5px"}}
                                     src={imagePreview}
-                                    alt={"Error while loading image"}
+                                    alt={t('errorImage')}
                                 />
                                 :
                                 <img
                                     style={{maxHeight: "250px", width: "auto", borderRadius: "5px"}}
                                     src={process.env.REACT_APP_API_URL + user.userImage}
-                                    alt="Error while loading image"
+                                    alt={t('errorImage')}
                                 />
                             }
                         </div>
@@ -300,7 +300,7 @@ const AdminOneUser = () => {
                     </FormGroup>
 
                     <Form.Group controlId={"companyId"} className={"mb-3"}>
-                        <Form.Label>Id компанії</Form.Label>
+                        <Form.Label>{t('companyId')}</Form.Label>
                         <InputGroup hasValidation>
                             <Form.Select
                                 name={"companyId"}
@@ -312,7 +312,7 @@ const AdminOneUser = () => {
                                 <option
                                     value={null}
                                 >
-                                    Не закріплений за компанією
+                                    {t('notAssignedCompany')}
                                 </option>
                                 { companies.map(company => (
                                     <option
@@ -401,9 +401,9 @@ const AdminOneUser = () => {
                                     value={selectedRole}
                                     onChange={(e) => setSelectedRole(e.target.value)}
                                 >
-                                    <option value={RoleEnum.SUBSCRIBER}>Підписник</option>
-                                    <option value={RoleEnum.COMPANY_ADMIN}>Адміністратор компанії</option>
-                                    <option value={RoleEnum.ADMIN}>Системний адміністратор</option>
+                                    <option value={RoleEnum.SUBSCRIBER}>{t('subscriber')}</option>
+                                    <option value={RoleEnum.COMPANY_ADMIN}>{t('companyAdmin')}</option>
+                                    <option value={RoleEnum.ADMIN}>{t('systemAdmin')}</option>
                                 </Form.Select>
                                 <div className={"w-100 mt-1"}>
                                     <Button
@@ -421,16 +421,15 @@ const AdminOneUser = () => {
                                 </div>
                             </div>
                             :
-                            <Button
-                                className={"w-25"}
-                                onClick={() => setIsRoleAdding(true)}
+                            <Button                                className={"w-25"}
+                                                                   onClick={() => setIsRoleAdding(true)}
                             >
                                 {t('addButton')}
                             </Button>
                         }
                     </div>
                     <hr />
-                    < UserEducation educations={educations} userId={id} onUpdate={onDeleteEducation}/>
+                    <UserEducation educations={educations} userId={id} onUpdate={onDeleteEducation}/>
                 </div>
 
             </Container>
@@ -438,3 +437,5 @@ const AdminOneUser = () => {
 };
 
 export default AdminOneUser;
+
+

@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
-import {fetchScanners} from "../API/adminScannerApi";
-import {fetchUsers} from "../API/adminUserApi";
-import {deleteScannerHistory, fetchScannerHistoryById, updateScannerHistory} from "../API/adminScannerHistoryApi";
-import {getTimeInHours} from "../utils/getTimeInHours";
-import {Alert, Button, Container, Form, InputGroup} from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchScanners } from "../API/adminScannerApi";
+import { fetchUsers } from "../API/adminUserApi";
+import { deleteScannerHistory, fetchScannerHistoryById, updateScannerHistory } from "../API/adminScannerHistoryApi";
+import { getTimeInHours } from "../utils/getTimeInHours";
+import { Alert, Button, Container, Form, InputGroup } from "react-bootstrap";
 import Loader from "../components/UI/Loader/Loader";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import getFormattingErrors from "../utils/validationErrorsFormating";
-import {getTimeInSeconds} from "../utils/getTimeInSeconds";
-import {ADMIN_PAGE} from "../utils/consts";
+import { getTimeInSeconds } from "../utils/getTimeInSeconds";
+import { ADMIN_PAGE } from "../utils/consts";
 
 const AdminOneScannerHistory = () => {
     const { id } = useParams();
@@ -125,17 +125,17 @@ const AdminOneScannerHistory = () => {
             :
             <Container className={"min-vh-100 mb-3 mt-3 border p-3"}>
                 <div>
-                    <h2>Історія датчика</h2>
+                    <h2>{t('scannerHistoryTitle')}</h2>
                 </div>
                 <hr />
                 <Form>
                     <Form.Group className={"mb-3"}>
-                        <Form.Label>Температура</Form.Label>
+                        <Form.Label>{t('temperatureLabel')}</Form.Label>
                         <InputGroup hasValidation>
                             <InputGroup.Text>°C</InputGroup.Text>
                             <Form.Control
                                 type={'number'}
-                                placeholder={"Температура"}
+                                placeholder={t('temperaturePlaceholder')}
                                 name={"temperature"}
                                 value={scannerHistoryPreview.temperature}
                                 onChange={onChange}
@@ -150,12 +150,12 @@ const AdminOneScannerHistory = () => {
                     </Form.Group>
 
                     <Form.Group className={"mb-3"}>
-                        <Form.Label>Пульс</Form.Label>
+                        <Form.Label>{t('pulseLabel')}</Form.Label>
                         <InputGroup hasValidation>
-                            <InputGroup.Text>уд.з.хв</InputGroup.Text>
+                            <InputGroup.Text>{t('pulseUnit')}</InputGroup.Text>
                             <Form.Control
                                 type={'number'}
-                                placeholder={"Пульс"}
+                                placeholder={t('pulsePlaceholder')}
                                 name={"pulse"}
                                 value={scannerHistoryPreview.pulse}
                                 onChange={onChange}
@@ -170,24 +170,24 @@ const AdminOneScannerHistory = () => {
                     </Form.Group>
 
                     <Form.Group className={"mb-3 w-50"} controlId={"requiredWorkerCount"}>
-                        <Form.Label>Час робочої зміни</Form.Label>
+                        <Form.Label>{t('workTimeLabel')}</Form.Label>
                         <InputGroup className={"d-flex align-items-center"} hasValidation>
                             <Form.Control
                                 className={"w-25 m-1"}
                                 type={"number"}
                                 name={"hours"}
-                                placeholder={"Час робочої зміни"}
+                                placeholder={t('hoursPlaceholder')}
                                 value={scannerHistoryPreview.hours}
                                 onChange={onChange}
                                 isInvalid={!!validationErrors.activeWorkedTime}
                                 disabled={!isEditing}
                             />
-                            <strong>год.</strong>
+                            <strong>{t('hoursUnit')}</strong>
                             <Form.Control
                                 className={"w-25 m-1"}
                                 type={"number"}
                                 name={"minutes"}
-                                placeholder={"Час робочої зміни"}
+                                placeholder={t('minutesPlaceholder')}
                                 value={scannerHistoryPreview.minutes}
                                 onChange={onChange}
                                 isInvalid={!!validationErrors.activeWorkedTime}
@@ -196,14 +196,14 @@ const AdminOneScannerHistory = () => {
                             <Form.Control.Feedback type="invalid">
                                 {validationErrors.activeWorkedTime}
                             </Form.Control.Feedback>
-                            <strong>хв.</strong>
+                            <strong>{t('minutesUnit')}</strong>
                         </InputGroup>
                     </Form.Group>
 
                     <Form.Group className={"mb-3"} controlId={"scannerId"}>
-                        <Form.Label>Id сканеру</Form.Label>
+                        <Form.Label>{t('scannerIdLabel')}</Form.Label>
                         <Form.Select name={"scannerId"} onChange={onChange} value={scannerHistoryPreview.scannerId} disabled={!isEditing}>
-                            <option disabled selected>Id сканеру</option>
+                            <option disabled selected>{t('selectScannerId')}</option>
                             {scanners.map(scanner => (
                                 <option
                                     key={scanner.id}
@@ -216,9 +216,9 @@ const AdminOneScannerHistory = () => {
                     </Form.Group>
 
                     <Form.Group className={"mb-3"} controlId={"userId"}>
-                        <Form.Label>Email користувача</Form.Label>
+                        <Form.Label>{t('userEmailLabel')}</Form.Label>
                         <Form.Select name={"userId"} onChange={onChange} value={scannerHistoryPreview.userId} disabled={!isEditing}>
-                            <option disabled selected>Оберіть email користувача</option>
+                            <option disabled selected>{t('selectUserEmail')}</option>
                             { users.map(user => (
                                 <option
                                     key={user.id}
@@ -274,3 +274,4 @@ const AdminOneScannerHistory = () => {
 };
 
 export default AdminOneScannerHistory;
+

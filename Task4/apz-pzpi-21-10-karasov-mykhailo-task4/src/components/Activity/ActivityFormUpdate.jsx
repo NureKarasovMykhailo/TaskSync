@@ -98,7 +98,7 @@ const ActivityFormUpdate = ({ activity, onUpdate }) => {
             :
             <Form>
                 <Form.Group className={"mb-3"} controlId={"activityTitle"}>
-                    <Form.Label>Назва активності</Form.Label>
+                    <Form.Label>{t('activityName')}</Form.Label>
                     <InputGroup hasValidation>
                         <Form.Control
                             type={"text"}
@@ -115,12 +115,12 @@ const ActivityFormUpdate = ({ activity, onUpdate }) => {
                 </Form.Group>
 
                 <Form.Group  className={"mb-3"} controlId={"description"} >
-                    <Form.Label>Опис</Form.Label>
+                    <Form.Label>{t('description')}</Form.Label>
                     <InputGroup hasValidation>
                         <Form.Control
                             as={"textarea"}
                             name={"description"}
-                            placeholder={"Опис"}
+                            placeholder={t('description')}
                             value={activityInfo.description}
                             disabled={!isEdit}
                             onChange={onChange}
@@ -133,12 +133,12 @@ const ActivityFormUpdate = ({ activity, onUpdate }) => {
                 </Form.Group>
 
                 <Form.Group className={"mb-3"} controlId={"requiredWorkerCount"}>
-                    <Form.Label>Необхідна кількість робітників</Form.Label>
+                    <Form.Label>{t('requiredWorkerCount')}</Form.Label>
                     <InputGroup hasValidation>
                         <Form.Control
                             type={"number"}
                             name={"requiredWorkerCount"}
-                            placeholder={"Необхідна кількість робітників"}
+                            placeholder={t('requiredWorkerCount')}
                             value={activityInfo.requiredWorkerCount}
                             disabled={!isEdit}
                             onChange={onChange}
@@ -151,23 +151,23 @@ const ActivityFormUpdate = ({ activity, onUpdate }) => {
                 </Form.Group>
 
                 <Form.Group className={"mb-3 w-50"} controlId={"requiredWorkerCount"}>
-                    <Form.Label>Час робочої зміни</Form.Label>
+                    <Form.Label>{t('timeShift')}</Form.Label>
                     <InputGroup className={"d-flex align-items-center"} hasValidation>
                         <Form.Control
                             className={"w-25 m-1"}
                             type={"number"}
                             name={"hoursShift"}
-                            placeholder={"Час робочої зміни"}
+                            placeholder={t('timeShift')}
                             value={activityInfo.hoursShift}
                             disabled={!isEdit}
                             onChange={onChange}
                         />
-                        <strong>год.</strong>
+                        <strong>{t('hours')}</strong>
                         <Form.Control
                             className={"w-25 m-1"}
                             type={"number"}
                             name={"minutesShift"}
-                            placeholder={"Час робочої зміни"}
+                            placeholder={t('timeShift')}
                             value={activityInfo.minutesShift}
                             disabled={!isEdit}
                             onChange={onChange}
@@ -175,12 +175,12 @@ const ActivityFormUpdate = ({ activity, onUpdate }) => {
                         <Form.Control.Feedback type="invalid">
 
                         </Form.Control.Feedback>
-                        <strong>хв.</strong>
+                        <strong>{t('minutes')}</strong>
                     </InputGroup>
                 </Form.Group>
 
                 <Form.Group className={"mb-3"} controlId={"educationId"}>
-                    <Form.Label>Необхідна освіта</Form.Label>
+                    <Form.Label>{t('requiredEducation')}</Form.Label>
                     <Form.Select name={"educationId"}  disabled={!isEdit} onChange={onChange} >
                         <option disabled selected>Необхідна освіта</option>
                         {educations.map(education => (
@@ -196,9 +196,9 @@ const ActivityFormUpdate = ({ activity, onUpdate }) => {
                 </Form.Group>
 
                 <Form.Group className={"mb-3"} controlId={"complexityId"}>
-                    <Form.Label>Складність виокнання діяльності</Form.Label>
+                    <Form.Label>{t('activityComplexity')}</Form.Label>
                     <Form.Select name={"complexityId"} disabled={!isEdit} onChange={onChange}>
-                        <option disabled selected>Оберіть складність</option>
+                        <option disabled selected>{t('selectComplexity')}</option>
                         { complexities.map(complexity => (
                             <option
                                 key={complexity.id}

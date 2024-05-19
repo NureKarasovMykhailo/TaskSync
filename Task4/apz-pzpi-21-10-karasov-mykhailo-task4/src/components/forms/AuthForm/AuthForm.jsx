@@ -6,8 +6,10 @@ import {Link, useNavigate} from "react-router-dom";
 import {observer} from "mobx-react-lite";
 import {Context} from "../../../index";
 import {decodeToken} from "react-jwt";
+import {useTranslation} from "react-i18next";
 
 const AuthForm = observer(() => {
+    const { t } = useTranslation();
     const [authData, setAuthData] = useState({
         email: '',
         password: ''
@@ -51,21 +53,21 @@ const AuthForm = observer(() => {
         <Form>
             <Form.Group className={"mb-3"} controlId={"authFormEmail"}>
                 <Form.Label>Email</Form.Label>
-                <Form.Control name={"email"} type={"email"} placeholder={"Введіть Email"} onChange={handleChange}/>
-                <Form.Control.Feedback type={'invalid'}>Введіть Email</Form.Control.Feedback>
+                <Form.Control name={"email"} type={"email"} placeholder={"Email"} onChange={handleChange}/>
+                <Form.Control.Feedback type={'invalid'}>{t('enterEmail')}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className={"mb-3"} controlId={"authPassword"}>
-                <Form.Label>Пароль</Form.Label>
-                <Form.Control name={"password"} type={"password"} placeholder={"Пароль"} onChange={handleChange}/>
+                <Form.Label>{t('password')}</Form.Label>
+                <Form.Control name={"password"} type={"password"} placeholder={t('password')} onChange={handleChange}/>
             </Form.Group>
-            <p className={"mb-2"}>Ще не маєте акаунт? <Link to={REGISTRATION_PAGE_PATH}>Зареєструйтесь!</Link></p>
+            <p className={"mb-2"}>{t('dontHaveAccount')} <Link to={REGISTRATION_PAGE_PATH}>{t('registration!')}</Link></p>
             {error && (
                 <Alert variant={"danger"}>
                     {error}
                 </Alert>
             )}
             <Button variant={"primary"} type={"button"} className={"col-md-3"} onClick={handleAuthClick}>
-                Вхід
+                {t('enter')}
             </Button>
         </Form>
     );

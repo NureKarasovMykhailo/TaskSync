@@ -21,10 +21,10 @@ const ScannerHistoryComponent = () => {
     const { t } = useTranslation();
     const tableHeaders = [
         'Id',
-        'Температура',
-        'Пульс',
-        'Час роботи',
-        'Id робітника'
+        t('temperature'),
+        t('pulse'),
+        t('activeWorkTime'),
+        t('userId')
     ];
 
     const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +52,7 @@ const ScannerHistoryComponent = () => {
             :
             <div className={"h-100"}>
                 <div>
-                    <h2>Інформація від датчиків</h2>
+                    <h2>{t('scannerHistories')}</h2>
                 </div>
                 <hr/>
                 <Table striped border hover>

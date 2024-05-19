@@ -8,14 +8,25 @@ const $authHost = axios.create({
    baseURL: process.env.REACT_APP_API_URL
 });
 
-const authInterceptor = config => {
-    config.headers.authorization = `Bearer ${localStorage.getItem('token')}`;
+const hostInterceptor = (config, selectedLanguage) => {
+    config.headers['Accept-Language'] = localStorage.getItem('selectedLanguage');
     return config;
 }
 
-$authHost.interceptors.request.use(authInterceptor);
+const authInterceptor = (config, selectedLanguage) => {
+    config.headers.authorization = `Bearer ${localStorage.getItem('token')}`;
+    config.headers['Accept-Language'] = localStorage.getItem('selectedLanguage');
+    return config;
+}
+
+const setupAxios = (selectedLanguage) => {
+    $host.interceptors.request.use((config) => hostInterceptor(config, selectedLanguage))
+    $authHost.interceptors.request.use((config) => authInterceptor(config, selectedLanguage));
+}
+
 
 export {
     $host,
-    $authHost
+    $authHost,
+    setupAxios
 }

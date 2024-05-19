@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button} from "react-bootstrap";
 import {deleteUserEducation} from "../../../../API/userApi";
+import {useTranslation} from "react-i18next";
 
 const EducationList = ({ educations, onDeleteSuccess }) => {
     const handleDeleteEducation = async (e) => {
@@ -14,6 +15,7 @@ const EducationList = ({ educations, onDeleteSuccess }) => {
             console.log(error);
         }
     }
+    const { t } = useTranslation();
 
     return (
         <ul>
@@ -30,7 +32,7 @@ const EducationList = ({ educations, onDeleteSuccess }) => {
                                 type={"button"}
                                 onClick={handleDeleteEducation}
                             >
-                                Видалити
+                                {t('deleteButton')}
                             </Button>
                         </div>
                     </div>

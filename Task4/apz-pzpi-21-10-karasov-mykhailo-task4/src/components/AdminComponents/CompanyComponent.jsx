@@ -8,13 +8,14 @@ import CustomPagination from "../Pagination/CustomPagination";
 import {useNavigate} from "react-router-dom";
 
 const CompanyComponent = () => {
+    const { t } = useTranslation();
+
     const tableHeaders = [
         'Id',
-        'Назва компанії',
-        'Опис'
+        t('companyName'),
+        t('description')
     ];
 
-    const { t } = useTranslation();
     const navigation = useNavigate();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +41,7 @@ const CompanyComponent = () => {
             :
             <div className={"h-100"}>
                 <div>
-                    <h2>Компанії</h2>
+                    <h2>{t('companies')}</h2>
                 </div>
                 <hr/>
                 <Table striped border hover>

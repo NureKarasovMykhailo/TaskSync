@@ -18,8 +18,8 @@ const ComplexityComponent = () => {
 
     const tableHeaders = [
         'Id',
-        'Складність',
-        'Числовий коефіціент'
+        t('complexity'),
+        t('numericalCoefficient')
     ];
 
     useEffect(() => {
@@ -41,7 +41,7 @@ const ComplexityComponent = () => {
             :
             <div className={"h-100"}>
                 <div>
-                    <h2>Складності</h2>
+                    <h2>{t('complexities')}</h2>
                 </div>
                 <hr/>
                 <Table striped border hover>

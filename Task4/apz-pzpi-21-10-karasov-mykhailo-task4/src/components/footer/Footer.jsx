@@ -1,7 +1,10 @@
 import React from 'react';
 import './Footer.css';
+import {useTranslation} from "react-i18next";
 
 const Footer = () => {
+    const { t } = useTranslation();
+
     return (
         <div className={"footer__container"}>
             <div className="footer__content">
@@ -10,13 +13,13 @@ const Footer = () => {
                 </div>
                 <div className={"footer__content-main-container"}>
                     <div className="footer__content-first-row">
-                        <p>Про компанію</p>
-                        <p>Сплата</p>
-                        <p>Відгуки</p>
-                        <p>Контакти</p>
+                        <p>{t('aboutCompany')}</p>
+                        <p>{t('payment')}</p>
+                        <p>{t('reviews')}</p>
+                        <p>{t('contacts')}</p>
                     </div>
                     <div className="footer__content-second-row">
-                        <p>@2024 платформа "TaskSync"</p>
+                        <p>{t('platform')}</p>
                     </div>
                 </div>
             </div>

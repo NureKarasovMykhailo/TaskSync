@@ -9,10 +9,12 @@ import LanguageSelector from "../LanguageSelector/LanguageSelector";
 import {hasUserRole} from "../../utils/hasUserRole";
 import {getRoleTitles} from "../../utils/getRoleTitles";
 import {RoleEnum} from "../../utils/enums/RoleEnum";
+import {useTranslation} from "react-i18next";
 
 const Header = observer(() => {
     const { userStore } = useContext(Context);
     const navigation = useNavigate();
+    const { t } = useTranslation();
 
     const handleAuthClick = (e) => {
         e.preventDefault();
@@ -33,12 +35,12 @@ const Header = observer(() => {
                 <Navbar.Toggle aria-controls="basic" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href={MAIN_PAGE_PATH}>На головну</Nav.Link>
+                        <Nav.Link href={MAIN_PAGE_PATH}>{t('toMain')}</Nav.Link>
                         <Nav.Link
                             href={"#"}
                             onClick={() => navigation(ADMIN_PAGE)}
                         >
-                            Панель адміністрування
+                            {t('adminPanel')}
                         </Nav.Link>
 
                     </Nav>
@@ -52,7 +54,7 @@ const Header = observer(() => {
                                     <Link to={PROFILE_PAGE_PATH}>{userStore.user.email}</Link>
                                 </div>
                                 <Button variant={"danger"} type={"submit"} onClick={handleExitClick}>
-                                    Вийти
+                                    {t('exitButton')}
                                 </Button>
                             </div>)
                             :
@@ -60,7 +62,7 @@ const Header = observer(() => {
                                 onClick={handleAuthClick}
                                 variant={"outline-primary"}
                             >
-                                Авторизація
+                                {t('authorizeButton')}
                             </Button>)
                         }
                     </Navbar.Text>

@@ -18,9 +18,9 @@ const ScannerComponent = () => {
     const { t } = useTranslation();
     const tableHeaders = [
         'Id',
-        'Опис',
-        'Id компанії',
-        'Id користувача'
+        t('description'),
+        t('companyId'),
+        t('userId')
     ];
 
     const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +47,7 @@ const ScannerComponent = () => {
             :
             <div className={"h-100"}>
                 <div>
-                    <h2>Датчики</h2>
+                    <h2>{t('scanners')}</h2>
                 </div>
                 <hr/>
                 <Table striped border hover>

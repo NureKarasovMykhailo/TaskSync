@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
-import {useTranslation} from "react-i18next";
-import {fetchUsers} from "../API/adminUserApi";
-import {fetchCompanies} from "../API/adminCompanyApi";
-import {deleteScanner, getScannerById, updateScanner} from "../API/adminScannerApi";
-import {Alert, Button, Container, Form} from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { fetchUsers } from "../API/adminUserApi";
+import { fetchCompanies } from "../API/adminCompanyApi";
+import { deleteScanner, getScannerById, updateScanner } from "../API/adminScannerApi";
+import { Alert, Button, Container, Form } from "react-bootstrap";
 import Loader from "../components/UI/Loader/Loader";
-import {ADMIN_PAGE} from "../utils/consts";
+import { ADMIN_PAGE } from "../utils/consts";
 
 const AdminOneScanner = () => {
     const { id } = useParams();
@@ -63,6 +63,7 @@ const AdminOneScanner = () => {
             formData.append('description', scannerData.description);
             formData.append('userId', scannerData.userId);
             formData.append('companyId', scannerData.companyId);
+
             const response = await updateScanner(id, formData);
             setScannerData({
                 ...response.scanner
@@ -96,7 +97,7 @@ const AdminOneScanner = () => {
             :
             <Container className={"min-vh-100 border mt-3 mb-3 p-3"}>
                 <div>
-                    <h2>Датчик</h2>
+                    <h2>{t('scanner')}</h2>
                 </div>
                 <hr/>
                 <Form className={"mt-3"}>
@@ -113,10 +114,10 @@ const AdminOneScanner = () => {
                     </Form.Group>
 
                     <Form.Group className={"mb-3"} controlId={"companyId"}>
-                        <Form.Label>Назва компанії</Form.Label>
+                        <Form.Label>{t('companyName')}</Form.Label>
                         <Form.Select onChange={onChange} name={"companyId"} value={scannerData.companyId} disabled={!isEditing}>
                             { companies.map(company => (
-                                <option value={company.id}>
+                                <option key={company.id} value={company.id}>
                                     {company.companyName}
                                 </option>
                             )) }
@@ -124,10 +125,10 @@ const AdminOneScanner = () => {
                     </Form.Group>
 
                     <Form.Group className={"mb-3"} controlId={"userId"}>
-                        <Form.Label>Email користувача</Form.Label>
+                        <Form.Label>{t('userEmail')}</Form.Label>
                         <Form.Select onChange={onChange} name={"userId"} value={scannerData.userId} disabled={!isEditing}>
                             { users.map(user => (
-                                <option value={user.id}>
+                                <option key={user.id} value={user.id}>
                                     {user.email}
                                 </option>
                             )) }

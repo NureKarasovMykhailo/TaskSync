@@ -1,18 +1,18 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Button, Container} from "react-bootstrap";
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, Container } from "react-bootstrap";
 import Loader from "../components/UI/Loader/Loader";
-import {fetchActivity} from "../API/activityApi";
-import {useTranslation} from "react-i18next";
+import { fetchActivity } from "../API/activityApi";
+import { useTranslation } from "react-i18next";
 import ActivityList from "../components/Activity/ActivityList";
-import {useNavigate} from "react-router-dom";
-import {ADD_ACTIVITY_PAGE} from "../utils/consts";
+import { useNavigate } from "react-router-dom";
+import { ADD_ACTIVITY_PAGE } from "../utils/consts";
 import CustomPagination from "../components/Pagination/CustomPagination";
-import {hasUserRole} from "../utils/hasUserRole";
-import {observer} from "mobx-react-lite";
-import {Context} from "../index";
-import {getRoleTitles} from "../utils/getRoleTitles";
-import {RoleEnum} from "../utils/enums/RoleEnum";
-import {getTimeTable} from "../API/timeTableApi";
+import { hasUserRole } from "../utils/hasUserRole";
+import { observer } from "mobx-react-lite";
+import { Context } from "../index";
+import { getRoleTitles } from "../utils/getRoleTitles";
+import { RoleEnum } from "../utils/enums/RoleEnum";
+import { getTimeTable } from "../API/timeTableApi";
 
 const ActivitiesPage = observer(() => {
     const { t } = useTranslation();
@@ -76,7 +76,7 @@ const ActivitiesPage = observer(() => {
                                     onClick={() => navigation(ADD_ACTIVITY_PAGE)}
                                     className={"w-25 m-1"}
                                 >
-                                    Додати активність
+                                    {t('addActivityButton')}
                                 </Button>
 
                                 <Button
@@ -84,14 +84,14 @@ const ActivitiesPage = observer(() => {
                                     className={"m-1 w-25"}
                                     onClick={handleGetTimeTableClick}
                                 >
-                                    Розробити оптимальний розподіл робітників
+                                    {t('developOptimalSchedule')}
                                 </Button>
                             </div>
                         }
                     </div>
                     :
                     <div className={"d-flex w-100 min-vh-100 flex-column justify-content-center align-items-center"}>
-                        <strong>У вашій компанії відстутні активності</strong>
+                        <strong>{t('noActivitiesInCompany')}</strong>
                         <div className={"w-100 d-flex justify-content-end"}>
                             <Button
                                 className={"mt-3 w-25"}

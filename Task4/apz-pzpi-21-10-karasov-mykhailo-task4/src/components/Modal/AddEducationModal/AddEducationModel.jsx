@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import {Alert, Button, Container, Form} from "react-bootstrap";
 import {addUserEducation} from "../../../API/userApi";
+import {useTranslation} from "react-i18next";
 
 const AddEducationModel = ({ educations, onAddSuccess }) => {
     const [error, setError] = useState('');
+    const { t } = useTranslation();
     const [educationTitle, setEducationTitle] = useState('');
 
     const handleAddEducation = async () => {
@@ -23,15 +25,15 @@ const AddEducationModel = ({ educations, onAddSuccess }) => {
     return (
         <Container className={"w-100 h-100"}>
             <div className={"w-100 d-flex justify-content-center"}>
-                <h4>Оберіть освіту</h4>
+                <h4>{t('selectEducation')}</h4>
             </div>
 
             <Form>
                 <Form.Group controlId={"educationTitle"}>
-                    <Form.Label>Освіта</Form.Label>
+                    <Form.Label>{t('education')}</Form.Label>
                     <Form.Control
                         list={"educations"}
-                        placeholder={"Введіть назву освіти..."}
+                        placeholder={t('enterEducationTitle')}
                         value={educationTitle}
                         onChange={(e) => setEducationTitle(e.target.value)}
                     />
@@ -46,7 +48,7 @@ const AddEducationModel = ({ educations, onAddSuccess }) => {
                         { error }
                     </Alert>
                 }
-                <Button className={"mt-3"} onClick={handleAddEducation}>Додати освіту</Button>
+                <Button className={"mt-3"} onClick={handleAddEducation}>{t('acceptButton')}</Button>
             </Form>
 
         </Container>
