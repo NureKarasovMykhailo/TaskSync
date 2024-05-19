@@ -6,6 +6,9 @@ import '../styles/AdminPage.css';
 import EducationComponent from "../components/AdminComponents/EducationComponent";
 import UserComponent from "../components/AdminComponents/UserComponent";
 import CompanyComponent from "../components/AdminComponents/CompanyComponent";
+import ActivityComponent from "../components/AdminComponents/ActivityComponent";
+import ScannerComponent from "../components/AdminComponents/ScannerComponent";
+import ScannerHistoryComponent from "../components/AdminComponents/ScannerHistoryComponent";
 
 const AdminPage = () => {
     const [selectedEntity, setSelectedEntity] = useState('complexity');
@@ -30,6 +33,12 @@ const AdminPage = () => {
                 return <UserComponent />
             case 'company':
                 return <CompanyComponent />
+            case 'activity':
+                return <ActivityComponent />
+            case 'scanner':
+                return <ScannerComponent />
+            case 'scannerInfo':
+                return <ScannerHistoryComponent />
             default:
                 return null;
         }

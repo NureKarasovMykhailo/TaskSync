@@ -59,9 +59,6 @@ const AddActivityForm = () => {
 
     const handleCreateActivityClick = async () => {
         try {
-            console.log(activityInfo.educationId)
-            console.log(activityInfo.complexityId)
-
             const formData = new FormData();
             formData.append('activityTitle', activityInfo.activityTitle);
             formData.append('description', activityInfo.description);

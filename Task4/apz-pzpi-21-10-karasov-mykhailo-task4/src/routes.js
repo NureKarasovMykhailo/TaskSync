@@ -5,9 +5,9 @@ import {
     ADD_COMPANY,
     ADD_COMPLEXITY_ADMIN,
     ADD_WORKER_ITEM_PAGE,
-    ADD_WORKER_PAGE, ADMIN_ADD_COMPANY,
-    ADMIN_ADD_EDUCATION, ADMIN_ADD_USER_PAGE, ADMIN_COMPANY_PAGE,
-    ADMIN_COMPLEXITY_PAGE, ADMIN_EDUCATION_PAGE,
+    ADD_WORKER_PAGE, ADMIN_ACTIVITY_PAGE, ADMIN_ADD_ACTIVITY_PAGE, ADMIN_ADD_COMPANY,
+    ADMIN_ADD_EDUCATION, ADMIN_ADD_SCANNER, ADMIN_ADD_SCANNER_HISTORY, ADMIN_ADD_USER_PAGE, ADMIN_COMPANY_PAGE,
+    ADMIN_COMPLEXITY_PAGE, ADMIN_EDUCATION_PAGE, ADMIN_ONE_SCANNER, ADMIN_ONE_SCANNER_HISTORY,
     ADMIN_PAGE, ADMIN_USER_PAGE,
     AUTH_PAGE_PATH,
     COMPANY_SCANNERS,
@@ -43,6 +43,12 @@ import AdminAddUser from "./pages/AdminAddUser";
 import AdminOneUser from "./pages/AdminOneUser";
 import AdminAddCompany from "./pages/AdminAddCompany";
 import AdminOneCompany from "./pages/AdminOneCompany";
+import AdminAddActivity from "./pages/AdminAddActivity";
+import AdminOneActivity from "./pages/AdminOneActivity";
+import AdminAddScanner from "./pages/AdminAddScanner";
+import AdminOneScanner from "./pages/AdminOneScanner";
+import AdminAddScannerHistory from "./pages/AdminAddScannerHistory";
+import AdminOneScannerHistory from "./pages/AdminOneScannerHistory";
 
 const defaultRoutes = [
     {
@@ -147,6 +153,30 @@ export const adminRoutes = [
     {
         path: ADMIN_COMPANY_PAGE,
         Element: AdminOneCompany
+    },
+    {
+        path: ADMIN_ADD_ACTIVITY_PAGE,
+        Element: AdminAddActivity
+    },
+    {
+        path: ADMIN_ACTIVITY_PAGE,
+        Element: AdminOneActivity
+    },
+    {
+        path: ADMIN_ADD_SCANNER,
+        Element: AdminAddScanner
+    },
+    {
+        path: ADMIN_ONE_SCANNER,
+        Element: AdminOneScanner
+    },
+    {
+        path: ADMIN_ADD_SCANNER_HISTORY,
+        Element: AdminAddScannerHistory
+    },
+    {
+        path: ADMIN_ONE_SCANNER_HISTORY,
+        Element: AdminOneScannerHistory
     }
 ]
 

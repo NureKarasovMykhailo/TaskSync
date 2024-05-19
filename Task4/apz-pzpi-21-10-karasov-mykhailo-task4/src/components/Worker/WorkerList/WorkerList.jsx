@@ -10,7 +10,7 @@ import {useTranslation} from "react-i18next";
 const WorkerList = observer(({ workers, onDelete }) => {
     const { userStore } = useContext(Context);
     const { t } = useTranslation();
-    const isUserAdmin = hasUserRole(getRoleTitles(userStore.user.roles), [RoleEnum.SUBSCRIBER, RoleEnum.COMPANY_ADMIN]);
+    const isUserAdmin = hasUserRole(getRoleTitles(userStore.user.roles), [RoleEnum.SUBSCRIBER, RoleEnum.COMPANY_ADMIN, RoleEnum.ADMIN]);
 
     return (
         workers.length > 0 ?

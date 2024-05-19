@@ -38,6 +38,6 @@ export const addWorkerToActivity = async (activityId, formData) => {
 }
 
 export const deleteWorkerFromActivity = async (activityId, formData) => {
-    const { data } = await $authHost.post(`api/activity/delete-employee/${activityId}`, formData);
+    const { data } = await $authHost.post   (`api/activity/delete-employee/${activityId}`, formData);
     return data;
 }
