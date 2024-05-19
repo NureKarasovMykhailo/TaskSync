@@ -99,8 +99,10 @@ class AdminUserController {
                 return this.userMapper.toPersistenceModel(userDomainModel);
             });
 
+
+
             return res.status(200).json({
-                users: users,
+                users: paginatedUserModel.paginatedItems,
                 pagination: {
                     totalItems: paginatedUserModel.itemsCount,
                     totalPages: paginatedUserModel.totalPages,

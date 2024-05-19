@@ -75,9 +75,9 @@ export default class ScannerHistoryRepositoryImpl implements IScannerHistoryRepo
             throw ApiError.notFound(i18n.__('userNotFound'));
         }
 
-        if (user.companyId !== scanner.companyId) {
-            throw ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation'));
-        }
+        //if (user.companyId !== scanner.companyId) {
+          //  throw ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation'));
+        //}
 
         const scannerHistory = await ScannerHistory.findOne({ where: { id }});
         if (!scannerHistory) {

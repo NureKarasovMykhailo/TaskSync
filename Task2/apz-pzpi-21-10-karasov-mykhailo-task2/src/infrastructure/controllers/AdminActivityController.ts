@@ -34,9 +34,9 @@ export default class AdminActivityController {
                 activityTile,
                 educationTitle,
                 sortBy,
-                limit = '10',
+                limit = '8',
                 page = '1'
-            } = req.body;
+            } = req.query;
 
             const offset = Number(page) * Number(limit) - Number(limit);
 

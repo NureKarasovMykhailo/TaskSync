@@ -5,6 +5,7 @@ import IUserRepository from "../../repositories/UserRepository/IUserRepository";
 import PaginationClass from "../../common/uttils/PaginationClass";
 import ScannerDomainModel from "../../domain/models/Scanner/Scanner";
 import i18n from "i18n";
+import RolesEnum from "../../common/enums/RolesEnum";
 
 export default class ScannerService {
     constructor(
@@ -70,9 +71,9 @@ export default class ScannerService {
     private async checkUser(userId: number, companyId: number) {
         const user = await this.userRepository.getUserById(userId);
         if (user) {
-            if (user.companyId !== companyId) {
-                throw ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation'));
-            }
+            //if (user.companyId !== companyId && !user.roles?.includes(RolesEnum.ADMIN)) {
+              //  throw ApiError.forbidden(i18n.__('youHaveNotAccessToThisInformation'));
+            //}
         } else {
             throw ApiError.notFound(i18n.__('userNotFound'));
         }

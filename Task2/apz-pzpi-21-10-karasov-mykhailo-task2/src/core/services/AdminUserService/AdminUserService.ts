@@ -62,8 +62,9 @@ export default class AdminUserService {
         }
 
         const pagination: PaginationClass<UserDomainModel> = new PaginationClass();
-
-        return pagination.paginateItems(users, offset, limit);
+        console.log(offset);
+        const paginatedUser = pagination.paginateItems(users, offset, limit);
+        return paginatedUser;
     }
 
     public async getUserById(id: number) {
@@ -134,7 +135,7 @@ export default class AdminUserService {
 
     public async deleteUserRole(dto: AddOrDeleteRoleDto, userId: number, addingUserRoles: string[]) {
         console.log(addingUserRoles)
-        if ((addingUserRoles.includes(RolesEnum.COMPANY_ADMIN) || addingUserRoles.includes(RolesEnum.SUBSCRIBER))
+        if ((addingUserRoles.includes(RolesEnum.COMPANY_ADMIN) || addingUserRoles.includes(RolesEnum.SUBSCRIBER) && !addingUserRoles.includes(RolesEnum.ADMIN))
             && (dto.roleTitle === RolesEnum.SUBSCRIBER || dto.roleTitle === RolesEnum.ADMIN)) {
             throw ApiError.forbidden(i18n.__('youCannotDeleteThisRole'))
         }
