@@ -1,6 +1,6 @@
 package com.example.tasksyncmobileapp.model
 
-data class User(
+data class Worker (
     val id: Int,
     val email: String,
     val firstName: String,
@@ -9,5 +9,6 @@ data class User(
     val birthday: String,
     val phoneNumber: String,
     val companyId: Int,
-    val roles: List<Role>
+    val roles: List<Role>,
+    val educations: List<Education>
 )

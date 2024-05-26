@@ -3,6 +3,8 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.example.tasksyncmobileapp.model.Role
 import com.example.tasksyncmobileapp.model.User
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 
 class Jwt {
@@ -18,7 +20,16 @@ class Jwt {
         val phoneNumber = jwt.claims["phoneNumber"]?.asString() ?: throw RuntimeException("Missing 'phoneNumber' claim in JWT")
         val companyId = jwt.claims["companyId"]?.asInt() ?: throw RuntimeException("Missing 'companyId' claim in JWT")
 
-        return User(id, email, firstName, secondName, userImage, birthday, phoneNumber, companyId)
+        val rolesJson = jwt.claims["roles"].toString()
+        println(rolesJson)
+        val gson = Gson()
+
+        val type = object : TypeToken<List<Role>>() {}.type
+
+        val roles: List<Role> = gson.fromJson(rolesJson, type)
+
+
+        return User(id, email, firstName, secondName, userImage, birthday, phoneNumber, companyId, roles)
     }
 
 }

@@ -1,7 +1,9 @@
 package com.example.tasksyncmobileapp.view.company
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.example.tasksyncmobileapp.BuildConfig
 import com.example.tasksyncmobileapp.R
@@ -13,6 +15,7 @@ import com.example.tasksyncmobileapp.repository.CompanyRepository
 import com.example.tasksyncmobileapp.util.classes.FileManager
 import com.example.tasksyncmobileapp.util.classes.TokenManager
 import com.example.tasksyncmobileapp.view.HeaderFragment
+import com.example.tasksyncmobileapp.view.worker.WorkerActivity
 import kotlinx.coroutines.launch
 
 class CompanyActivity : AppCompatActivity() {
@@ -20,6 +23,7 @@ class CompanyActivity : AppCompatActivity() {
     private lateinit var companyController: CompanyController
     private lateinit var company: Company
     private lateinit var tokenManager: TokenManager
+    private lateinit var workersIntent: Intent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCompanyBinding.inflate(layoutInflater)
@@ -34,10 +38,18 @@ class CompanyActivity : AppCompatActivity() {
         var companyRepository = CompanyRepository(retrofitClient.apiService)
         companyController = CompanyController(companyRepository)
 
+        workersIntent = Intent(this, WorkerActivity::class.java)
+
         getCompany()
+
+        binding.bCompanyWorkers.setOnClickListener {
+            startActivity(workersIntent)
+        }
     }
 
     private fun getCompany(){
+        binding.companyProgressBar.visibility = View.VISIBLE
+
         lifecycleScope.launch {
             val result = companyController.getCompany(tokenManager.getToken()!!)
             val fileManager = FileManager()
@@ -57,5 +69,7 @@ class CompanyActivity : AppCompatActivity() {
 
             }
         }
+        binding.companyProgressBar.visibility = View.GONE
+
     }
 }

@@ -96,17 +96,6 @@
             android:textColor="#FFFFFF" />
 
         <Button
-            android:id="@+id/bCompanyScanners"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="8dp"
-            android:backgroundTint="#0000BB"
-            android:text="Сканери"
-            android:textColor="#FFFFFF" />
-
-        <Button
             android:id="@+id/bCompanyGoToActivity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -126,6 +115,13 @@
             android:background="#0000BB"
             android:text="Назад"
             android:textColor="#ffffff" />
+
+        <ProgressBar
+            android:id="@+id/companyProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
     </LinearLayout>
 

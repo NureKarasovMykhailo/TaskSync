@@ -16,6 +16,18 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".view.worker.AddWorkerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.worker.AddWorkersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.worker.OneWorkerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.worker.WorkerActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.company.CompanyActivity"
             android:exported="false" />
         <activity

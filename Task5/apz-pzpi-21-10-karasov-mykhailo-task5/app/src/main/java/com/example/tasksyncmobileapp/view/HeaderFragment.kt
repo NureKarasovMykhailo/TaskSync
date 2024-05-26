@@ -43,7 +43,6 @@ class HeaderFragment : Fragment() {
             try {
                 val jwt = Jwt()
                 user = jwt.decodeJWT(token)
-                println(user.toString())
 
                 val imageView: ImageView = view.findViewById(R.id.ivHeaderUserAvatar)
                 val fileManager = FileManager()
