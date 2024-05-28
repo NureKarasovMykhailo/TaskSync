@@ -1,6 +1,0 @@
-export const RoleEnum = {
-    ADMIN: 'SYSTEM-ADMIN',
-    USER: 'USER',
-    COMPANY_ADMIN: 'COMPANY-ADMIN',
-    SUBSCRIBER: 'SUBSCRIBER'
-};
