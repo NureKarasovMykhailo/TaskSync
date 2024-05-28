@@ -1,5 +1,6 @@
 package com.example.tasksyncmobileapp.repository
 
+import com.example.tasksyncmobileapp.model.dto.AddDeleteEmployeeFromActivityDto
 import com.example.tasksyncmobileapp.model.dto.CreateActivityDto
 import com.example.tasksyncmobileapp.model.response.GetActivitiesResponse
 import com.example.tasksyncmobileapp.model.response.GetActivityResponse
@@ -47,6 +48,18 @@ class ActivityRepository (private val apiService: IApiService) {
         return try {
             val response = apiService.deleteActivityById(token, id)
             Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun deleteEmployeeFromActivity(
+        token: String,
+        id: Int,
+        addDeleteEmployeeFromActivityDto: AddDeleteEmployeeFromActivityDto): Result<GetActivityResponse> {
+        return try {
+            val response = apiService.deleteEmployeeFromActivity(token, id, addDeleteEmployeeFromActivityDto)
+            return Result.success(response)
         } catch (e: Exception) {
             Result.failure(e)
         }

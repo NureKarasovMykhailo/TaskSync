@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.tasksyncmobileapp.R
+import com.example.tasksyncmobileapp.adapter.UserAdapter
 import com.example.tasksyncmobileapp.controller.ActivityController
 import com.example.tasksyncmobileapp.databinding.ActivityOneBinding
 import com.example.tasksyncmobileapp.model.Activity
+import com.example.tasksyncmobileapp.model.dto.AddDeleteEmployeeFromActivityDto
 import com.example.tasksyncmobileapp.network.RetrofitClient
 import com.example.tasksyncmobileapp.repository.ActivityRepository
 import com.example.tasksyncmobileapp.util.classes.TokenManager
@@ -22,6 +25,7 @@ class OneActivity : AppCompatActivity() {
     private lateinit var activityController: ActivityController
     private lateinit var tokenManager: TokenManager
     private lateinit var updateActivityIntent: Intent
+    private lateinit var adapter: UserAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOneBinding.inflate(layoutInflater)
@@ -36,10 +40,28 @@ class OneActivity : AppCompatActivity() {
         val activityId = intent.getIntExtra("ACTIVITY_ID", -1)
         val retrofitClient = RetrofitClient()
         val activityRepository = ActivityRepository(retrofitClient.apiService)
+        val layoutManager = GridLayoutManager(this, 1)
+        tokenManager = TokenManager(binding.root.context)
 
         activityController = ActivityController(activityRepository)
+
+        adapter = UserAdapter { user ->
+            val token = tokenManager.getToken()
+            if (token != null) {
+                lifecycleScope.launch {
+                    setProgressBarVisible()
+                    val addDeleteEmployeeFromActivityDto = AddDeleteEmployeeFromActivityDto(user.id)
+                    activityController.deleteEmployeeFromActivity(token, activityId, addDeleteEmployeeFromActivityDto)
+                    setActivity(activityId)
+
+                }
+            }
+        }
+        binding.rvUserItem.layoutManager = layoutManager
+        binding.rvUserItem.adapter = adapter
+
+
         activitiesIntent = Intent(this, ActivitiesActivity::class.java)
-        tokenManager = TokenManager(binding.root.context)
 
         setActivity(activityId)
 
@@ -67,14 +89,17 @@ class OneActivity : AppCompatActivity() {
         }
     }
 
+
     private fun setProgressBarVisible() {
         binding.apply {
+            rvUserItem.visibility = View.INVISIBLE
             tvOneActivityComplexity.visibility = View.INVISIBLE
             tvOneActivityDescription.visibility = View.INVISIBLE
             tvOneActivityEducation.visibility = View.INVISIBLE
             tvOneActivityTitle.visibility = View.INVISIBLE
             tvOneActivityTimeShift.visibility = View.INVISIBLE
             tvOneActivityRequiredWorkerCount.visibility = View.INVISIBLE
+            textView9.visibility = View.INVISIBLE
 
             oneActivityProgressBar.visibility = View.VISIBLE
         }
@@ -87,6 +112,7 @@ class OneActivity : AppCompatActivity() {
                 val result = activityController.getActivityById(token, activityId)
                 result.onSuccess { response ->
                     val activity = response.activity
+                    adapter.submitList(activity.users)
                     setDataVisible(activity)
 
                 }
@@ -110,6 +136,9 @@ class OneActivity : AppCompatActivity() {
             tvOneActivityTitle.visibility = View.VISIBLE
             tvOneActivityTimeShift.visibility = View.VISIBLE
             tvOneActivityRequiredWorkerCount.visibility = View.VISIBLE
+            rvUserItem.visibility = View.VISIBLE
+            textView9.visibility = View.VISIBLE
+
 
             oneActivityProgressBar.visibility = View.GONE
         }

@@ -16,6 +16,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".view.profile.UserProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activities.UpdateActivity"
             android:exported="false" />
         <activity

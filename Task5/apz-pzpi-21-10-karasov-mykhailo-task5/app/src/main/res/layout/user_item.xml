@@ -13,6 +13,7 @@
         android:layout_marginEnd="1dp"
         android:gravity="center"
         android:orientation="horizontal"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,8 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:src="@tools:sample/avatars" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/tvUserItemEmail"
@@ -32,7 +32,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:text="TextView"
-            android:textSize="17sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tvUserItemName"
@@ -41,7 +41,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:text="TextView"
-            android:textSize="17sp" />
+            android:textSize="13sp" />
 
         <Button
             android:id="@+id/bUserItemDeleteWorkerFromActivity"
@@ -51,6 +51,7 @@
             android:layout_weight="1"
             android:background="#FF6666 "
             android:text="Видалити"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

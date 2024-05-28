@@ -16,6 +16,7 @@ import com.example.tasksyncmobileapp.util.classes.FileManager
 import com.example.tasksyncmobileapp.util.classes.TokenManager
 import com.example.tasksyncmobileapp.view.HeaderFragment
 import com.example.tasksyncmobileapp.view.activities.ActivitiesActivity
+import com.example.tasksyncmobileapp.view.profile.ProfileActivity
 import com.example.tasksyncmobileapp.view.worker.WorkerActivity
 import kotlinx.coroutines.launch
 
@@ -26,6 +27,7 @@ class CompanyActivity : AppCompatActivity() {
     private lateinit var tokenManager: TokenManager
     private lateinit var workersIntent: Intent
     private lateinit var activitiesIntent: Intent
+    private lateinit var profileIntent: Intent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCompanyBinding.inflate(layoutInflater)
@@ -42,6 +44,7 @@ class CompanyActivity : AppCompatActivity() {
 
         workersIntent = Intent(this, WorkerActivity::class.java)
         activitiesIntent = Intent(this, ActivitiesActivity::class.java)
+        profileIntent = Intent(this, ProfileActivity::class.java)
 
         getCompany()
 
@@ -51,6 +54,10 @@ class CompanyActivity : AppCompatActivity() {
 
         binding.bCompanyGoToActivity.setOnClickListener {
             startActivity(activitiesIntent)
+        }
+
+        binding.bCompanyBack.setOnClickListener {
+            startActivity(profileIntent)
         }
     }
 

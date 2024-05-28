@@ -2,6 +2,7 @@ package com.example.tasksyncmobileapp.network
 
 import com.example.tasksyncmobileapp.model.Company
 import com.example.tasksyncmobileapp.model.GetUser
+import com.example.tasksyncmobileapp.model.dto.AddDeleteEmployeeFromActivityDto
 import com.example.tasksyncmobileapp.model.dto.AddDeleteRoleDto
 import com.example.tasksyncmobileapp.model.dto.AuthDto
 import com.example.tasksyncmobileapp.model.dto.CreateActivityDto
@@ -122,5 +123,15 @@ interface IApiService {
 
     @DELETE("activity/{id}")
     suspend fun deleteActivityById(@Header("Authorization") token: String, @Path("id") id: Int)
+
+    @POST("activity/delete-employee/{id}")
+    suspend fun deleteEmployeeFromActivity(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Body addDeleteEmployeeFromActivityDto: AddDeleteEmployeeFromActivityDto
+    ): GetActivityResponse
+
+    @GET("timetable/{id}")
+    suspend fun getTimetableForOneEmployee(@Header("Authorization") token: String, @Path("id") id: Int): GetActivityResponse
 
 }

@@ -1,5 +1,6 @@
 package com.example.tasksyncmobileapp.controller
 
+import com.example.tasksyncmobileapp.model.dto.AddDeleteEmployeeFromActivityDto
 import com.example.tasksyncmobileapp.model.dto.CreateActivityDto
 import com.example.tasksyncmobileapp.model.response.GetActivitiesResponse
 import com.example.tasksyncmobileapp.model.response.GetActivityResponse
@@ -38,4 +39,19 @@ class ActivityController (private val activityRepository: ActivityRepository) {
             activityRepository.deleteActivity("Bearer $token", id)
         }
     }
+
+    suspend fun deleteEmployeeFromActivity (
+        token: String,
+        id: Int,
+        addDeleteEmployeeFromActivityDto: AddDeleteEmployeeFromActivityDto
+    ): Result<GetActivityResponse> {
+        return withContext(Dispatchers.IO) {
+            activityRepository.deleteEmployeeFromActivity(
+                "Bearer $token",
+                id,
+                addDeleteEmployeeFromActivityDto
+            )
+        }
+    }
+
 }

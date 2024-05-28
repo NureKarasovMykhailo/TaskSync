@@ -21,10 +21,12 @@ import com.example.tasksyncmobileapp.util.classes.Jwt
 import com.example.tasksyncmobileapp.util.classes.TokenManager
 import com.example.tasksyncmobileapp.util.functions.getAge
 import com.example.tasksyncmobileapp.util.functions.getEducations
+import com.example.tasksyncmobileapp.util.functions.getErrorMessage
 import com.example.tasksyncmobileapp.util.functions.getRolesString
 import com.example.tasksyncmobileapp.util.functions.hasOtherUserRole
 import com.example.tasksyncmobileapp.util.functions.hasUserRoles
 import com.example.tasksyncmobileapp.view.HeaderFragment
+import com.example.tasksyncmobileapp.view.activities.OneActivity
 import kotlinx.coroutines.launch
 
 class OneWorkerActivity : AppCompatActivity() {
@@ -35,6 +37,7 @@ class OneWorkerActivity : AppCompatActivity() {
     private lateinit var workerController: WorkerController
     private lateinit var tokenManager: TokenManager
     private lateinit var workerActivityIntent: Intent
+    private lateinit var oneActivityIntent: Intent
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +78,24 @@ class OneWorkerActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            bOneWorkerSet2Activity.setOnClickListener {
+                val token = tokenManager.getToken()
+                if (token != null) {
+                    lifecycleScope.launch {
+                        val result = workerController.getActivityForOneEmployee(token, workerId)
+                        result.onSuccess { response ->
+                            oneActivityIntent = Intent(binding.root.context, OneActivity::class.java).apply {
+                                putExtra("ACTIVITY_ID", response.activity.id)
+                            }
+                            startActivity(oneActivityIntent)
+                        }.onFailure {throwable ->
+                            tvOneWorkerError.visibility = View.VISIBLE
+                            tvOneWorkerError.text = getErrorMessage(throwable)
+                        }
+                    }
+                }
+            }
         }
 
         setData(workerId)
@@ -94,6 +115,8 @@ class OneWorkerActivity : AppCompatActivity() {
             tvOneWorkerPhone.visibility = View.INVISIBLE
             tvOneWorkerEducations.visibility = View.INVISIBLE
             tvOneWorkerRoles.visibility = View.INVISIBLE
+            bOneWorkerSet2Activity.visibility = View.GONE
+
 
         }
 
@@ -156,6 +179,7 @@ class OneWorkerActivity : AppCompatActivity() {
 
             if (hasUserRoles(listOf("COMPANY_ADMIN", "SUBSCRIBER"), token)) {
                 binding.bOneWorkerAddOrDeleteRole.visibility = View.VISIBLE
+                binding.bOneWorkerSet2Activity.visibility = View.VISIBLE
                 if (hasOtherUserRole(roles, listOf("COMPANY-ADMIN"))) {
                     binding.bOneWorkerAddOrDeleteRole.text = "Видалити роль адміна компанії"
                     binding.bOneWorkerAddOrDeleteRole.setOnClickListener {
@@ -175,6 +199,7 @@ class OneWorkerActivity : AppCompatActivity() {
                 }
             } else {
                 binding.bOneWorkerAddOrDeleteRole.visibility = View.GONE
+                binding.bOneWorkerSet2Activity.visibility = View.GONE
             }
         }
     }

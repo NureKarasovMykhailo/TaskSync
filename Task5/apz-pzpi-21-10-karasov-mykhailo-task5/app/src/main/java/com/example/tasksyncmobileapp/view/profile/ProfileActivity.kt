@@ -11,6 +11,7 @@ import com.example.tasksyncmobileapp.view.company.CompanyActivity
 
 class ProfileActivity: AppCompatActivity(){
     private lateinit var binding: ActivityProfileBinding
+    private lateinit var userProfileIntent: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,9 +23,14 @@ class ProfileActivity: AppCompatActivity(){
             .commit()
 
         val companyIntent = Intent(this, CompanyActivity::class.java)
+        val userProfileIntent = Intent(this, UserProfileActivity::class.java)
 
         binding.bProfileGoToCompany.setOnClickListener {
             startActivity(companyIntent)
+        }
+
+        binding.bProfileGoToProfile.setOnClickListener {
+            startActivity(userProfileIntent)
         }
 
     }

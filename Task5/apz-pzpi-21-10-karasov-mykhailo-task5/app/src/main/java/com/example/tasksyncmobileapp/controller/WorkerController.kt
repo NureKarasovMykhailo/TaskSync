@@ -1,6 +1,7 @@
 package com.example.tasksyncmobileapp.controller
 
 import com.example.tasksyncmobileapp.model.GetUser
+import com.example.tasksyncmobileapp.model.response.GetActivityResponse
 import com.example.tasksyncmobileapp.model.response.GetCompanyWorkerResponse
 import com.example.tasksyncmobileapp.model.response.GetUserResponse
 import com.example.tasksyncmobileapp.repository.WorkerRepository
@@ -30,6 +31,12 @@ class WorkerController(private val workerRepository: WorkerRepository) {
     suspend fun deleteUserFromCompany(token: String, id: Int): Result<Unit> {
         return withContext(Dispatchers.IO) {
             workerRepository.deleteUserFromCompany("Bearer $token", id)
+        }
+    }
+
+    suspend fun getActivityForOneEmployee(token: String, id: Int): Result<GetActivityResponse> {
+        return withContext(Dispatchers.IO) {
+            workerRepository.getActivityForEmployee("Bearer $token", id)
         }
     }
 
