@@ -17,7 +17,7 @@ router.post(
 );
 router.get(
     '/',
-    authMiddleware,
+   // authMiddleware,
     roleController.getAll.bind(roleController)
 );
 router.get(

@@ -39,9 +39,9 @@ app.use(errorHandler);
 
 try {
     sequelize.sync().then(() => {
-        app.listen(PORT, () => {
+        app.listen(PORT, '0.0.0.0', () => {
             console.log(`[server]: Server started work on http://localhost:${PORT}`);
-        });
+        })
     })
 } catch (error) {
     console.log(error);
