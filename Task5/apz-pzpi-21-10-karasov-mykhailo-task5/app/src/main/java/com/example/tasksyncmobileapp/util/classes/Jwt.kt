@@ -17,8 +17,8 @@ class Jwt {
         val secondName = jwt.claims["secondName"]?.asString() ?: throw RuntimeException("Missing 'secondName' claim in JWT")
         val userImage = jwt.claims["userImage"]?.asString() ?: throw RuntimeException("Missing 'userImage' claim in JWT")
         val birthday = jwt.claims["birthday"]?.asString() ?: throw RuntimeException("Missing 'birthday' claim in JWT")
-        val phoneNumber = jwt.claims["phoneNumber"]?.asString() ?: throw RuntimeException("Missing 'phoneNumber' claim in JWT")
-        val companyId = jwt.claims["companyId"]?.asInt() ?: throw RuntimeException("Missing 'companyId' claim in JWT")
+        val phoneNumber = jwt.claims["phoneNumber"]?.asString() ?: ""
+        val companyId = jwt.claims["companyId"]?.asInt() ?: -1
 
         val rolesJson = jwt.claims["roles"].toString()
         println(rolesJson)

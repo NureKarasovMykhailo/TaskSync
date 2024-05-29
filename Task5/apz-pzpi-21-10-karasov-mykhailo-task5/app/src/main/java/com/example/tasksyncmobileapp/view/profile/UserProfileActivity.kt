@@ -38,6 +38,7 @@ class UserProfileActivity : AppCompatActivity() {
         userController = UserController(userRepository)
 
         setProgressBarVisible()
+        profileActivityIntent = Intent(this, ProfileActivity::class.java)
 
         tokenManager = TokenManager(this)
 
