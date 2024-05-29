@@ -1,14 +1,55 @@
-2.5 Опис інженерних рішень
-Посилання на демонстрацію роботи та функціональне тестування IoT
-пристрою https://youtu.be/KX3Rzn0CbKw.
+1 ПОБУДОВА UML ДІАГРАМИ ПРЕЦЕДЕНТІВ
+
+На діаграмі виділено двох акторів: робітника, який використовує IoT 
+пристрій, та back-end частину програмної системи, куди IoT пристрій, буде 
+відправляти дані.
+Робітник має можливість вмикнути та вимкнути свій розумний пристрій.
+Крім того, він має можливість розпочати збір даних (розпочати відлік часу, який він 
+працював), зібрати усі дані про свій стан (температура тіла, пульс, час роботи) та 
+переглянути їх. Також ці дані будуть відправлені на серверну частину програмної 
+системи, для подальшої обробки.
+
+2 ПОБУДОВА ДІАГРАМИ ВЗАЄМОДІЇ
+
+Створення діаграми взаємодії, дає можливість наочно показати, як об’єкти
+системи взаємодіють між собою в певному сценарії або випадку використання. 
+Вона ілюструє послідовність викликів методів та обмін повідомлення між 
+об’єктами, що допомагає зрозуміти динамічні аспекти системи.
+Пристрій працює наступним чином: IoT пристрій отримує від робітника дані 
+(пульс, температура, час роботи). Після чого дані виводяться користувачу, та 
+відправляються на серверну частину, для обробки. На серверній частині 
+відправлені дані зберігають у базу даних.
+
+3 ПОБУДОВА ДІАГРАМИ ДІЯЛЬНОСТІ
+
+Для представлення робочих процесів та алгоритмів, у вигляді послідовностей 
+дій та рішень, створюється діаграма діяльності. Також вона дає можливість 
+моделювання бізнес – процесів та поведінки програмного забезпечення.
+При увімкнені пристрою, він починає збирати дані, про стан користувача. Для 
+відправки даних, пристрій під’єднується до мережі Інтернет, після чого відправляє 
+дані на сервер, де вони зберігаються у базі даних.
+
+4 ПОБУДОВА ДІАГРАМИ СТАНІВ
+
+Розробка UML діаграми станів має за мету моделювання поведінки системи 
+в залежності від її станів та подій, які впливають на ці стани.
+IoT пристрій працює наступним чином: робітник вмикає свій пристрій, після 
+чого при першому натисканні на кнопку, починається замір часу роботи працівника. 
+При другому натисканні на кнопку відбувається отримання інформації з 
+під’єднаних датчиків. Далі відбудеться спроба під’єднатися до мережі Інтернет. 
+При успішному під’єднанні, отримані дані відправляться на серверну частину.
+
+5 ОПИС ТЕХНОЛОГІЙ
+
 IoT пристрій розроблений за допомогою платформи Arduino та эмулятору 
 Wokwi.
 Сам пристрій складається з мікроконтролеру ESP32, датчика температури
 DHT22, датчику пульсу та звичайної кнопки.
 IoT пристрій взаємодіє з серверною частиною за REST API та по протоколу 
 HTTP.
-Програмний код IoT пристрою наведений у додатку А.
-7
+
+6 ОПИС РОБОТИ IoT ПРИСТРОЮ
+
 У програмному коді спочатку визначаються змінні, для підлючення до мережі 
 Інтернет, шляху для відправки даних на сервер, та визначаються піни для датчиків 
 та кнопки.
@@ -20,141 +61,3 @@ HTTP.
 отримуються дані з датчика температури та датчику пульсу.
 Після цього за допомогою бібліотеки HTTPClient, дані по визначеному 
 маршруту та методу POST відправляються на серверну частину.
-3 Висновки
-У ході виконання лабораторної роботи був розроблений розумний пристрій, 
-який є частиною складної програмної системи. З метою проектування, були 
-створені UML діаграми. Окрім того був розроблений сам розумний прилад, та 
-програмний код для його функціонування.
-8
-ПЕРЕЛІК ДЖЕРЕЛ ПОСИЛАННЯ
-1. Відеоролик з демонстрацією роботи серверної частини. URL 
-https://youtu.be/KX3Rzn0CbKw
-2. Посилання на GitHub репозиторій з джерельним кодом 
-https://github.com/NureKarasovMykhailo/apz-pzpi-21-10-karasov-mykhailo
-9
-ДОДАТОК А
-Програмний код
-1. #include <WiFi.h>
-2. #include <HTTPClient.h>
-3. #include "DHTesp.h"
-4. 
-5. #define BUTTON_PIN 12
-6. #define DHT_PIN 15
-7. #define PULSE_PIN 35
-8. 
-9. const char* ssid = "Wokwi-GUEST";
-10. const char* password = "";
-11. 
-12. const char* serverUrl = 
-13. "http://host.wokwi.internal:5000/api/scanner-history/";
-14. 
-15. DHTesp dhtSensor;
-16. 
-17. unsigned long last_button_press = 0;
-18. bool isMeasuring = false;
-19. bool isButtonPressed = false;
-20. float temperature = 0.0;
-21. int pulse = 0;
-22. unsigned long activeWorkedTime = 0;
-23. int scannerId = 34;
-24. 
-25. void setup() {
-26. Serial.begin(115200);
-27. Serial.println("Esp 32 work start");
-28. 
-29. pinMode(BUTTON_PIN, INPUT_PULLUP);
-30. dhtSensor.setup(DHT_PIN, DHTesp::DHT22);
-31. 
-32. WiFi.begin(ssid, password);
-33. while (WiFi.status() != WL_CONNECTED) {
-34. delay(100);
-35. Serial.println("Connecting to WiFi...");
-36. }
-37. Serial.println("Connected to WiFi");
-38. }
-39. 
-40. void loop () {
-41. if (digitalRead(BUTTON_PIN) == LOW
-42. && !isMeasuring && !isButtonPressed) {
-43. delay(10); 
-44. startMeasurement();
-45. delay(20);
-46. } else if (digitalRead(BUTTON_PIN) == HIGH
-10
-47. && isMeasuring && !isButtonPressed) {
-48. isButtonPressed = true;
-49. delay(10);
-50. } else if (digitalRead(BUTTON_PIN) == LOW 
-51. && isMeasuring && isButtonPressed) {
-52. delay(10); 
-53. stopMeasurement();
-54. }
-55. }
-56. 
-57. void startMeasurement() {
-58. isMeasuring = true;
-59. last_button_press = millis();
-60. Serial.println("Time measurement started");
-61. }
-62. 
-63. void stopMeasurement() {
-64. isMeasuring = false;
-65. activeWorkedTime = (millis() - last_button_press) / 100;
-66. Serial.print("Time: ");
-67. Serial.println(activeWorkedTime);
-68. measureTemp();
-69. measurePulse();
-70. sendDataToServer();
-71. }
-72. 
-73. void measureTemp() {
-74. TempAndHumidity data = dhtSensor.getTempAndHumidity();
-75. temperature = data.temperature;
-76. Serial.print("Temperature: ");
-77. Serial.print(temperature, 1);
-78. Serial.println("°C");
-79. }
-80. 
-81. void measurePulse() {
-82. int pulseValue = analogRead(PULSE_PIN);
-83. float voltage = pulseValue * (5.0 / 4095.0);
-84. int heartRate = (voltage / 3.3) * 675;
-85. pulse = heartRate;
-86. Serial.print("Heart rate: ");
-87. Serial.println(heartRate);
-88. }
-89. 
-90. void sendDataToServer() {
-91. if (WiFi.status() == WL_CONNECTED) {
-92. HTTPClient http;
-93. 
-94. http.begin(serverUrl);
-95. http.addHeader("Content-Type", "application/json");
-96. 
-97. String jsonPayload = "{";
-98. jsonPayload += "\"temperature\": " + String(temperature) 
-+ ",";
-11
-99. jsonPayload += "\"pulse\": " + String(pulse) + ",";
-100. jsonPayload += "\"activeWorkedTime\": "
-101. + String(activeWorkedTime) + ",";
-102. jsonPayload += "\"scannerId\": " + String(scannerId);
-103. jsonPayload += "}";
-104. 
-105. int httpResponseCode = http.POST(jsonPayload);
-106. 
-107. if (httpResponseCode > 0) {
-108. String response = http.getString();
-109. Serial.println("HTTP Response code: " + 
-String(httpResponseCode));
-110. Serial.println("Response: " + response);
-111. } else {
-112. Serial.println("Error on sending POST: " + 
-String(httpResponseCode));
-113. }
-114. 
-115. http.end();
-116. } else {
-117. Serial.println("WiFi Disconnected");
-118. }
-119. }
